@@ -35,7 +35,7 @@ export class Wallet extends BaseEntity {
     authExpire?: Date | null
 
     @Index()
-    @Column({ type: 'integer', nullable: true })
+    @Column({ type: 'bigint', nullable: true })
     telegramId?: number | null
 
     @Index()
