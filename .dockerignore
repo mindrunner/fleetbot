@@ -1,0 +1,15 @@
+node_modules/**/.editorconfig
+node_modules/**/.eslintrc
+node_modules/**/.gitattributes
+node_modules/**/.npmignore
+node_modules/**/*.html
+node_modules/**/*.lock
+node_modules/**/*.md
+node_modules/**/*.markdown
+node_modules/**/*.txt
+node_modules/**/*.yml
+node_modules/**/LICENSE
+node_modules/**/license
+node_modules/**/test
+**/*.map
+**/*.test.js

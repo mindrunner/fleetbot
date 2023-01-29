@@ -1,0 +1,159 @@
+image: node:18-alpine
+
+variables:
+  PROJECT_NAME: fleetbot
+
+stages:
+  - install
+  - test-and-build
+  - build-docker
+  - integrate
+  - deploy
+  - post-deploy
+
+.docker-auth: &docker-auth
+  - echo "{\"auths\":{\"registry.gitlab.com\":{\"auth\":\"$(echo -n gitlab-ci-token:${CI_JOB_TOKEN} | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+
+.cache: &cache
+  key:
+    files:
+      - package-lock.json
+  paths:
+    - .npm
+
+.tag: &tag
+  image:
+    # Use debug image, otherwise no shell available
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [ "" ]
+  before_script:
+    - *docker-auth
+  script:
+    - echo "FROM ${DOCKER_REGISTRY}/${PROJECT_NAME}:${CI_COMMIT_SHORT_SHA}" | /kaniko/executor --dockerfile /dev/stdin --destination ${DOCKER_REGISTRY}/${PROJECT_NAME}:${TAG}
+
+.integration-vars: &integration-vars
+  # TimescaleDB / postgres Container Config
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  # App Config
+  APP_ENVIRONMENT: e2e
+  DATABASE_HOST: postgres
+  DATABASE_PORT: 5432
+  DATABASE_LOGGING: query,error,schema,warn,info,log
+  DATABASE_PASSWORD: postgres
+  DATABASE_USER: postgres
+  # Test Config
+  TZ: 'Europe/Berlin'
+  LOG_LEVEL: 'info'
+
+install:
+  stage: install
+  cache:
+    <<: *cache
+  script:
+    - npm ci --cache .npm --prefer-offline
+  artifacts:
+    paths:
+      - node_modules
+    expire_in: 30 minutes
+
+audit:
+  stage: test-and-build
+  script:
+    - npm audit
+
+build:
+  stage: test-and-build
+  cache:
+    <<: *cache
+    policy: pull
+  script:
+    - npm run build
+    - npm prune --production
+  artifacts:
+    paths:
+      - build/app
+      - node_modules
+    expire_in: 30 minutes
+
+lint-ts:
+  stage: test-and-build
+  script:
+    - npm run lint
+
+lint-yaml:
+  image:
+    name: cytopia/yamllint
+    entrypoint: [ "/bin/ash", "-c" ]
+  stage: test-and-build
+  script:
+    - yamllint -f colored .
+  dependencies: [ ]
+
+lint-docker:
+  image:
+    name: hadolint/hadolint:latest-alpine
+    entrypoint: [ "/bin/sh", "-c" ]
+  stage: test-and-build
+  script:
+    - hadolint docker/app/Dockerfile
+  dependencies: [ ]
+
+.build-docker: &build-docker
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [ "" ]
+  before_script:
+    - *docker-auth
+  script:
+    - |-
+      export DOCKER_REPO=$(echo "$DOCKER_REPO" | tr '[:upper:]' '[:lower:]')
+      /kaniko/executor \
+        --cache=true \
+        --cache-dir "./cache" \
+        --compressed-caching=false \
+        --context "${CONTEXT}" \
+        --single-snapshot \
+        --dockerfile "${DOCKERFILE}" \
+        --destination "${DOCKER_REPO}:${CI_COMMIT_SHORT_SHA}" \
+        $(if [ ! -z "${CI_COMMIT_TAG}" ]; then echo "--destination ${DOCKER_REPO}:${CI_COMMIT_TAG}"; fi) \
+        ${DOCKER_BUILD_ARGS}
+  dependencies: [ build ]
+
+build-docker-app:
+  stage: build-docker
+  variables:
+    # Variables below can be used to manipulate which image to build
+    CONTEXT: ${CI_PROJECT_DIR}
+    DOCKERFILE: ${CI_PROJECT_DIR}/docker/app/Dockerfile
+    # You can overwrite this if you want to have multiple docker images for example
+    DOCKER_REPO: ${DOCKER_REGISTRY}/${PROJECT_NAME}
+    # Define build args as "--build-arg arg1='my string' --build-arg arg2=2"
+    DOCKER_BUILD_ARGS: "--build-arg CI_JOB_TOKEN=${CI_JOB_TOKEN} --build-arg VERSION=${CI_COMMIT_SHORT_SHA}"
+  dependencies: [ test-and-build ]
+  <<: *build-docker
+
+test-migration:
+  stage: integrate
+  image: ${DOCKER_REGISTRY}/${PROJECT_NAME}:${CI_COMMIT_SHORT_SHA}
+  services:
+    - name: postgres:14.5-alpine
+      alias: postgres
+  variables:
+    <<: *integration-vars
+    APP_ENVIRONMENT: test-migration
+  script:
+    - cp .env.example /app/.env
+    - cd /app
+    - wait-for-it.sh ${DATABASE_HOST}:5432 --strict --timeout=60
+    - npx typeorm migration:run -d ./db/db-data-source.js
+    - npx typeorm migration:generate -d ./db/db-data-source.js --check check
+  dependencies: [ ]
+
+release:
+  stage: deploy
+  variables:
+    TAG: latest
+  <<: *tag
+  only:
+    - main

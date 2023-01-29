@@ -1,0 +1,5 @@
+export * from './unauthorized'
+export * from './already-registered'
+export * from './unknown-wallet'
+export * from './wrong-param-count'
+export * from './auth-pending'
