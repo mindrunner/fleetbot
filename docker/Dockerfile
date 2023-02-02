@@ -12,7 +12,7 @@ WORKDIR /app
 EXPOSE 3003
 
 COPY docker/scripts/* /usr/local/bin/
-ADD https://github.com/vishnubob/wait-for-it/blob/master/wait-for-it.sh /usr/local/bin/
+ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/wait-for-it.sh
 COPY node_modules node_modules
 COPY build/app .
