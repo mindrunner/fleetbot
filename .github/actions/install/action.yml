@@ -1,0 +1,10 @@
+name: install
+description: "Sets up node environment and installs dependencies"
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+    - run: npm ci
+      shell: bash
