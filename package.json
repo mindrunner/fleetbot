@@ -29,7 +29,7 @@
         "@sentry/node": "^7.39.0",
         "@sentry/tracing": "^7.38.0",
         "@solana/spl-token": "^0.1.8",
-        "@solana/web3.js": "^1.73.2",
+        "@solana/web3.js": "^1.73.3",
         "@staratlas/factory": "^0.4.4",
         "big.js": "^6.2.1",
         "bip39": "^3.1.0",
