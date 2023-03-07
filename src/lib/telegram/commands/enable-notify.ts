@@ -5,14 +5,16 @@ import { unauthorized } from '../response'
 
 export const enableNotify = (bot: Telegraf<ContextMessageUpdate>): void => {
     bot.command(['enable-notify'], async (ctx) => {
-        if (!ctx.user || !ctx.authed) {
-            await unauthorized(ctx)
+        await ctx.persistentChatAction('typing', async () => {
+            if (!ctx.user || !ctx.authed) {
+                await unauthorized(ctx)
 
-            return
-        }
+                return
+            }
 
-        ctx.user.notify = true
-        await ctx.user.save()
-        await ctx.reply('I will notify you after I refilled your fleets.')
+            ctx.user.notify = true
+            await ctx.user.save()
+            await ctx.reply('I will notify you after I refilled your fleets.')
+        })
     })
 }

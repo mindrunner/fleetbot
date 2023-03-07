@@ -5,14 +5,16 @@ import { unauthorized } from '../response'
 
 export const disableNotify = (bot: Telegraf<ContextMessageUpdate>): void => {
     bot.command(['disable-notify'], async (ctx) => {
-        if (!ctx.user || !ctx.authed) {
-            await unauthorized(ctx)
+        await ctx.persistentChatAction('typing', async () => {
+            if (!ctx.user || !ctx.authed) {
+                await unauthorized(ctx)
 
-            return
-        }
+                return
+            }
 
-        ctx.user.notify = false
-        await ctx.user.save()
-        await ctx.reply('I will stay silent unless there is something urgent happening.')
+            ctx.user.notify = false
+            await ctx.user.save()
+            await ctx.reply('I will stay silent unless there is something urgent happening.')
+        })
     })
 }
