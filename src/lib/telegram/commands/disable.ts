@@ -5,14 +5,16 @@ import { unauthorized } from '../response'
 
 export const disable = (bot: Telegraf<ContextMessageUpdate>): void => {
     bot.command(['disable'], async (ctx) => {
-        if (!ctx.user || !ctx.authed) {
-            await unauthorized(ctx)
+        await ctx.persistentChatAction('typing', async () => {
+            if (!ctx.user || !ctx.authed) {
+                await unauthorized(ctx)
 
-            return
-        }
+                return
+            }
 
-        ctx.user.enabled = false
-        await ctx.user.save()
-        await ctx.reply('Refilling is disabled!')
+            ctx.user.enabled = false
+            await ctx.user.save()
+            await ctx.reply('Refilling is disabled!')
+        })
     })
 }

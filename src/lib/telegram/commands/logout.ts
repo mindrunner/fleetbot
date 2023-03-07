@@ -6,25 +6,27 @@ import { unauthorized } from '../response'
 
 export const logout = (bot: Telegraf<ContextMessageUpdate>): void => {
     bot.command(['logout'], async (ctx) => {
-        if (!ctx.user || !ctx.authed) {
-            await unauthorized(ctx)
+        await ctx.persistentChatAction('typing', async () => {
+            if (!ctx.user || !ctx.authed) {
+                await unauthorized(ctx)
 
-            return
-        }
+                return
+            }
 
-        if (ctx.user.enabled) {
-            await ctx.reply('Your wallet is currently enabled, toggle with /disable command')
+            if (ctx.user.enabled) {
+                await ctx.reply('Your wallet is currently enabled, toggle with /disable command')
 
-            return
-        }
+                return
+            }
 
-        ctx.user.authed = false
-        ctx.user.telegramId = null
-        ctx.user.authTxAmount = null
-        ctx.user.authExpire = null
+            ctx.user.authed = false
+            ctx.user.telegramId = null
+            ctx.user.authTxAmount = null
+            ctx.user.authExpire = null
 
-        await Wallet.save(ctx.user)
+            await Wallet.save(ctx.user)
 
-        ctx.reply('Logged out successfully')
+            ctx.reply('Logged out successfully')
+        })
     })
 }

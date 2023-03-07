@@ -11,34 +11,36 @@ import { unauthorized, wrongParamCount } from '../response'
 
 export const withdraw = (bot: Telegraf<ContextMessageUpdate>): void => {
     bot.command(['withdraw'], async (ctx) => {
-        if (!ctx.user || !ctx.authed) {
-            await unauthorized(ctx)
+        await ctx.persistentChatAction('typing', async () => {
+            if (!ctx.user || !ctx.authed) {
+                await unauthorized(ctx)
 
-            return
-        }
+                return
+            }
 
-        if (ctx.params.length !== 1) {
-            await wrongParamCount(ctx, 'Usage: /withdraw {amount}|all')
+            if (ctx.params.length !== 1) {
+                await wrongParamCount(ctx, 'Usage: /withdraw {amount}|all')
 
-            return
-        }
+                return
+            }
 
-        const wallet = ctx.user
-        const userBalance = await wallet.getBalance()
-        const withdrawAmount = ctx.params[0] === 'all' ? userBalance : Big(ctx.params[0]).abs()
+            const wallet = ctx.user
+            const userBalance = await wallet.getBalance()
+            const withdrawAmount = ctx.params[0] === 'all' ? userBalance : Big(ctx.params[0]).abs()
 
-        if (withdrawAmount.gt(userBalance)) {
-            await ctx.reply(`Amount ${withdrawAmount.toFixed(AD)} exceeds user balance ${userBalance.toFixed(AD)}`)
+            if (withdrawAmount.gt(userBalance)) {
+                await ctx.reply(`Amount ${withdrawAmount.toFixed(AD)} exceeds user balance ${userBalance.toFixed(AD)}`)
 
-            return
-        }
+                return
+            }
 
-        await ctx.reply(`Sending ${withdrawAmount} ATLAS to ${ctx.user.publicKey}`)
-        const signature = await sendAtlas(new PublicKey(ctx.user.publicKey), withdrawAmount.toNumber())
+            await ctx.reply(`Sending ${withdrawAmount} ATLAS to ${ctx.user.publicKey}`)
+            const signature = await sendAtlas(new PublicKey(ctx.user.publicKey), withdrawAmount.toNumber())
 
-        await ctx.reply(`https://solscan.io/tx/${signature}`)
-        const amount = -withdrawAmount
+            await ctx.reply(`https://solscan.io/tx/${signature}`)
+            const amount = -withdrawAmount
 
-        await Transaction.create({ wallet, amount, signature, time: dayjs().toDate() }).save()
+            await Transaction.create({ wallet, amount, signature, time: dayjs().toDate() }).save()
+        })
     })
 }

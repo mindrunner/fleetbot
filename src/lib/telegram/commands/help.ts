@@ -5,7 +5,8 @@ import { ContextMessageUpdate } from '../context-message-update'
 
 export const help = (bot: Telegraf<ContextMessageUpdate>): void => {
     bot.command(['start', 'help'], async (ctx: ContextMessageUpdate) => {
-        await ctx.replyWithHTML(`
+        await ctx.persistentChatAction('typing', async () => {
+            await ctx.replyWithHTML(`
 <b>Welcome to fleetbot!</b>
 I can automatically refill your Star Atlas enlisted fleets.
 
@@ -46,5 +47,6 @@ Commands for verified users:
 <b>/logout</b> <i>Disconnects Telegram Account from wallet</i>
 <b>/tip</b> <i>Set or query tip setting (default 15%)</i>
         `)
+        })
     })
 }
