@@ -12,8 +12,8 @@ const telegramBot: Telegraf<ContextMessageUpdate> = new Telegraf(config.bot.tele
 telegramBot.use(auth)
 telegramBot.use(params)
 
-for (const command of Object.keys(commands)) {
-    commands[command](telegramBot)
+for (const command of Object.values(commands)) {
+    command(telegramBot)
 }
 
 process.once('SIGINT', () => telegramBot.stop('SIGINT'))
