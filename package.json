@@ -26,7 +26,7 @@
     "dependencies": {
         "@faker-js/faker": "^7.6.0",
         "@sentry/integrations": "^7.44.0",
-        "@sentry/node": "^7.44.0",
+        "@sentry/node": "^7.44.2",
         "@sentry/tracing": "^7.44.0",
         "@solana/spl-token": "^0.1.8",
         "@solana/web3.js": "^1.74.0",
