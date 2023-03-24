@@ -49,6 +49,7 @@ module.exports = {
     root: true,
     parser: '@typescript-eslint/parser',
     parserOptions: {
+        project: './tsconfig.json',
         ecmaVersion: 2021,
         sourceType: 'module'
     },
@@ -67,7 +68,8 @@ module.exports = {
         '@typescript-eslint',
         'filenames',
         'import',
-        'promise'
+        'promise',
+        'deprecation'
     ],
     extends: [
         'eslint:all',
@@ -164,6 +166,7 @@ module.exports = {
         'sort-imports': 'off',
         'sort-keys': 'off',
         'strict': 'off',
+        'deprecation/deprecation': 'warn',
 
         // https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin#supported-rules
         '@typescript-eslint/explicit-function-return-type': 'off',

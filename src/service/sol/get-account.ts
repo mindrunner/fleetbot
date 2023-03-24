@@ -5,9 +5,9 @@ import { Resource } from '../wallet'
 
 const resourceAccounts: Map<string, PublicKey> = new Map()
 
-export const getAccount = async (player: PublicKey, resource: Resource): Promise<PublicKey> => {
+export const getAccount = (player: PublicKey, resource: Resource): PublicKey => {
     if (!resourceAccounts.get(resource.toString())) {
-        const ret = await PublicKey.findProgramAddress([
+        const ret = PublicKey.findProgramAddressSync([
             player.toBuffer(),
             TOKEN_PROGRAM_ID.toBuffer(),
             resource.toBuffer()

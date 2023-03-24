@@ -54,7 +54,7 @@
     },
 
     // File Inclusions
-    "include": ["src/**/*", "src/**/*.json"],
+    "include": ["src/**/*", "src/**/*.json", ".eslintrc.js"],
     "exclude": ["**/*.test.ts"],
 
     // Local developer settings
