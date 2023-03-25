@@ -15,7 +15,13 @@ export const refillFleet = async (player: PublicKey, fleetUnit: ShipStakingInfo,
         getAccount(keyPair.publicKey, resource.tool)
     ])
 
-    const transaction = new Transaction({ feePayer: keyPair.publicKey })
+    const latestBlockhash = await connection.getLatestBlockhash()
+
+    const transaction = new Transaction({
+        feePayer: keyPair.publicKey,
+        blockhash: latestBlockhash.blockhash,
+        lastValidBlockHeight: latestBlockhash.lastValidBlockHeight
+    })
 
     if (amounts.food.gt(0)) {
         transaction.add(
