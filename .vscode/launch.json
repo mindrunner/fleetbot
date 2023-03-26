@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "node-terminal",
+            "name": "fleetbot",
+            "request": "launch",
+            "command": "npm run start:fleetbot",
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
