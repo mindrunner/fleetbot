@@ -1,4 +1,4 @@
-import { Message } from 'typegram'
+import { Message } from 'telegraf/types'
 
 import dayjs from '../../../dayjs'
 import { Wallet } from '../../../db/entities'

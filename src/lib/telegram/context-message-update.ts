@@ -1,5 +1,5 @@
 import { Context } from 'telegraf'
-import { Update } from 'typegram'
+import { Update } from 'telegraf/types'
 
 import { Wallet } from '../../db/entities'
 
