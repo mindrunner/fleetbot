@@ -42,7 +42,7 @@
         "pretty-error": "^4.0.0",
         "superagent": "^8.0.9",
         "telegraf": "^4.12.2",
-        "typeorm": "^0.3.12",
+        "typeorm": "^0.3.13",
         "winston": "^3.8.2"
     },
     "devDependencies": {
