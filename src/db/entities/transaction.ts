@@ -15,6 +15,12 @@ export class Transaction extends BaseEntity {
     @Column({ type: 'float' })
     amount: number
 
+    @Column({ type: 'float' })
+    originalAmount: number
+
+    @Column()
+    resource: string
+
     @RelationIdColumn()
     walletPublicKey: Wallet['publicKey']
 

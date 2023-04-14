@@ -1,14 +1,14 @@
-// eslint-disable-next-line import/named
-import { ParsedInstruction, ParsedTransactionWithMeta } from '@solana/web3.js'
-import { getAssociatedTokenAddress } from '@staratlas/factory'
 import { LessThan, MoreThan } from 'typeorm'
 
 import dayjs from '../dayjs'
 import { Transaction, Wallet } from '../db/entities'
 import { logger } from '../logger'
 import { getBalanceAtlas, getResourceBalances, getResourcePrices, initOrderBook } from '../service/gm'
-import { AD, connection } from '../service/sol'
+import { AD } from '../service/sol'
 import { keyPair, resource } from '../service/wallet'
+
+import { checkAtlasTransactions } from './check-atlas-transactions'
+import { checkR4Transactions } from './check-r4-transactions'
 
 export const checkTransactions = async (): Promise<void> => {
     await initOrderBook()
@@ -37,64 +37,19 @@ export const checkTransactions = async (): Promise<void> => {
     const getSigOptions = { until }
 
     logger.info(`Total balance: ${total.toFixed(AD)} ATLAS`)
-    const atlasTokenAccount = await getAssociatedTokenAddress(keyPair.publicKey, resource.atlas)
-    const signatureList = await connection.getSignaturesForAddress(atlasTokenAccount, getSigOptions)
 
-    const transactionList = await connection.getParsedTransactions(signatureList.map(s => s.signature))
+    await checkAtlasTransactions(getSigOptions)
 
-    const txList: ParsedTransactionWithMeta[] =
-        transactionList.filter((tx): tx is ParsedTransactionWithMeta => tx !== null)
+    const wallets = await Wallet.findBy({ enabled: true })
 
-    const transferList = txList.filter(tx => tx.meta?.postTokenBalances?.length === 2)
-
-    await Promise.all(
-        transferList.map(tx => tx.transaction.message.instructions.map(async (instr) => {
-            const instruction: ParsedInstruction = instr as ParsedInstruction
-
-            if (instruction.program === 'spl-token' && instruction.parsed.info.mint === resource.atlas.toString()) {
-                const { info } = instruction.parsed
-
-                const sender = info.authority
-                const amount = info.tokenAmount.uiAmount
-                const blockTime = tx.blockTime || 0
-                const time = dayjs.unix(blockTime).toDate()
-                const [signature] = tx.transaction.signatures
-
-                const transaction = await Transaction.findOneBy({ signature })
-                const log = transaction ? logger.debug : logger.info
-
-                if (sender === keyPair.publicKey.toString()) {
-                    const receiver = tx.meta?.postTokenBalances?.filter(
-                        tb => tb.owner?.toString() !== keyPair.publicKey.toString())[0].owner
-
-                    log(`${receiver} -${amount} ATLAS ${dayjs.duration(dayjs().diff(time)).humanize(false)} ago`)
-                    const wallet = Wallet.create({ publicKey: receiver })
-
-                    await wallet.save()
-                    await Transaction.create({ wallet, amount: -amount, signature, time }).save()
-                }
-                else {
-                    log(`${sender} +${amount} ATLAS ${dayjs.duration(dayjs().diff(time)).humanize(false)} ago`)
-
-                    let wallet = await Wallet.findOneBy({ publicKey: sender })
-
-                    if (wallet?.telegramId && !wallet.authed && dayjs().isBefore(wallet.authExpire) && !transaction) {
-                        if (wallet.authTxAmount === amount) {
-                            wallet.authed = true
-
-                            logger.info(`Successfully assigned ${wallet.telegramId} to ${wallet.publicKey}`)
-                        }
-                        else {
-                            logger.warn(`Amount mismatch, got ${amount}, expected ${wallet.authTxAmount}`)
-                        }
-                    }
-                    if (!wallet) {
-                        wallet = Wallet.create({ publicKey: sender })
-                    }
-
-                    await wallet.save()
-                    await Transaction.create({ wallet, amount, signature, time }).save()
-                }
-            }
-        })))
+    for (const wallet of wallets) {
+        // eslint-disable-next-line no-await-in-loop
+        await checkR4Transactions(wallet, 'tool', resource.tool, getSigOptions)
+        // eslint-disable-next-line no-await-in-loop
+        await checkR4Transactions(wallet, 'ammo', resource.ammo, getSigOptions)
+        // eslint-disable-next-line no-await-in-loop
+        await checkR4Transactions(wallet, 'food', resource.food, getSigOptions)
+        // eslint-disable-next-line no-await-in-loop
+        await checkR4Transactions(wallet, 'fuel', resource.fuel, getSigOptions)
+    }
 }

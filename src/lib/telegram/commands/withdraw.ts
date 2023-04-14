@@ -40,7 +40,7 @@ export const withdraw = (bot: Telegraf<ContextMessageUpdate>): void => {
             await ctx.reply(`https://solscan.io/tx/${signature}`)
             const amount = -withdrawAmount
 
-            await Transaction.create({ wallet, amount, signature, time: dayjs().toDate() }).save()
+            await Transaction.create({ wallet, amount, signature, time: dayjs().toDate(), originalAmount: amount, resource: 'ATLAS' }).save()
         })
     })
 }
