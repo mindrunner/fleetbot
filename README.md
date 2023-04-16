@@ -176,6 +176,12 @@ You can send it to one of the following addresses:
 As soon as I receive the ATLAS, I will start refilling your ships in regular intervals. I use an optimized refilling strategy, so that you are always covered.
 However, to save you on commission, I will not fully load the ship. You can always refill your fleet by yourself. I will only jump in if you are running low.
 
+Since it is now possible to stake your claim stakes and generate R4, I decided to accept this as a payment method as well. Please first set everything up
+by using ATLAS as explained above. As soon as everything is set, you can also send me your R4 (tool, fuel, ammo, food). I am not keeping track of individual R4 account balances.
+Instead, each R4 you send me will credit your internal ATLAS balance by the current market price.
+
+Withdrawals are only possible in ATLAS.
+
 For the hard work of refilling all the fleets, I keep 15% of the ATLAS I spend for myself.
 You can change the commission at any time to any value.
 
