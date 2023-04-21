@@ -44,12 +44,12 @@ export const checkTransactions = async (): Promise<void> => {
 
     for (const wallet of wallets) {
         // eslint-disable-next-line no-await-in-loop
-        await checkR4Transactions(wallet, 'tool', resource.tool, getSigOptions)
+        await checkR4Transactions(wallet, 'tool', resource.tool, prices, getSigOptions)
         // eslint-disable-next-line no-await-in-loop
-        await checkR4Transactions(wallet, 'ammo', resource.ammo, getSigOptions)
+        await checkR4Transactions(wallet, 'ammo', resource.ammo, prices, getSigOptions)
         // eslint-disable-next-line no-await-in-loop
-        await checkR4Transactions(wallet, 'food', resource.food, getSigOptions)
+        await checkR4Transactions(wallet, 'food', resource.food, prices, getSigOptions)
         // eslint-disable-next-line no-await-in-loop
-        await checkR4Transactions(wallet, 'fuel', resource.fuel, getSigOptions)
+        await checkR4Transactions(wallet, 'fuel', resource.fuel, prices, getSigOptions)
     }
 }
