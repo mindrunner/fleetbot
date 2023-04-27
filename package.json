@@ -25,7 +25,7 @@
     "homepage": "https://github.com/mindrunner/fleetbot#readme",
     "dependencies": {
         "@faker-js/faker": "^7.6.0",
-        "@sentry/integrations": "^7.48.0",
+        "@sentry/integrations": "^7.50.0",
         "@sentry/node": "^7.49.0",
         "@sentry/tracing": "^7.48.0",
         "@solana/spl-token": "^0.1.8",
