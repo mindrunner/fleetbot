@@ -27,7 +27,7 @@
         "@faker-js/faker": "^8.0.1",
         "@sentry/integrations": "^7.53.1",
         "@sentry/node": "^7.53.0",
-        "@sentry/tracing": "^7.53.0",
+        "@sentry/tracing": "^7.53.1",
         "@solana/spl-token": "^0.1.8",
         "@solana/web3.js": "^1.76.0",
         "@staratlas/factory": "^0.5.3",
