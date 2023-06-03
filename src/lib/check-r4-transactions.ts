@@ -21,9 +21,10 @@ export const checkR4Transactions = async (
     resource: PublicKey,
     prices: Amounts,
     options: SignaturesForAddressOptions): Promise<void> => {
-    const tokenAccount = await getAssociatedTokenAddress(new PublicKey(wallet.publicKey), resource)
+    const sourceTokenAccount = await getAssociatedTokenAddress(new PublicKey(wallet.publicKey), resource)
+    const destTokenAccount = await getAssociatedTokenAddress(new PublicKey(keyPair.publicKey), resource)
 
-    const signatureList = await connection.getSignaturesForAddress(tokenAccount, options)
+    const signatureList = await connection.getSignaturesForAddress(sourceTokenAccount, options)
 
     logger.info(`${signatureList.length} transactions found for ${resourceName} on ${wallet.publicKey}`)
 
@@ -32,19 +33,21 @@ export const checkR4Transactions = async (
         const { signature } = signatureInfo
         const tx = await connection.getParsedTransaction(signature)
 
-        if (tx?.meta?.postTokenBalances?.length === 2) {
+        const balanceChangeLength = tx?.meta?.postTokenBalances?.length
+
+        if (balanceChangeLength && balanceChangeLength >= 2) {
             for (const instr of tx.transaction.message.instructions) {
                 const instruction: ParsedInstruction = instr as ParsedInstruction
 
-                if (instruction.program === 'spl-token' && instruction.parsed.info.mint === resource.toString()) {
+                if (instruction.program === 'spl-token' && instruction.parsed.info.source === sourceTokenAccount.toBase58() && instruction.parsed.info.destination === destTokenAccount.toBase58()) {
                     const { info } = instruction.parsed
 
                     const sender = info.authority
-                    const originalAmount = info.tokenAmount.uiAmount
+                    const originalAmount = info.tokenAmount?.uiAmount || info.amount
                     const blockTime = tx.blockTime || 0
                     const time = dayjs.unix(blockTime).toDate()
 
-                    const transaction = await Transaction.findOneBy({ signature })
+                    const transaction = await Transaction.findOneBy({ signature, resource: resourceName.toUpperCase() })
                     const log = transaction ? logger.debug : logger.info
 
                     const amounts: Amounts = {
@@ -66,26 +69,32 @@ export const checkR4Transactions = async (
 
                         log(`${receiver} -${originalAmount} ${resourceName.toUpperCase()} worth ${price.toFixed(AD)} ATLAS ${dayjs.duration(dayjs().diff(time)).humanize(false)} ago`)
 
-                        await Transaction.create({
-                            wallet: await ensureWallet(receiver),
-                            amount: price.mul(-1).toNumber(),
-                            originalAmount: Big(originalAmount).mul(-1).toNumber(),
-                            resource: resourceName.toUpperCase(),
-                            signature,
-                            time
-                        }).save()
+                        // eslint-disable-next-line max-depth
+                        if (!transaction) {
+                            await Transaction.create({
+                                wallet: await ensureWallet(receiver),
+                                amount: price.mul(-1).toNumber(),
+                                originalAmount: Big(originalAmount).mul(-1).toNumber(),
+                                resource: resourceName.toUpperCase(),
+                                signature,
+                                time
+                            }).save()
+                        }
                     }
                     else {
                         log(`${sender} +${originalAmount} ${resourceName.toUpperCase()} worth ${price.toFixed(AD)} ATLAS ${dayjs.duration(dayjs().diff(time)).humanize(false)} ago`)
 
-                        await Transaction.create({
-                            wallet: await ensureWallet(sender),
-                            amount: price.toNumber(),
-                            originalAmount,
-                            resource: resourceName.toUpperCase(),
-                            signature,
-                            time
-                        }).save()
+                        // eslint-disable-next-line max-depth
+                        if (!transaction) {
+                            await Transaction.create({
+                                wallet: await ensureWallet(sender),
+                                amount: price.toNumber(),
+                                originalAmount,
+                                resource: resourceName.toUpperCase(),
+                                signature,
+                                time
+                            }).save()
+                        }
                     }
                 }
             }

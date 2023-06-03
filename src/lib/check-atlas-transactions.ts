@@ -44,7 +44,11 @@ export const checkAtlasTransactions = async (options?: SignaturesForAddressOptio
                     log(`${receiver} -${amount} ATLAS ${dayjs.duration(dayjs().diff(time)).humanize(false)} ago`)
                     const wallet = await ensureWallet(receiver)
 
-                    await Transaction.create({ wallet, amount: -amount, signature, time, originalAmount: amount, resource: 'ATLAS' }).save()
+                    const tr = await Transaction.findOneBy({ signature, resource: 'ATLAS' })
+
+                    if (!tr) {
+                        await Transaction.create({ wallet, amount: -amount, signature, time, originalAmount: amount, resource: 'ATLAS' }).save()
+                    }
                 }
                 else {
                     log(`${sender} +${amount} ATLAS ${dayjs.duration(dayjs().diff(time)).humanize(false)} ago`)
@@ -61,7 +65,11 @@ export const checkAtlasTransactions = async (options?: SignaturesForAddressOptio
                             logger.warn(`Amount mismatch, got ${amount}, expected ${wallet.authTxAmount}`)
                         }
                     }
-                    await Transaction.create({ wallet, amount, signature, time, originalAmount: amount, resource: 'ATLAS' }).save()
+                    const tr = await Transaction.findOneBy({ signature, resource: 'ATLAS' })
+
+                    if (!tr) {
+                        await Transaction.create({ wallet, amount, signature, time, originalAmount: amount, resource: 'ATLAS' }).save()
+                    }
                 }
             }
         })))
