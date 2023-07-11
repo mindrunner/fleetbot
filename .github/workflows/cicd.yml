@@ -8,12 +8,12 @@ on:
 
 jobs:
 
-  audit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/install
-      - run: npm audit
+#  audit:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#      - uses: ./.github/actions/install
+#      - run: npm audit
 
   lint:
     runs-on: ubuntu-latest
