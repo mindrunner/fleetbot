@@ -5,6 +5,7 @@ import Big from 'big.js'
 
 import dayjs from '../dayjs'
 import { Transaction, Wallet } from '../db/entities'
+import { TxCache } from '../db/entities/tx-cache'
 import { logger } from '../logger'
 import { Amounts } from '../service/fleet/const'
 import { AD, connection } from '../service/sol'
@@ -31,7 +32,19 @@ export const checkR4Transactions = async (
     /* eslint-disable no-await-in-loop */
     for (const signatureInfo of signatureList) {
         const { signature } = signatureInfo
-        const tx = await connection.getParsedTransaction(signature)
+
+        let tx = (await TxCache.findOneBy({ id: signature }))?.tx ?? null
+
+        if (!tx) {
+            tx = await connection.getParsedTransaction(signature)
+            if (tx) {
+                await TxCache.create({ id: signature, tx }).save()
+            }
+        }
+
+        if (!tx) {
+            throw new Error('tx is null')
+        }
 
         const balanceChangeLength = tx?.meta?.postTokenBalances?.length
 

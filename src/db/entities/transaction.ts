@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, Index, ManyToOne, PrimaryColumn, Unique } from 'typeorm'
+import { BaseEntity, Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm'
 
 import { RelationIdColumn } from '../columns'
 
@@ -7,7 +7,7 @@ import { Wallet } from './wallet'
 @Entity()
 @Unique(['signature', 'resource'])
 export class Transaction extends BaseEntity {
-    @PrimaryColumn('uuid')
+    @PrimaryGeneratedColumn('uuid')
     id: string
 
     @Column()
