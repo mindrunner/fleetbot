@@ -1,6 +1,7 @@
 import Big from 'big.js'
 import { BaseEntity, Column, CreateDateColumn, Entity, Index, OneToMany, PrimaryColumn, UpdateDateColumn } from 'typeorm'
 
+import { Bonus } from './bonus'
 import { Refill } from './refill'
 import { Transaction } from './transaction'
 
@@ -48,14 +49,18 @@ export class Wallet extends BaseEntity {
     @OneToMany(() => Transaction, transaction => transaction.wallet)
     transactions: Promise<Transaction[]>
 
+    @OneToMany(() => Bonus, bonus => bonus.wallet)
+    bonuses: Promise<Bonus[]>
+
     @OneToMany(() => Refill, refill => refill.wallet)
     refills: Promise<Refill[]>
 
     async getBalance (): Promise<Big> {
         const deposit = (await this.transactions).reduce((acc, cur) => acc.add(cur.amount), Big(0))
+        const bonus = (await this.bonuses).reduce((acc, cur) => acc.add(cur.amount), Big(0))
         const spent = (await this.refills).reduce((acc, cur) => acc.add(cur.price), Big(0))
 
-        return deposit.minus(spent).minus(await this.totalTipped())
+        return deposit.add(bonus).minus(spent).minus(await this.totalTipped())
     }
 
     async totalTipped (): Promise<Big> {
