@@ -15,6 +15,9 @@ export class Bonus extends BaseEntity {
     @Column({ type: 'float' })
     amount: number
 
+    @Column()
+    reason: string
+
     @RelationIdColumn()
     walletPublicKey: Wallet['publicKey']
 
