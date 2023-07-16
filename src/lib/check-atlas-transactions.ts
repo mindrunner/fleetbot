@@ -14,7 +14,16 @@ export const checkAtlasTransactions = async (options?: SignaturesForAddressOptio
     const atlasTokenAccount = await getAssociatedTokenAddress(keyPair.publicKey, resource.atlas)
     const signatureList = await connection.getSignaturesForAddress(atlasTokenAccount, options)
 
-    const transactionList = await connection.getParsedTransactions(signatureList.map(s => s.signature))
+    const transactionList : ParsedTransactionWithMeta[] = []
+
+    for (const signature of signatureList) {
+        // eslint-disable-next-line no-await-in-loop
+        const parsedSignature = await connection.getParsedTransaction(signature.signature)
+
+        if (parsedSignature) {
+            transactionList.push(parsedSignature)
+        }
+    }
 
     const txList: ParsedTransactionWithMeta[] =
         transactionList.filter((tx): tx is ParsedTransactionWithMeta => tx !== null)
