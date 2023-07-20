@@ -1,13 +1,7 @@
 import { Wallet } from '../db/entities'
 
 export const ensureWallet = async (publicKey: string): Promise<Wallet> => {
-    let wallet = await Wallet.findOneBy({ publicKey: publicKey.toString() })
+    await Wallet.upsert({ publicKey: publicKey.toString() }, { conflictPaths: ['publicKey'], skipUpdateIfNoValuesChanged: true })
 
-    if (!wallet) {
-        wallet = Wallet.create({ publicKey: publicKey.toString() })
-
-        return wallet.save()
-    }
-
-    return wallet
+    return Wallet.findOneOrFail({ where: { publicKey: publicKey.toString() } })
 }
