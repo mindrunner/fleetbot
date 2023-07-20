@@ -174,6 +174,7 @@ module.exports = {
         '@typescript-eslint/no-shadow': 'error',
         '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true, varsIgnorePattern: '^_+$' }],
         '@typescript-eslint/no-use-before-define': 'error',
+        '@typescript-eslint/no-explicit-any': 'warn',
 
         // https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules
         'import/default': 'error',
