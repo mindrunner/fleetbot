@@ -21,7 +21,7 @@ export const checkR4Transactions = async (
     resourceName: ResourceName,
     resource: PublicKey,
     prices: Amounts,
-    options: SignaturesForAddressOptions): Promise<void> => {
+    options?: SignaturesForAddressOptions): Promise<void> => {
     const sourceTokenAccount = await getAssociatedTokenAddress(new PublicKey(wallet.publicKey), resource)
     const destTokenAccount = await getAssociatedTokenAddress(new PublicKey(keyPair.publicKey), resource)
 

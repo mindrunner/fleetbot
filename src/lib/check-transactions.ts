@@ -33,8 +33,13 @@ export const checkTransactions = async (): Promise<void> => {
         Transaction.find({ where: { amount: LessThan(0) }, order: { time: 'DESC' }, take: 1 })
     ])
 
-    const until = dayjs(lastInTx.time).isBefore(lastOutTx.time) ? lastInTx.signature : lastOutTx.signature
-    const getSigOptions = { until }
+    let getSigOptions
+
+    if (lastInTx && lastOutTx) {
+        const until = dayjs(lastInTx.time).isBefore(lastOutTx.time) ? lastInTx.signature : lastOutTx.signature
+
+        getSigOptions = { until }
+    }
 
     logger.info(`Total balance: ${total.toFixed(AD)} ATLAS`)
 
