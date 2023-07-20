@@ -5,7 +5,15 @@ import { derivePath } from 'ed25519-hd-key'
 import { config } from '../../config'
 import { logger } from '../../logger'
 
-const initKeypair = (mnemonic: string, accountNumber: number): Keypair => {
+const initKeypairBySecretKey = (key: number[]): Keypair => {
+    const keypair = Keypair.fromSecretKey(new Uint8Array(key))
+
+    logger.info(`key => ${keypair.publicKey.toBase58()}`)
+
+    return keypair
+}
+
+const initKeypairByMnemonic = (mnemonic: string, accountNumber: number): Keypair => {
     const seed = mnemonicToSeedSync(mnemonic, '')
     const path = `m/44'/501'/${accountNumber}'/0'`
     const keypair = Keypair.fromSeed(derivePath(path, seed.toString('hex')).key)
@@ -15,4 +23,4 @@ const initKeypair = (mnemonic: string, accountNumber: number): Keypair => {
     return keypair
 }
 
-export const keyPair = initKeypair(config.user.mnemonic, config.user.walletId)
+export const keyPair = config.user.keyMode === 'mnemonic' ? initKeypairByMnemonic(config.user.mnemonic, config.user.walletId) : initKeypairBySecretKey(config.user.secretKey)
