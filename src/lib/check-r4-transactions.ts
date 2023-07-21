@@ -36,7 +36,8 @@ export const checkR4Transactions = async (
         let tx = (await TxCache.findOneBy({ id: signature }))?.tx ?? null
 
         if (!tx) {
-            tx = await connection.getParsedTransaction(signature)
+            // https://docs.solana.com/developing/versioned-transactions#max-supported-transaction-version
+            tx = await connection.getParsedTransaction(signature, { maxSupportedTransactionVersion: 0 })
             if (tx) {
                 await TxCache.create({ id: signature, tx }).save()
             }

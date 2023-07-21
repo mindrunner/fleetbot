@@ -17,8 +17,10 @@ export const checkAtlasTransactions = async (options?: SignaturesForAddressOptio
     const transactionList : ParsedTransactionWithMeta[] = []
 
     for (const signature of signatureList) {
-        // eslint-disable-next-line no-await-in-loop
-        const parsedSignature = await connection.getParsedTransaction(signature.signature)
+        // https://docs.solana.com/developing/versioned-transactions#max-supported-transaction-version
+        const parsedSignature =
+            // eslint-disable-next-line no-await-in-loop
+            await connection.getParsedTransaction(signature.signature, { maxSupportedTransactionVersion: 0 })
 
         if (parsedSignature) {
             transactionList.push(parsedSignature)
