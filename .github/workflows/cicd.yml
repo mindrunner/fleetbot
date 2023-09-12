@@ -30,7 +30,7 @@ jobs:
       - uses: ./.github/actions/install
       - run: npm run build
       - run: npm prune --production
-      - uses: docker/metadata-action@v4
+      - uses: docker/metadata-action@v5
         id: metadata
         with:
           images: runmymind/fleetbot
