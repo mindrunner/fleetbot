@@ -42,6 +42,10 @@ const namingConventions = [
         selector: 'objectLiteralProperty',
         modifiers: ['requiresQuotes'],
         format: null
+    },
+    {
+        selector: 'import',
+        format: ['camelCase', 'PascalCase', 'snake_case', 'UPPER_CASE'],
     }
 ]
 
