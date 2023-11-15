@@ -24,7 +24,7 @@
     },
     "homepage": "https://github.com/mindrunner/fleetbot#readme",
     "dependencies": {
-        "@faker-js/faker": "^8.2.0",
+        "@faker-js/faker": "^8.3.1",
         "@sentry/integrations": "^7.80.0",
         "@sentry/node": "^7.80.0",
         "@sentry/tracing": "^7.80.0",
