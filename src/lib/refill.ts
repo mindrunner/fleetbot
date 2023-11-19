@@ -12,12 +12,12 @@ import { refillPlayer } from './refill-player'
 import { optimalRefillStrategy } from './refill-strategy'
 import { getDailyBurnRate } from './stock-resources'
 
-export const refill = async (): Promise<void[]> => {
+export const refill = async (): Promise<void> => {
     const players = await Wallet.findBy({ enabled: true })
 
     await initOrderBook()
 
-    return Promise.all(players.map(async (player) => {
+    await Promise.all(players.map(async (player) => {
         if (dayjs().isAfter(player.nextRefill)) {
             await refillPlayer(new PublicKey(player.publicKey), optimalRefillStrategy)
         }

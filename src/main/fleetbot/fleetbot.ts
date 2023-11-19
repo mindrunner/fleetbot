@@ -41,7 +41,11 @@ export const start = async (): Promise<void> => {
         await checkTransactions()
         await refill()
     }
-    resourcesCronJob = new CronJob(config.cron.resourceInterval, stockResources, null, true)
-    refillCronJob = new CronJob(config.cron.refillInterval, refill, null, true)
-    transactionCronJob = new CronJob(config.cron.bookkeeperInterval, checkTransactions, null, true)
+    resourcesCronJob = CronJob.from({ cronTime: config.cron.resourceInterval, onTick: stockResources, start: true })
+    refillCronJob = CronJob.from({ cronTime: config.cron.refillInterval, onTick: refill, start: true })
+    transactionCronJob = CronJob.from({
+        cronTime: config.cron.bookkeeperInterval,
+        onTick: checkTransactions,
+        start: true
+    })
 }
