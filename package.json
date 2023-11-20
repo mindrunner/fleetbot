@@ -48,7 +48,7 @@
     "devDependencies": {
         "@types/bs58": "^4.0.4",
         "@types/pg": "^8.10.9",
-        "@types/superagent": "^4.1.21",
+        "@types/superagent": "^4.1.22",
         "@typescript-eslint/eslint-plugin": "^6.11.0",
         "@typescript-eslint/parser": "^6.11.0",
         "eslint": "^8.53.0",
