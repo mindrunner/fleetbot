@@ -37,6 +37,7 @@ export interface Config {
     }
     sol: {
         rpcEndpoint: string
+        wsEndpoint: string
         fleetAddress: string
         atlasMint: string
         marketAddress: string
@@ -75,6 +76,7 @@ export const config: Config = {
     },
     sol: {
         rpcEndpoint: env.get('RPC_ENDPOINT'),
+        wsEndpoint: env.get('WS_ENDPOINT'),
         fleetAddress: env.get('FLEET_ADDRESS'),
         marketAddress: env.get('MARKET_ADDRESS'),
         atlasMint: env.get('ATLAS_MINT'),
