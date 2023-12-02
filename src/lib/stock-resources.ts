@@ -1,5 +1,7 @@
-import { PublicKey } from '@solana/web3.js'
-import { getAllFleetsForUserPublicKey, getScoreVarsShipInfo, ShipStakingInfo } from '@staratlas/factory'
+// eslint-disable-next-line import/named
+import { AnchorProvider, Idl, Program } from '@project-serum/anchor'
+import { Connection, PublicKey } from '@solana/web3.js'
+import { getScoreIDL, getScoreVarsShipInfo, getShipStakingAccount, ShipStakingInfo } from '@staratlas/factory'
 import Big from 'big.js'
 import superagent from 'superagent'
 
@@ -11,6 +13,61 @@ import { Amounts } from '../service/fleet/const'
 import { buyResources, getResourceBalances, getResourcePrices, initOrderBook } from '../service/gm'
 import { AD, connection, fleetProgram } from '../service/sol'
 import { keyPair } from '../service/wallet'
+
+/**
+ * Returns a list of player deployed fleets to the SCORE program
+ *
+ * @param conn - web3.Connection object
+ * @param playerPublicKey - Player's public key
+ * @param programId - Deployed program ID for the SCORE program
+ * @returns - [Ship Staking Account Infos]
+ */
+const getAllFleetsForUserPublicKey = async (
+    conn: Connection,
+    playerPublicKey: PublicKey,
+    programId: PublicKey
+): Promise<ShipStakingInfo[]> => {
+    const idl = getScoreIDL(programId)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    const provider = new AnchorProvider(conn, null, null)
+    const program = new Program(<Idl>idl, programId, provider)
+
+    const shipsRegistered = await program.account.scoreVarsShip.all()
+
+    const playerShipStakingAccounts = []
+
+    for (const ship of shipsRegistered) {
+        // eslint-disable-next-line no-await-in-loop
+        const [playerShipStakingAccount] = await getShipStakingAccount(
+            programId,
+            ship.account.shipMint as PublicKey,
+            playerPublicKey
+        )
+
+        playerShipStakingAccounts.push(playerShipStakingAccount)
+    }
+
+    logger.info(`Found ${playerShipStakingAccounts.length} fleets for ${playerPublicKey.toString()}`)
+
+    const playerFleets: ShipStakingInfo[] = []
+
+    for(const acc of playerShipStakingAccounts) {
+        try {
+            // eslint-disable-next-line no-await-in-loop
+            const fleet = await program.account.shipStaking.fetchNullable(acc)
+
+            if(fleet) {
+                playerFleets.push(<ShipStakingInfo>fleet)
+            }
+        }
+        catch (e) {
+            logger.error(e)
+        }
+    }
+
+    return playerFleets
+}
 
 export const getShipName = async (shipStakingInfo: ShipStakingInfo): Promise<string> => {
     const mint = shipStakingInfo.shipMint.toString()
