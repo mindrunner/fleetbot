@@ -48,8 +48,6 @@ const getAllFleetsForUserPublicKey = async (
         playerShipStakingAccounts.push(playerShipStakingAccount)
     }
 
-    logger.info(`Found ${playerShipStakingAccounts.length} fleets for ${playerPublicKey.toString()}`)
-
     const playerFleets: ShipStakingInfo[] = []
 
     for(const acc of playerShipStakingAccounts) {
@@ -65,6 +63,7 @@ const getAllFleetsForUserPublicKey = async (
             logger.error(e)
         }
     }
+    logger.info(`Found ${playerFleets.length} fleets for ${playerPublicKey.toString()}`)
 
     return playerFleets
 }
