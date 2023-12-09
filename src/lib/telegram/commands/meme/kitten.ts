@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { Telegraf } from 'telegraf'
 
+import { logger } from '../../../../logger'
 import { ContextMessageUpdate } from '../../context-message-update'
 
 export const kitten = (bot: Telegraf<ContextMessageUpdate>): void => {
@@ -9,13 +10,11 @@ export const kitten = (bot: Telegraf<ContextMessageUpdate>): void => {
             const x = faker.datatype.number({ min: 128, max: 2048 })
 
             try {
-                await ctx.replyWithPhoto({
-                    url: `https://placekitten.com/${x}/${x}`,
-                    filename: 'kitten.jpg'
-                })
+                await ctx.replyWithPhoto(`https://placekitten.com/${x}/${x}`)
             }
-            catch {
-                ctx.reply('Meow!')
+            catch (e: any) {
+                logger.error(`Cannot send Photo: ${e.message}`)
+                await ctx.reply('Meow!')
             }
         })
     })

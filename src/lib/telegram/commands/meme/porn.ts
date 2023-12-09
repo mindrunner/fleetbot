@@ -1,6 +1,7 @@
 import { Telegraf } from 'telegraf'
 
 import { ShipInfo } from '../../../../db/entities'
+import { logger } from '../../../../logger'
 import { ContextMessageUpdate } from '../../context-message-update'
 
 export const porn = (bot: Telegraf<ContextMessageUpdate>): void => {
@@ -14,14 +15,13 @@ export const porn = (bot: Telegraf<ContextMessageUpdate>): void => {
                     .getOne()
 
                 const imageName = randomShip?.imageName || ''
+                const imageUrl = `https://storage.googleapis.com/nft-assets/items/${imageName}.jpg`
 
-                await ctx.replyWithPhoto({
-                    url: `https://storage.googleapis.com/nft-assets/items/${imageName}.jpg`,
-                    filename: `${imageName}.jpg`
-                })
+                await ctx.replyWithPhoto(imageUrl)
             }
-            catch {
-                ctx.reply(':-*')
+            catch (e: any) {
+                logger.error(`Cannot send Photo: ${e.message}`)
+                await ctx.reply(':-*')
             }
         })
     })
