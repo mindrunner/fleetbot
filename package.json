@@ -26,9 +26,9 @@
     "dependencies": {
         "@project-serum/anchor": "^0.24.2",
         "@faker-js/faker": "^8.3.1",
-        "@sentry/integrations": "^7.84.0",
-        "@sentry/node": "^7.84.0",
-        "@sentry/tracing": "^7.84.0",
+        "@sentry/integrations": "^7.86.0",
+        "@sentry/node": "^7.86.0",
+        "@sentry/tracing": "^7.86.0",
         "@solana/spl-token": "^0.1.8",
         "@solana/web3.js": "^1.87.6",
         "@staratlas/factory": "^0.6.0",
