@@ -2,13 +2,15 @@ import { logger } from '../../logger'
 
 import { connection } from './const'
 
-// eslint-disable-next-line promise/avoid-new
-const sleep = (ms: number) => new Promise((resolve) => {
-    setTimeout(resolve, ms)
-})
+const sleep = (ms: number) =>
+    // eslint-disable-next-line promise/avoid-new
+    new Promise((resolve) => {
+        setTimeout(resolve, ms)
+    })
 
 export const finalize = async (sig: string): Promise<void> => {
     let finalized = false
+    let attempts = 0
 
     do {
         // eslint-disable-next-line no-await-in-loop
@@ -21,8 +23,11 @@ export const finalize = async (sig: string): Promise<void> => {
             finalized = true
         }
         else {
-            logger.info(`Waiting for finalization: ${status.value?.confirmations}`)
+            logger.info(
+                `(${++attempts}) Waiting for finalization: ${status.value
+                    ?.confirmations}`,
+            )
         }
-    } while (!finalized)
+    } while (!finalized || attempts > 25)
     logger.info(`finalized ${sig}`)
 }
