@@ -1,3 +1,5 @@
+import { Sentry } from '../../sentry'
+
 import { logger } from '../../logger'
 
 import { connection } from './const'
@@ -28,6 +30,14 @@ export const finalize = async (sig: string): Promise<void> => {
                     ?.confirmations}`,
             )
         }
-    } while (!finalized || attempts > 25)
-    logger.info(`finalized ${sig}`)
+    } while (!finalized && attempts < 25)
+    if(finalized) {
+        logger.info(`finalized ${sig}`)
+    }
+    else {
+        const message = `could not finalize ${sig}`
+
+        logger.warn(message)
+        Sentry.captureMessage(message)
+    }
 }
