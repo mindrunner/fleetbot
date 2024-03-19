@@ -1,7 +1,7 @@
-import { Token, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { Keypair, PublicKey, Transaction } from '@solana/web3.js'
 import { getAssociatedTokenAddress, GmClientService, GmOrderbookService } from '@staratlas/factory'
 import Big from 'big.js'
+import { createTransferCheckedInstruction, getOrCreateAssociatedTokenAccount } from '@solana/spl-token'
 
 import { Sentry } from '../../sentry'
 
@@ -31,8 +31,7 @@ export const getResourcePrices = (): Amounts => ({
 
 export const getBalanceAtlas = async (pubKey: PublicKey): Promise<Big> => {
     try {
-        const token = new Token(connection, resource.atlas, TOKEN_PROGRAM_ID, new Keypair())
-        const balance = await token.getOrCreateAssociatedAccountInfo(pubKey)
+        const balance = await getOrCreateAssociatedTokenAccount(connection, new Keypair(), resource.atlas, pubKey)
 
         return Big(Number(balance.amount)).div(100000000)
     }
@@ -46,15 +45,14 @@ export const getBalanceAtlas = async (pubKey: PublicKey): Promise<Big> => {
 
 export const sendAtlas = async (receiver: PublicKey, amount: number): Promise<string> => {
     const transaction = new Transaction().add(
-        Token.createTransferCheckedInstruction(
-            TOKEN_PROGRAM_ID,
+        createTransferCheckedInstruction(
             await getAssociatedTokenAddress(keyPair.publicKey, resource.atlas),
             resource.atlas,
             await getAssociatedTokenAddress(receiver, resource.atlas),
             keyPair.publicKey,
-            [],
             Big(amount).mul(100000000).toNumber(),
-            8
+            8,
+            [],
         )
     )
 
@@ -66,8 +64,7 @@ export const sendAtlas = async (receiver: PublicKey, amount: number): Promise<st
 }
 
 export const getBalanceMarket = async (pubKey: PublicKey, res: PublicKey): Promise<Big> => {
-    const token = new Token(connection, res, TOKEN_PROGRAM_ID, new Keypair())
-    const balance = await token.getOrCreateAssociatedAccountInfo(pubKey)
+    const balance = await getOrCreateAssociatedTokenAccount(connection, new Keypair(), res, pubKey)
 
     return Big(Number(balance.amount))
 }

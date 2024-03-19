@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/named
-import { AnchorProvider, Idl, Program } from '@project-serum/anchor'
+import { AnchorProvider, Idl, Program } from '@coral-xyz/anchor'
 import { Connection, PublicKey } from '@solana/web3.js'
 import { getScoreIDL, getScoreVarsShipInfo, getShipStakingAccount, ShipStakingInfo } from '@staratlas/factory'
 import Big from 'big.js'
@@ -28,8 +28,7 @@ const getAllFleetsForUserPublicKey = async (
     programId: PublicKey
 ): Promise<ShipStakingInfo[]> => {
     const idl = getScoreIDL(programId)
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
+    // @ts-expect-error 123
     const provider = new AnchorProvider(conn, null, null)
     const program = new Program(<Idl>idl, programId, provider)
 
