@@ -1,5 +1,5 @@
 import { Keypair, PublicKey, Transaction } from '@solana/web3.js'
-import { getAssociatedTokenAddress, GmClientService, GmOrderbookService } from '@staratlas/factory'
+import { getAssociatedTokenAddress, GmClientService, GmOrderbookService, Order } from '@staratlas/factory'
 import Big from 'big.js'
 import { createTransferCheckedInstruction, getOrCreateAssociatedTokenAccount } from '@solana/spl-token'
 
@@ -14,12 +14,16 @@ import { keyPair, resource } from '../wallet'
 const gmClientService = new GmClientService()
 const gmOrderbookService = new GmOrderbookService(connection, marketProgram)
 
+const orderSorter = (a: Order, b: Order) => a.price.sub(b.price).toNumber()
+
 export const getMarketPrice = (res: PublicKey): Big => {
     const orders =
         gmOrderbookService.getSellOrdersByCurrencyAndItem(resource.atlas.toString(), res.toString())
-            .sort((a, b) => a.uiPrice - b.uiPrice)
+            .sort(orderSorter)
 
-    return Big(orders[0].uiPrice)
+    const [order] = orders
+
+    return Big(order.uiPrice)
 }
 
 export const getResourcePrices = (): Amounts => ({
@@ -90,17 +94,19 @@ export const buyResource = async (res: PublicKey, amount: Big): Promise<string> 
 
     const orders =
         gmOrderbookService.getSellOrdersByCurrencyAndItem(resource.atlas.toString(), res.toString())
-            .sort((a, b) => a.uiPrice - b.uiPrice)
+            .sort(orderSorter)
+
+    const [order] = orders
 
     const exchangeTx = await gmClientService.getCreateExchangeTransaction(
         connection,
-        orders[0],
+        order,
         keyPair.publicKey,
         amount.round().toNumber(),
         marketProgram
     )
 
-    logger.info(`Buying ${amount.toFixed(0)} ${res} for ${orders[0].uiPrice} each`)
+    logger.info(`Buying ${amount.toFixed(0)} ${res} for ${order.uiPrice} each`)
 
     return sendAndConfirmTransaction(exchangeTx.transaction)
 
