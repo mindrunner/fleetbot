@@ -2,8 +2,6 @@ import { Message } from 'telegraf/types'
 
 import { ContextMessageUpdate } from '../context-message-update'
 
-import TextMessage = Message.TextMessage
-
-export const unauthorized = (ctx: ContextMessageUpdate): Promise<TextMessage> => ctx.reply(`
+export const unauthorized = (ctx: ContextMessageUpdate): Promise<Message.TextMessage> => ctx.reply(`
 Huh, who are you? Please authorize first!
 `)

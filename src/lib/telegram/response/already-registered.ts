@@ -2,8 +2,6 @@ import { Message } from 'telegraf/types'
 
 import { ContextMessageUpdate } from '../context-message-update'
 
-import TextMessage = Message.TextMessage
-
-export const alreadyRegistered = (ctx: ContextMessageUpdate): Promise<TextMessage> => ctx.reply(`
+export const alreadyRegistered = (ctx: ContextMessageUpdate): Promise<Message.TextMessage> => ctx.reply(`
 Looks like you are already registered and ready to go!
 `)
