@@ -93,7 +93,7 @@ export const refillFleet = async (player: PublicKey, fleetUnit: ShipStakingInfo,
 
     transaction.sign([keyPair, keyPair])
 
-    const txid = await connection.sendTransaction(transaction)
+    const txid = await connection.sendTransaction(transaction, { maxRetries: 10 })
 
     logger.info(`https://solscan.io/tx/${txid}`)
 
