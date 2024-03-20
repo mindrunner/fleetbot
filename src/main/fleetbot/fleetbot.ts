@@ -4,6 +4,7 @@ import { config } from '../../config'
 import * as db from '../../db'
 import { checkTransactions, refill, stockResources, telegramBot } from '../../lib'
 import { logger } from '../../logger'
+import { initOrderBook } from '../../service/gm'
 
 let refillCronJob: CronJob | undefined,
     resourcesCronJob: CronJob | undefined,
@@ -34,6 +35,7 @@ export const stop = async (): Promise<void> => {
 }
 
 export const start = async (): Promise<void> => {
+    await initOrderBook()
     // https://github.com/telegraf/telegraf/issues/1749
     telegramBot.launch()
     if (config.app.quickstart) {

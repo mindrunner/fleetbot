@@ -6,7 +6,7 @@ import { Between, MoreThanOrEqual } from 'typeorm'
 
 import dayjs from '../../../dayjs'
 import { Refill } from '../../../db/entities'
-import { getResourcePrices, initOrderBook } from '../../../service/gm'
+import { getResourcePrices } from '../../../service/gm'
 import { AD, connection, fleetProgram } from '../../../service/sol'
 import { getDailyBurnRate, getPendingRewards } from '../../stock-resources'
 import { ContextMessageUpdate } from '../context-message-update'
@@ -31,7 +31,6 @@ export const stats = (bot: Telegraf<ContextMessageUpdate>): void => {
             const player = ctx.user
 
             if (player) {
-                await initOrderBook()
                 const fleets = await getAllFleetsForUserPublicKey(
                     connection,
                     new PublicKey(player.publicKey),

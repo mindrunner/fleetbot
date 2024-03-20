@@ -103,8 +103,6 @@ export const initOrderBook = async (): Promise<void> => {
 }
 
 export const buyResource = async (res: PublicKey, amount: Big): Promise<string> => {
-    await initOrderBook()
-
     const orders =
         gmOrderbookService.getSellOrdersByCurrencyAndItem(resource.atlas.toString(), res.toString())
             .sort(orderSorter)

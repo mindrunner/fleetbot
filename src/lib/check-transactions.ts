@@ -3,7 +3,7 @@ import { LessThan, MoreThan } from 'typeorm'
 import dayjs from '../dayjs'
 import { Transaction, Wallet } from '../db/entities'
 import { logger } from '../logger'
-import { getBalanceAtlas, getResourceBalances, getResourcePrices, initOrderBook } from '../service/gm'
+import { getBalanceAtlas, getResourceBalances, getResourcePrices } from '../service/gm'
 import { AD } from '../service/sol'
 import { keyPair, resource } from '../service/wallet'
 
@@ -11,7 +11,6 @@ import { checkAtlasTransactions } from './check-atlas-transactions'
 import { checkR4Transactions } from './check-r4-transactions'
 
 export const checkTransactions = async (): Promise<void> => {
-    await initOrderBook()
     const atlasBalance = await getBalanceAtlas(keyPair.publicKey)
     const prices = getResourcePrices()
     const resources = await getResourceBalances(keyPair.publicKey)

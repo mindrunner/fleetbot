@@ -5,7 +5,7 @@ import Big from 'big.js'
 import dayjs from '../dayjs'
 import { Wallet } from '../db/entities'
 import { logger } from '../logger'
-import { getResourcePrices, initOrderBook } from '../service/gm'
+import { getResourcePrices } from '../service/gm'
 import { AD, connection, fleetProgram } from '../service/sol'
 
 import { max } from './const'
@@ -15,8 +15,6 @@ import { getDailyBurnRate } from './stock-resources'
 
 export const refill = async (): Promise<void> => {
     const players = await Wallet.findBy({ enabled: true })
-
-    await initOrderBook()
 
     /* eslint-disable no-await-in-loop */
     for (const player of players) {

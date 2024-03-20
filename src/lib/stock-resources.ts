@@ -10,7 +10,7 @@ import { ShipInfo, Wallet } from '../db/entities'
 import { logger } from '../logger'
 import { getFleetRemainingResources, getTimePass } from '../service/fleet'
 import { Amounts } from '../service/fleet/const'
-import { buyResources, getResourceBalances, getResourcePrices, initOrderBook } from '../service/gm'
+import { buyResources, getResourceBalances, getResourcePrices } from '../service/gm'
 import { AD, connection, fleetProgram } from '../service/sol'
 import { keyPair } from '../service/wallet'
 
@@ -127,7 +127,6 @@ export const getDailyBurnRate = async (fleets: ShipStakingInfo[]): Promise<Amoun
         fuel: Big(0)
     }
 
-    await initOrderBook()
     await Promise.all(fleets.map(async (shipStakingInfo) => {
         const info = await getScoreVarsShipInfo(connection, fleetProgram, shipStakingInfo.shipMint)
         const remaining = getFleetRemainingResources(info, shipStakingInfo)
