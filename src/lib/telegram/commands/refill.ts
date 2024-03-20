@@ -25,7 +25,7 @@ export const refill = (bot: Telegraf<ContextMessageUpdate>): void => {
             const strategy = ctx.params.length === 1 && ctx.params[0] === 'full' ? fullRefillStrategy : optimalRefillStrategy
             const strategyName = ctx.params.length === 1 && ctx.params[0] === 'full' ? 'full' : 'optimal'
 
-            await ctx.reply('Just saying... There should not be any reason to do this now, but as you wish, I am going to refill your fleets, sir!')
+            await ctx.reply('Just saying... There should not be any reason to do this now, but as you wish, I am going to refill your fleets, ser!')
             await ctx.reply(`Using ${strategyName} refill strategy. Give me a moment please...`)
             const userRefills = await refillPlayer(new PublicKey(ctx.user.publicKey), strategy)
 
