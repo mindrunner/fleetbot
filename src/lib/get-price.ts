@@ -3,8 +3,8 @@ import Big from 'big.js'
 import { Amounts } from '../service/fleet/const'
 import { getResourcePrices } from '../service/gm'
 
-export const getPrice = async (amount: Amounts, price?: Amounts): Promise<Big> => {
-    const p: Amounts = price ? price : await getResourcePrices()
+export const getPrice = (amount: Amounts, price?: Amounts): Big => {
+    const p: Amounts = price ? price : getResourcePrices()
     const totalFuelPrice = amount.fuel.mul(p.fuel)
     const totalFoodPrice = amount.food.mul(p.food)
     const totalAmmoPrice = amount.ammo.mul(p.ammo)

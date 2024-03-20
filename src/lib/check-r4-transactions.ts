@@ -74,7 +74,7 @@ export const checkR4Transactions = async (
                     amounts[resourceName] = Big(originalAmount)
 
                     // eslint-disable-next-line no-await-in-loop
-                    const price = await getPrice(amounts, prices)
+                    const price = getPrice(amounts, prices)
 
                     // eslint-disable-next-line max-depth
                     if (sender === keyPair.publicKey.toString()) {

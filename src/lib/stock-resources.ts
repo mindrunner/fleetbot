@@ -174,7 +174,7 @@ export const stockResources = async (): Promise<void> => {
     }
 
     if (amount.food.gt(0) || amount.ammo.gt(0) || amount.fuel.gt(0) || amount.tool.gt(0)) {
-        const price = await getResourcePrices()
+        const price = getResourcePrices()
         const totalFuelPrice = amount.fuel.mul(price.fuel)
         const totalFoodPrice = amount.food.mul(price.food)
         const totalAmmoPrice = amount.ammo.mul(price.ammo)

@@ -13,7 +13,7 @@ import { checkR4Transactions } from './check-r4-transactions'
 export const checkTransactions = async (): Promise<void> => {
     await initOrderBook()
     const atlasBalance = await getBalanceAtlas(keyPair.publicKey)
-    const prices = await getResourcePrices()
+    const prices = getResourcePrices()
     const resources = await getResourceBalances(keyPair.publicKey)
 
     logger.info(`ATLAS balance: ${atlasBalance.toFixed(AD)}`)

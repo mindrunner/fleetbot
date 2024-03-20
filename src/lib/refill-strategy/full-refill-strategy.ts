@@ -33,6 +33,6 @@ export const fullRefillStrategy: RefillStrategy = shipStakingInfos =>
         return {
             shipStakingInfo,
             amount,
-            price: await getPrice(amount)
+            price: getPrice(amount)
         } as FleetRefill
     }))
