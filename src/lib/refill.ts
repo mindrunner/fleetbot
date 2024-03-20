@@ -18,17 +18,17 @@ export const refill = async (): Promise<void> => {
 
     await initOrderBook()
 
-    await Promise.all(players.map(async (player) => {
+    /* eslint-disable no-await-in-loop */
+    for (const player of players) {
         if (dayjs().isAfter(player.nextRefill)) {
             await refillPlayer(new PublicKey(player.publicKey), optimalRefillStrategy)
         }
 
         const fleets = await getAllFleetsForUserPublicKey(connection, new PublicKey(player.publicKey), fleetProgram)
-        const [burnRate, price, balance] = await Promise.all([
-            getDailyBurnRate(fleets),
-            getResourcePrices(),
-            player.getBalance()
-        ])
+        const burnRate = await getDailyBurnRate(fleets)
+        const price = getResourcePrices()
+        const balance = await player.getBalance()
+
         const burnPerDay =
             max(burnRate.food.mul(price.food).add(
                 burnRate.fuel.mul(price.fuel)).add(
@@ -44,5 +44,6 @@ export const refill = async (): Promise<void> => {
         logger.info(`Balance: ${balance.toFixed(AD)} ATLAS / Burn ${burnPerDay.toFixed(AD)} ATLAS per day / Credit for ${dayjs.duration(balanceTime.toNumber(), 'day').humanize(false)}`)
         logger.info(`Total Tipped: ${(await player.totalTipped()).toFixed(AD)}`)
         logger.info('-----------------------------------------------------')
-    }))
+    }
+    /* eslint-enable no-await-in-loop */
 }
