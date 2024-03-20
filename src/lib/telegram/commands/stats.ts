@@ -32,7 +32,10 @@ export const stats = (bot: Telegraf<ContextMessageUpdate>): void => {
 
             if (player) {
                 await initOrderBook()
-                const fleets = await getAllFleetsForUserPublicKey(connection, new PublicKey(player), fleetProgram)
+                const fleets = await getAllFleetsForUserPublicKey(
+                    connection,
+                    new PublicKey(player.publicKey),
+                    fleetProgram)
                 const [burnRate, price, playerBalance, pendingRewards] = await Promise.all([
                     getDailyBurnRate(fleets),
                     getResourcePrices(),

@@ -23,7 +23,7 @@ export const refill = async (): Promise<void> => {
             await refillPlayer(new PublicKey(player.publicKey), optimalRefillStrategy)
         }
 
-        const fleets = await getAllFleetsForUserPublicKey(connection, new PublicKey(player), fleetProgram)
+        const fleets = await getAllFleetsForUserPublicKey(connection, new PublicKey(player.publicKey), fleetProgram)
         const [burnRate, price, balance] = await Promise.all([
             getDailyBurnRate(fleets),
             getResourcePrices(),
