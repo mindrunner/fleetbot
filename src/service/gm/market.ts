@@ -1,4 +1,4 @@
-import { Keypair, PublicKey, Transaction } from '@solana/web3.js'
+import { Keypair, PublicKey, TransactionMessage, VersionedTransaction } from '@solana/web3.js'
 import { getAssociatedTokenAddress, GmClientService, GmOrderbookService, Order } from '@staratlas/factory'
 import Big from 'big.js'
 import { createTransferCheckedInstruction, getOrCreateAssociatedTokenAccount } from '@solana/spl-token'
@@ -8,7 +8,6 @@ import { Sentry } from '../../sentry'
 import { logger } from '../../logger'
 import { Amounts } from '../fleet/const'
 import { connection, marketProgram } from '../sol'
-import { sendAndConfirmTransaction } from '../sol/send-and-confirm-transaction'
 import { keyPair, resource } from '../wallet'
 
 const gmClientService = new GmClientService()
@@ -48,8 +47,12 @@ export const getBalanceAtlas = async (pubKey: PublicKey): Promise<Big> => {
 }
 
 export const sendAtlas = async (receiver: PublicKey, amount: number): Promise<string> => {
-    const transaction = new Transaction().add(
-        createTransferCheckedInstruction(
+    const latestBlockHash = await connection.getLatestBlockhash()
+
+    const messageV0 = new TransactionMessage({
+        payerKey: keyPair.publicKey,
+        recentBlockhash: latestBlockHash.blockhash,
+        instructions: [ createTransferCheckedInstruction(
             await getAssociatedTokenAddress(keyPair.publicKey, resource.atlas),
             resource.atlas,
             await getAssociatedTokenAddress(receiver, resource.atlas),
@@ -57,14 +60,24 @@ export const sendAtlas = async (receiver: PublicKey, amount: number): Promise<st
             Big(amount).mul(100000000).toNumber(),
             8,
             [],
-        )
-    )
+        )]
+    }).compileToV0Message()
 
-    return sendAndConfirmTransaction(transaction)
+    const transaction = new VersionedTransaction(messageV0)
 
-    // return sendAndConfirmTransaction(connection, transaction, [keyPair], {
-    //     skipPreflight: false, maxRetries: 10, commitment: 'finalized'
-    // })
+    transaction.sign([keyPair, keyPair])
+
+    const txid = await connection.sendTransaction(transaction)
+
+    logger.info(`https://solscan.io/tx/${txid}`)
+
+    await connection.confirmTransaction({
+        blockhash: latestBlockHash.blockhash,
+        lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
+        signature: txid
+    })
+
+    return txid
 }
 
 export const getBalanceMarket = async (pubKey: PublicKey, res: PublicKey): Promise<Big> => {
@@ -108,11 +121,29 @@ export const buyResource = async (res: PublicKey, amount: Big): Promise<string> 
 
     logger.info(`Buying ${amount.toFixed(0)} ${res} for ${order.uiPrice} each`)
 
-    return sendAndConfirmTransaction(exchangeTx.transaction)
+    const latestBlockHash = await connection.getLatestBlockhash()
 
-    // return sendAndConfirmTransaction(connection, exchangeTx.transaction, [keyPair, ...exchangeTx.signers], {
-    //     skipPreflight: false, maxRetries: 10, commitment: 'finalized'
-    // })
+    const messageV0 = new TransactionMessage({
+        payerKey: keyPair.publicKey,
+        recentBlockhash: latestBlockHash.blockhash,
+        instructions: exchangeTx.transaction.instructions
+    }).compileToV0Message()
+
+    const transaction = new VersionedTransaction(messageV0)
+
+    transaction.sign([keyPair, keyPair])
+
+    const txid = await connection.sendTransaction(transaction)
+
+    logger.info(`https://solscan.io/tx/${txid}`)
+
+    await connection.confirmTransaction({
+        blockhash: latestBlockHash.blockhash,
+        lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
+        signature: txid
+    })
+
+    return txid
 }
 export const buyResources = (amount: Amounts): Promise<string[]> => {
     const buyPromises: Array<Promise<string>> = []

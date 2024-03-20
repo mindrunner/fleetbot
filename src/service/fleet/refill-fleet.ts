@@ -1,8 +1,8 @@
-import { PublicKey, Transaction, TransactionInstruction } from '@solana/web3.js'
+import { PublicKey, TransactionInstruction, TransactionMessage, VersionedTransaction } from '@solana/web3.js'
 import { createRearmInstruction, createRefeedInstruction, createRefuelInstruction, createRepairInstruction, ShipStakingInfo } from '@staratlas/factory'
 
+import { logger } from '../../logger'
 import { connection, fleetProgram, getAccount } from '../sol'
-import { sendAndConfirmTransaction } from '../sol/send-and-confirm-transaction'
 import { keyPair, resource } from '../wallet'
 
 import { Amounts } from './const'
@@ -15,10 +15,10 @@ export const refillFleet = async (player: PublicKey, fleetUnit: ShipStakingInfo,
         getAccount(keyPair.publicKey, resource.tool)
     ])
 
-    const transaction = new Transaction({ feePayer: keyPair.publicKey })
+    const instructions: TransactionInstruction[] = []
 
     if (amounts.food.gt(0)) {
-        transaction.add(
+        instructions.push(
             new TransactionInstruction(
                 await createRefeedInstruction(
                     connection,
@@ -33,7 +33,7 @@ export const refillFleet = async (player: PublicKey, fleetUnit: ShipStakingInfo,
         )
     }
     if (amounts.fuel.gt(0)) {
-        transaction.add(
+        instructions.push(
             new TransactionInstruction(
                 await createRefuelInstruction(connection,
                     keyPair.publicKey,
@@ -47,7 +47,7 @@ export const refillFleet = async (player: PublicKey, fleetUnit: ShipStakingInfo,
         )
     }
     if (amounts.ammo.gt(0)) {
-        transaction.add(
+        instructions.push(
             new TransactionInstruction(
                 await createRearmInstruction(connection,
                     keyPair.publicKey,
@@ -61,7 +61,7 @@ export const refillFleet = async (player: PublicKey, fleetUnit: ShipStakingInfo,
         )
     }
     if (amounts.tool.gt(0)) {
-        transaction.add(
+        instructions.push(
             new TransactionInstruction(
                 await createRepairInstruction(connection,
                     keyPair.publicKey,
@@ -75,11 +75,27 @@ export const refillFleet = async (player: PublicKey, fleetUnit: ShipStakingInfo,
         )
     }
 
-    return sendAndConfirmTransaction(transaction)
+    const latestBlockHash = await connection.getLatestBlockhash()
 
-    // return sendAndConfirmTransaction(connection, transaction, [keyPair, keyPair], {
-    //     skipPreflight: false, maxRetries: 10, commitment: 'finalized'
-    // })
+    const messageV0 = new TransactionMessage({
+        payerKey: keyPair.publicKey,
+        recentBlockhash: latestBlockHash.blockhash,
+        instructions
+    }).compileToV0Message()
 
-    // return sendAndConfirmTransaction(connection, transaction, [keyPair, keyPair])
+    const transaction = new VersionedTransaction(messageV0)
+
+    transaction.sign([keyPair, keyPair])
+
+    const txid = await connection.sendTransaction(transaction)
+
+    logger.info(`https://solscan.io/tx/${txid}`)
+
+    await connection.confirmTransaction({
+        blockhash: latestBlockHash.blockhash,
+        lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
+        signature: txid
+    })
+
+    return txid
 }
