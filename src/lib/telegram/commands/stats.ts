@@ -1,4 +1,5 @@
 import { PublicKey } from '@solana/web3.js'
+import { getAllFleetsForUserPublicKey } from '@staratlas/factory'
 import Big from 'big.js'
 import { Telegraf } from 'telegraf'
 import { Between, MoreThanOrEqual } from 'typeorm'
@@ -6,7 +7,7 @@ import { Between, MoreThanOrEqual } from 'typeorm'
 import dayjs from '../../../dayjs'
 import { Refill } from '../../../db/entities'
 import { getResourcePrices, initOrderBook } from '../../../service/gm'
-import { AD } from '../../../service/sol'
+import { AD, connection, fleetProgram } from '../../../service/sol'
 import { getDailyBurnRate, getPendingRewards } from '../../stock-resources'
 import { ContextMessageUpdate } from '../context-message-update'
 import { unauthorized } from '../response'
@@ -31,11 +32,12 @@ export const stats = (bot: Telegraf<ContextMessageUpdate>): void => {
 
             if (player) {
                 await initOrderBook()
+                const fleets = await getAllFleetsForUserPublicKey(connection, new PublicKey(player), fleetProgram)
                 const [burnRate, price, playerBalance, pendingRewards] = await Promise.all([
-                    getDailyBurnRate(new PublicKey(player.publicKey)),
+                    getDailyBurnRate(fleets),
                     getResourcePrices(),
                     player.getBalance(),
-                    getPendingRewards(new PublicKey(player.publicKey))
+                    getPendingRewards(fleets)
                 ])
                 const burnPerDay =
                     burnRate.food.mul(price.food).add(

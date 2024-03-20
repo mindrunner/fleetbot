@@ -1,11 +1,12 @@
 import { PublicKey } from '@solana/web3.js'
+import { getAllFleetsForUserPublicKey } from '@staratlas/factory'
 import Big from 'big.js'
 
 import dayjs from '../dayjs'
 import { Wallet } from '../db/entities'
 import { logger } from '../logger'
 import { getResourcePrices, initOrderBook } from '../service/gm'
-import { AD } from '../service/sol'
+import { AD, connection, fleetProgram } from '../service/sol'
 
 import { max } from './const'
 import { refillPlayer } from './refill-player'
@@ -22,8 +23,9 @@ export const refill = async (): Promise<void> => {
             await refillPlayer(new PublicKey(player.publicKey), optimalRefillStrategy)
         }
 
+        const fleets = await getAllFleetsForUserPublicKey(connection, new PublicKey(player), fleetProgram)
         const [burnRate, price, balance] = await Promise.all([
-            getDailyBurnRate(new PublicKey(player.publicKey)),
+            getDailyBurnRate(fleets),
             getResourcePrices(),
             player.getBalance()
         ])

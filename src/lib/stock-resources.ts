@@ -49,12 +49,12 @@ const getAllFleetsForUserPublicKey = async (
 
     const playerFleets: ShipStakingInfo[] = []
 
-    for(const acc of playerShipStakingAccounts) {
+    for (const acc of playerShipStakingAccounts) {
         try {
             // eslint-disable-next-line no-await-in-loop
             const fleet = await program.account.shipStaking.fetchNullable(acc)
 
-            if(fleet) {
+            if (fleet) {
                 playerFleets.push(<ShipStakingInfo>fleet)
             }
         }
@@ -91,9 +91,7 @@ export const getShipName = async (shipStakingInfo: ShipStakingInfo): Promise<str
     return shipInfo.name
 }
 
-export const getPendingRewards = async (player: PublicKey): Promise<Big> => {
-    const fleets = await getAllFleetsForUserPublicKey(connection, player, fleetProgram)
-
+export const getPendingRewards = async (fleets: ShipStakingInfo[]): Promise<Big> => {
     const fleetInfos = await Promise.all(fleets.map(async (fleet) => {
         const shipInfo = await getScoreVarsShipInfo(
             connection,
@@ -119,8 +117,7 @@ export const getPendingRewards = async (player: PublicKey): Promise<Big> => {
     }, Big(0)).div(100000000)
 }
 
-export const getDailyBurnRate = async (player: PublicKey): Promise<Amounts> => {
-    const fleets = await getAllFleetsForUserPublicKey(connection, player, fleetProgram)
+export const getDailyBurnRate = async (fleets: ShipStakingInfo[]): Promise<Amounts> => {
     const dayInSeconds = 86400
 
     const resourcePerDay: Amounts = {
@@ -154,13 +151,15 @@ const logStats = (balance: Amounts, dailyBurn: Amounts) => {
 export const stockResources = async (): Promise<void> => {
     const wallets = await Wallet.findBy({ enabled: true })
 
-    const dailyBurn = (await Promise.all(wallets.map(wallet => getDailyBurnRate(new PublicKey(wallet.publicKey)))))
-        .reduce((acc, cur) => ({
-            tool: acc.tool.add(cur.tool),
-            ammo: acc.ammo.add(cur.ammo),
-            food: acc.food.add(cur.food),
-            fuel: acc.fuel.add(cur.fuel)
-        }), { ammo: Big(0), food: Big(0), fuel: Big(0), tool: Big(0) } as Amounts)
+    const dailyBurn = (await Promise.all(wallets.map(async wallet =>
+        getDailyBurnRate(
+            await getAllFleetsForUserPublicKey(connection, new PublicKey(wallet.publicKey), fleetProgram)))
+    ) ) .reduce((acc, cur) => ({
+        tool: acc.tool.add(cur.tool),
+        ammo: acc.ammo.add(cur.ammo),
+        food: acc.food.add(cur.food),
+        fuel: acc.fuel.add(cur.fuel)
+    }), { ammo: Big(0), food: Big(0), fuel: Big(0), tool: Big(0) } as Amounts)
 
     const balance = await getResourceBalances(keyPair.publicKey)
 
