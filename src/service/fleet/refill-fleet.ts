@@ -1,8 +1,10 @@
 import { PublicKey, TransactionInstruction, TransactionMessage, VersionedTransaction } from '@solana/web3.js'
 import { createRearmInstruction, createRefeedInstruction, createRefuelInstruction, createRepairInstruction, ShipStakingInfo } from '@staratlas/factory'
 
+import { config } from '../../config'
 import { logger } from '../../logger'
 import { connection, fleetProgram, getAccount } from '../sol'
+import { createPriorityFeeInstruction } from '../sol/priority-fee/priority-fee-instruction'
 import { keyPair, resource } from '../wallet'
 
 import { Amounts } from './const'
@@ -76,6 +78,10 @@ export const refillFleet = async (player: PublicKey, fleetUnit: ShipStakingInfo,
     }
 
     const latestBlockHash = await connection.getLatestBlockhash()
+
+    if(config.sol.priorityFee > 0) {
+        instructions.unshift(createPriorityFeeInstruction())
+    }
 
     const messageV0 = new TransactionMessage({
         payerKey: keyPair.publicKey,
