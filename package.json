@@ -30,7 +30,7 @@
         "@sentry/node": "^7.108.0",
         "@sentry/tracing": "^7.108.0",
         "@solana/spl-token": "^0.4.1",
-        "@solana/web3.js": "^1.91.1",
+        "@solana/web3.js": "^1.91.2",
         "@staratlas/factory": "github:mindrunner/factory#develop",
         "big.js": "^6.2.1",
         "bip39": "^3.1.0",
