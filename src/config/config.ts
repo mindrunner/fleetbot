@@ -39,7 +39,6 @@ export interface Config {
         rpcEndpoint: string
         wsEndpoint: string
         fleetAddress: string
-        priorityFee: number
         atlasMint: string
         marketAddress: string
         toolMint: string
@@ -80,7 +79,6 @@ export const config: Config = {
         wsEndpoint: env.get('WS_ENDPOINT'),
         fleetAddress: env.get('FLEET_ADDRESS'),
         marketAddress: env.get('MARKET_ADDRESS'),
-        priorityFee: Number(env.get('PRIORITY_FEE')),
         atlasMint: env.get('ATLAS_MINT'),
         toolMint: env.get('TOOL_MINT'),
         foodMint: env.get('FOOD_MINT'),

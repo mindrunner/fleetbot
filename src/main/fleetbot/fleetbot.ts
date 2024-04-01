@@ -37,7 +37,11 @@ export const stop = async (): Promise<void> => {
 export const start = async (): Promise<void> => {
     await initOrderBook()
     // https://github.com/telegraf/telegraf/issues/1749
-    telegramBot.launch()
+    // await telegramBot.launch(() => console.log('Bot is starting!'))
+
+    telegramBot.botInfo = await telegramBot.telegram.getMe()
+    await telegramBot.launch()
+
     if (config.app.quickstart) {
         await stockResources()
         await checkTransactions()
