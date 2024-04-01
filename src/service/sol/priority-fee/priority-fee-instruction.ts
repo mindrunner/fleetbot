@@ -1,9 +1,14 @@
 import { ComputeBudgetProgram, TransactionInstruction } from '@solana/web3.js'
 
-import { config } from '../../../config'
+import { logger } from '../../../logger'
+import { connection } from '../const'
 
-export const createPriorityFeeInstruction = (): TransactionInstruction => {
-    const { priorityFee } = config.sol
+export const createPriorityFeeInstruction = async (): Promise<TransactionInstruction> => {
+    const recentPriorityFees = await connection.getRecentPrioritizationFees()
 
-    return ComputeBudgetProgram.setComputeUnitPrice({ microLamports: priorityFee })
+    const maxPriorityFee = Math.max(...recentPriorityFees.map(fee => fee.prioritizationFee.valueOf()))
+
+    logger.info(`Estimated priority fee: ${maxPriorityFee}`)
+
+    return ComputeBudgetProgram.setComputeUnitPrice({ microLamports: maxPriorityFee })
 }

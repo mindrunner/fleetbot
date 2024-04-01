@@ -1,10 +1,8 @@
-import { PublicKey, TransactionInstruction, TransactionMessage, VersionedTransaction } from '@solana/web3.js'
+import { PublicKey, TransactionInstruction } from '@solana/web3.js'
 import { createRearmInstruction, createRefeedInstruction, createRefuelInstruction, createRepairInstruction, ShipStakingInfo } from '@staratlas/factory'
 
-import { config } from '../../config'
-import { logger } from '../../logger'
 import { connection, fleetProgram, getAccount } from '../sol'
-import { createPriorityFeeInstruction } from '../sol/priority-fee/priority-fee-instruction'
+import { sendAndConfirmInstructions } from '../sol/send-and-confirm-tx'
 import { keyPair, resource } from '../wallet'
 
 import { Amounts } from './const'
@@ -77,31 +75,5 @@ export const refillFleet = async (player: PublicKey, fleetUnit: ShipStakingInfo,
         )
     }
 
-    const latestBlockHash = await connection.getLatestBlockhash()
-
-    if(config.sol.priorityFee > 0) {
-        instructions.unshift(createPriorityFeeInstruction())
-    }
-
-    const messageV0 = new TransactionMessage({
-        payerKey: keyPair.publicKey,
-        recentBlockhash: latestBlockHash.blockhash,
-        instructions
-    }).compileToV0Message()
-
-    const transaction = new VersionedTransaction(messageV0)
-
-    transaction.sign([keyPair, keyPair])
-
-    const txid = await connection.sendTransaction(transaction, { maxRetries: 10 })
-
-    logger.info(`https://solscan.io/tx/${txid}`)
-
-    await connection.confirmTransaction({
-        blockhash: latestBlockHash.blockhash,
-        lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
-        signature: txid
-    })
-
-    return txid
+    return await sendAndConfirmInstructions(instructions)
 }
