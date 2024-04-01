@@ -37,10 +37,8 @@ export const stop = async (): Promise<void> => {
 export const start = async (): Promise<void> => {
     await initOrderBook()
     // https://github.com/telegraf/telegraf/issues/1749
-    // await telegramBot.launch(() => console.log('Bot is starting!'))
-
-    telegramBot.botInfo = await telegramBot.telegram.getMe()
-    await telegramBot.launch()
+    // eslint-disable-next-line promise/prefer-await-to-then
+    telegramBot.launch().catch(e => logger.error(e))
 
     if (config.app.quickstart) {
         await stockResources()
