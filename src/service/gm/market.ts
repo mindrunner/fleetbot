@@ -1,13 +1,14 @@
-import { Keypair, PublicKey, TransactionMessage, VersionedTransaction } from '@solana/web3.js'
+import { createTransferCheckedInstruction, getOrCreateAssociatedTokenAccount } from '@solana/spl-token'
+import { Keypair, PublicKey } from '@solana/web3.js'
 import { getAssociatedTokenAddress, GmClientService, GmOrderbookService, Order } from '@staratlas/factory'
 import Big from 'big.js'
-import { createTransferCheckedInstruction, getOrCreateAssociatedTokenAccount } from '@solana/spl-token'
 
 import { Sentry } from '../../sentry'
 
 import { logger } from '../../logger'
 import { Amounts } from '../fleet/const'
 import { connection, marketProgram } from '../sol'
+import { sendAndConfirmInstructions } from '../sol/send-and-confirm-tx'
 import { keyPair, resource } from '../wallet'
 
 const gmClientService = new GmClientService()
@@ -47,37 +48,17 @@ export const getBalanceAtlas = async (pubKey: PublicKey): Promise<Big> => {
 }
 
 export const sendAtlas = async (receiver: PublicKey, amount: number): Promise<string> => {
-    const latestBlockHash = await connection.getLatestBlockhash()
+    const instructions = [ createTransferCheckedInstruction(
+        await getAssociatedTokenAddress(keyPair.publicKey, resource.atlas),
+        resource.atlas,
+        await getAssociatedTokenAddress(receiver, resource.atlas),
+        keyPair.publicKey,
+        Big(amount).mul(100000000).toNumber(),
+        8,
+        [],
+    )]
 
-    const messageV0 = new TransactionMessage({
-        payerKey: keyPair.publicKey,
-        recentBlockhash: latestBlockHash.blockhash,
-        instructions: [ createTransferCheckedInstruction(
-            await getAssociatedTokenAddress(keyPair.publicKey, resource.atlas),
-            resource.atlas,
-            await getAssociatedTokenAddress(receiver, resource.atlas),
-            keyPair.publicKey,
-            Big(amount).mul(100000000).toNumber(),
-            8,
-            [],
-        )]
-    }).compileToV0Message()
-
-    const transaction = new VersionedTransaction(messageV0)
-
-    transaction.sign([keyPair, keyPair])
-
-    const txid = await connection.sendTransaction(transaction)
-
-    logger.info(`https://solscan.io/tx/${txid}`)
-
-    await connection.confirmTransaction({
-        blockhash: latestBlockHash.blockhash,
-        lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
-        signature: txid
-    })
-
-    return txid
+    return await sendAndConfirmInstructions(instructions)
 }
 
 export const getBalanceMarket = async (pubKey: PublicKey, res: PublicKey): Promise<Big> => {
@@ -119,45 +100,15 @@ export const buyResource = async (res: PublicKey, amount: Big): Promise<string> 
 
     logger.info(`Buying ${amount.toFixed(0)} ${res} for ${order.uiPrice} each`)
 
-    const latestBlockHash = await connection.getLatestBlockhash()
-
-    const messageV0 = new TransactionMessage({
-        payerKey: keyPair.publicKey,
-        recentBlockhash: latestBlockHash.blockhash,
-        instructions: exchangeTx.transaction.instructions
-    }).compileToV0Message()
-
-    const transaction = new VersionedTransaction(messageV0)
-
-    transaction.sign([keyPair, keyPair])
-
-    const txid = await connection.sendTransaction(transaction)
-
-    logger.info(`https://solscan.io/tx/${txid}`)
-
-    await connection.confirmTransaction({
-        blockhash: latestBlockHash.blockhash,
-        lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
-        signature: txid
-    })
-
-    return txid
+    return await sendAndConfirmInstructions(exchangeTx.transaction.instructions)
 }
-export const buyResources = (amount: Amounts): Promise<string[]> => {
-    const buyPromises: Array<Promise<string>> = []
+export const buyResources = async (amount: Amounts): Promise<string[]> => {
+    const res = await Promise.all([
+        amount.food.gt(0) ? buyResource(resource.food, amount.food) : Promise.resolve(''),
+        amount.ammo.gt(0) ? buyResource(resource.ammo, amount.ammo) : Promise.resolve(''),
+        amount.fuel.gt(0) ? buyResource(resource.fuel, amount.fuel) : Promise.resolve(''),
+        amount.tool.gt(0) ? buyResource(resource.tool, amount.tool) : Promise.resolve('')
+    ])
 
-    if (amount.food.gt(0)) {
-        buyPromises.push(buyResource(resource.food, amount.food))
-    }
-    if (amount.ammo.gt(0)) {
-        buyPromises.push(buyResource(resource.ammo, amount.ammo))
-    }
-    if (amount.fuel.gt(0)) {
-        buyPromises.push(buyResource(resource.fuel, amount.fuel))
-    }
-    if (amount.tool.gt(0)) {
-        buyPromises.push(buyResource(resource.tool, amount.tool))
-    }
-
-    return Promise.all(buyPromises)
+    return res.filter(r => r !== '')
 }
