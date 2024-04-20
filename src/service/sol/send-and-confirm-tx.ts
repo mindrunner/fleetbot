@@ -22,13 +22,16 @@ type BlockhashWithExpiryBlockHeight = Readonly<{
 const confirmTx = async (txId: string): Promise<string | undefined> => {
     const res = await connection.getSignatureStatus(txId)
 
-    logger.debug(`Signature: ${txId} with status: ${JSON.stringify(res)}`)
+    // logger.debug(`Signature: ${txId} with status: ${JSON.stringify(res)}`)
 
     if (res?.value && 'confirmationStatus' in res.value) {
         if (res.value.confirmationStatus === 'finalized' || res.value.confirmationStatus === 'confirmed' || res.value.confirmationStatus === 'processed') {
-            logger.info(`Transaction ${res.value.confirmationStatus}: ${txId} with status: ${res.value.confirmationStatus}`)
+            const log = res.value.err ? logger.warn: logger.info
 
-            logger.info(`https://solscan.io/tx/${txId}`)
+            // log(`Transaction ${res.value.confirmationStatus}: ${txId} with status: ${res.value.confirmationStatus}`)
+            log(`Signature: ${txId} with status: ${JSON.stringify(res)}`)
+
+            // logger.info(`https://solscan.io/tx/${txId}`)
 
             return txId
         }
@@ -48,10 +51,16 @@ export const sendAndConfirmTx = async (
     /* eslint-disable no-await-in-loop */
     while (blockheight <= blockHash.lastValidBlockHeight) {
         try {
-            txId = await connection.sendRawTransaction(transaction.serialize())
+            txId = await connection.sendRawTransaction(transaction.serialize(), { skipPreflight: true })
         }
         catch (e) {
             const message = (e as any).message as string
+
+            const logs = (e as any).logs as string[]
+
+            logs.filter(log => log.includes('AnchorError')).forEach((log) => {
+                logger.error(log)
+            })
 
             if (message.includes('has already been processed') && txId) {
                 await confirmTx(txId)
