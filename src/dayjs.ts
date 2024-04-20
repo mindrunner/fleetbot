@@ -9,6 +9,8 @@ import utc from 'dayjs/plugin/utc'
 export { Dayjs } from 'dayjs'
 export { Duration } from 'dayjs/plugin/duration'
 
+export const now = (): dayjs.Dayjs => dayjs()
+
 dayjs.extend(customParseFormat)
 dayjs.extend(advancedFormat)
 dayjs.extend(duration)

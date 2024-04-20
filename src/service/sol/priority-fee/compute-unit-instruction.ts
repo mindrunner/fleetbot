@@ -38,7 +38,7 @@ export const createComputeUnitInstruction =
     async (instructions: TransactionInstruction[]): Promise<TransactionInstruction> => {
         const units = await getSimulationUnits(instructions, keyPair.publicKey, [])
 
-        logger.info(`Esitmated Compute Units: ${units}`)
+        logger.debug(`Esitmated Compute Units: ${units}`)
 
         return ComputeBudgetProgram.setComputeUnitLimit({ units: units ? units + 500 : 200_000 })
     }

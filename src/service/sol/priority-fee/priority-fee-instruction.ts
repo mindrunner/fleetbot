@@ -8,7 +8,7 @@ export const createPriorityFeeInstruction = async (): Promise<TransactionInstruc
 
     const maxPriorityFee = Math.max(...recentPriorityFees.map(fee => fee.prioritizationFee.valueOf()))
 
-    logger.info(`Estimated priority fee: ${maxPriorityFee}`)
+    logger.debug(`Estimated priority fee: ${maxPriorityFee}`)
 
     return ComputeBudgetProgram.setComputeUnitPrice({ microLamports: maxPriorityFee })
 }

@@ -30,18 +30,19 @@
         "@sentry/integrations": "^7.114.0",
         "@sentry/node": "^8.11.0",
         "@sentry/tracing": "^7.114.0",
-        "@solana/spl-token": "^0.4.6",
+        "@solana/spl-token": "^0.4.8",
         "@solana/web3.js": "^1.95.3",
         "@staratlas/atlas-prime": "^0.13.1",
         "@staratlas/cargo": "^1.1.0",
         "@staratlas/points": "^1.0.4",
-        "@staratlas/claim-stake": "^0.11.5",
+        "@staratlas/claim-stake": "^0.11.6",
         "@staratlas/crafting": "^1.1.0",
-        "@staratlas/data-source": "^0.7.4",
+        "@staratlas/data-source": "^0.7.6",
         "@staratlas/factory": "^0.7.0",
         "@staratlas/player-profile": "^0.9.1",
+        "@staratlas/points": "^1.0.5",
         "@staratlas/profile-faction": "^0.4.1",
-        "@staratlas/sage": "^1.0.2",
+        "@staratlas/sage": "^1.4.0",
         "big.js": "^6.2.1",
         "bip39": "^3.1.0",
         "bn.js": "^5.2.1",
@@ -55,6 +56,7 @@
         "superagent": "^9.0.2",
         "telegraf": "^4.16.3",
         "typeorm": "^0.3.20",
+        "undici": "^6.19.2",
         "winston": "^3.13.0"
     },
     "devDependencies": {
@@ -73,5 +75,5 @@
         "ts-node-dev": "^2.0.0",
         "typescript": "^5.4.5"
     },
-    "packageManager": "pnpm@9.1.0"
+    "packageManager": "pnpm@9.4.0"
 }

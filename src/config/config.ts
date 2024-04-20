@@ -15,6 +15,7 @@ export interface Config {
     user: {
         keyMode: string
         mnemonic: string
+        pubKey: string
         secretKey: number[]
         walletId: number
         address1: string
@@ -61,6 +62,7 @@ export const config: Config = {
     user: {
         keyMode: env.get('KEY_MODE'),
         secretKey: env.get('SECRET_KEY').split(',').map(s => Number(s)),
+        pubKey: env.get('PUBKEY'),
         mnemonic: env.get('MNEMONIC'),
         walletId: Number(env.get('WALLET_ID')),
         address1: env.get('BOT_ADDRESS_1'),
