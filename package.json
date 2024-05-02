@@ -27,9 +27,9 @@
     "dependencies": {
         "@coral-xyz/anchor": "^0.29.0",
         "@faker-js/faker": "^8.4.1",
-        "@sentry/integrations": "^7.111.0",
-        "@sentry/node": "^7.111.0",
-        "@sentry/tracing": "^7.111.0",
+        "@sentry/integrations": "^7.113.0",
+        "@sentry/node": "^7.113.0",
+        "@sentry/tracing": "^7.113.0",
         "@solana/spl-token": "^0.4.6",
         "@solana/web3.js": "^1.91.7",
         "@staratlas/atlas-prime": "^0.13.1",
