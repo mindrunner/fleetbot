@@ -13,14 +13,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/install
-      - run: npm run build
+      - run: pnpm run build
 
   lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/install
-      - run: npm run lint
+      - run: pnpm run lint
 
   release:
     if: github.ref == 'refs/heads/main'
@@ -28,8 +28,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/install
-      - run: npm run build
-      - run: npm prune --production
+      - run: pnpm run build
+      - run: pnpm install --frozen-lockfile --ignore-scripts --prod
       - uses: docker/metadata-action@v5
         id: metadata
         with:
