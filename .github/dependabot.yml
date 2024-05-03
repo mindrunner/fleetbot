@@ -12,3 +12,4 @@ updates:
           dependencies:
               patterns:
                   - "*sentry*"
+                  - "*eslint*"
