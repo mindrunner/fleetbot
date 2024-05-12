@@ -22,10 +22,10 @@ dependencies:
     version: 7.114.0
   '@solana/spl-token':
     specifier: ^0.4.6
-    version: 0.4.6(@solana/web3.js@1.91.7)(fastestsmallesttextencoderdecoder@1.0.22)
+    version: 0.4.6(@solana/web3.js@1.91.8)(fastestsmallesttextencoderdecoder@1.0.22)
   '@solana/web3.js':
-    specifier: ^1.91.7
-    version: 1.91.7
+    specifier: ^1.91.8
+    version: 1.91.8
   '@staratlas/atlas-prime':
     specifier: ^0.13.1
     version: 0.13.1(fastestsmallesttextencoderdecoder@1.0.22)
@@ -499,9 +499,9 @@ packages:
     resolution: {integrity: sha512-eny6QNG0WOwqV0zQ7cs/b1tIuzZGmP7U7EcH+ogt4Gdbl8HDmIYVMh/9aTmYZPaFWjtUaI8qSn73uYEXWfATdA==}
     engines: {node: '>=11'}
     dependencies:
-      '@coral-xyz/borsh': 0.29.0(@solana/web3.js@1.91.7)
+      '@coral-xyz/borsh': 0.29.0(@solana/web3.js@1.91.8)
       '@noble/hashes': 1.4.0
-      '@solana/web3.js': 1.91.7
+      '@solana/web3.js': 1.91.8
       bn.js: 5.2.1
       bs58: 4.0.1
       buffer-layout: 1.2.2
@@ -519,13 +519,13 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@coral-xyz/borsh@0.29.0(@solana/web3.js@1.91.7):
+  /@coral-xyz/borsh@0.29.0(@solana/web3.js@1.91.8):
     resolution: {integrity: sha512-s7VFVa3a0oqpkuRloWVPdCK7hMbAMY270geZOGfCnaqexrP5dTIpbEHL33req6IYPPJ0hYa71cdvJ1h6V55/oQ==}
     engines: {node: '>=10'}
     peerDependencies:
       '@solana/web3.js': ^1.68.0
     dependencies:
-      '@solana/web3.js': 1.91.7
+      '@solana/web3.js': 1.91.8
       bn.js: 5.2.1
       buffer-layout: 1.2.2
     dev: false
@@ -844,7 +844,7 @@ packages:
       '@jest/schemas': 29.6.3
       '@types/istanbul-lib-coverage': 2.0.6
       '@types/istanbul-reports': 3.0.4
-      '@types/node': 20.12.8
+      '@types/node': 20.12.11
       '@types/yargs': 17.0.32
       chalk: 4.1.2
     dev: true
@@ -925,13 +925,13 @@ packages:
     dev: false
     optional: true
 
-  /@project-serum/borsh@0.2.5(@solana/web3.js@1.91.7):
+  /@project-serum/borsh@0.2.5(@solana/web3.js@1.91.8):
     resolution: {integrity: sha512-UmeUkUoKdQ7rhx6Leve1SssMR/Ghv8qrEiyywyxSWg7ooV7StdpPBhciiy5eB3T0qU1BXvdRNC8TdrkxK7WC5Q==}
     engines: {node: '>=10'}
     peerDependencies:
       '@solana/web3.js': ^1.2.0
     dependencies:
-      '@solana/web3.js': 1.91.7
+      '@solana/web3.js': 1.91.8
       bn.js: 5.2.1
       buffer-layout: 1.2.2
     dev: false
@@ -1014,7 +1014,7 @@ packages:
     engines: {node: '>= 10'}
     dependencies:
       '@solana/buffer-layout': 4.0.1
-      '@solana/web3.js': 1.91.7
+      '@solana/web3.js': 1.91.8
       bigint-buffer: 1.1.5
       bignumber.js: 9.1.2
     transitivePeerDependencies:
@@ -1089,7 +1089,7 @@ packages:
       '@solana/codecs-numbers': 2.0.0-preview.2
     dev: false
 
-  /@solana/spl-token-group@0.0.4(@solana/web3.js@1.91.7)(fastestsmallesttextencoderdecoder@1.0.22):
+  /@solana/spl-token-group@0.0.4(@solana/web3.js@1.91.8)(fastestsmallesttextencoderdecoder@1.0.22):
     resolution: {integrity: sha512-7+80nrEMdUKlK37V6kOe024+T7J4nNss0F8LQ9OOPYdWCCfJmsGUzVx2W3oeizZR4IHM6N4yC9v1Xqwc3BTPWw==}
     engines: {node: '>=16'}
     peerDependencies:
@@ -1097,12 +1097,12 @@ packages:
     dependencies:
       '@solana/codecs': 2.0.0-preview.2(fastestsmallesttextencoderdecoder@1.0.22)
       '@solana/spl-type-length-value': 0.1.0
-      '@solana/web3.js': 1.91.7
+      '@solana/web3.js': 1.91.8
     transitivePeerDependencies:
       - fastestsmallesttextencoderdecoder
     dev: false
 
-  /@solana/spl-token-metadata@0.1.4(@solana/web3.js@1.91.7)(fastestsmallesttextencoderdecoder@1.0.22):
+  /@solana/spl-token-metadata@0.1.4(@solana/web3.js@1.91.8)(fastestsmallesttextencoderdecoder@1.0.22):
     resolution: {integrity: sha512-N3gZ8DlW6NWDV28+vCCDJoTqaCZiF/jDUnk3o8GRkAFzHObiR60Bs1gXHBa8zCPdvOwiG6Z3dg5pg7+RW6XNsQ==}
     engines: {node: '>=16'}
     peerDependencies:
@@ -1110,12 +1110,12 @@ packages:
     dependencies:
       '@solana/codecs': 2.0.0-preview.2(fastestsmallesttextencoderdecoder@1.0.22)
       '@solana/spl-type-length-value': 0.1.0
-      '@solana/web3.js': 1.91.7
+      '@solana/web3.js': 1.91.8
     transitivePeerDependencies:
       - fastestsmallesttextencoderdecoder
     dev: false
 
-  /@solana/spl-token@0.3.11(@solana/web3.js@1.91.7)(fastestsmallesttextencoderdecoder@1.0.22):
+  /@solana/spl-token@0.3.11(@solana/web3.js@1.91.8)(fastestsmallesttextencoderdecoder@1.0.22):
     resolution: {integrity: sha512-bvohO3rIMSVL24Pb+I4EYTJ6cL82eFpInEXD/I8K8upOGjpqHsKUoAempR/RnUlI1qSFNyFlWJfu6MNUgfbCQQ==}
     engines: {node: '>=16'}
     peerDependencies:
@@ -1123,8 +1123,8 @@ packages:
     dependencies:
       '@solana/buffer-layout': 4.0.1
       '@solana/buffer-layout-utils': 0.2.0
-      '@solana/spl-token-metadata': 0.1.4(@solana/web3.js@1.91.7)(fastestsmallesttextencoderdecoder@1.0.22)
-      '@solana/web3.js': 1.91.7
+      '@solana/spl-token-metadata': 0.1.4(@solana/web3.js@1.91.8)(fastestsmallesttextencoderdecoder@1.0.22)
+      '@solana/web3.js': 1.91.8
       buffer: 6.0.3
     transitivePeerDependencies:
       - bufferutil
@@ -1133,7 +1133,7 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@solana/spl-token@0.4.6(@solana/web3.js@1.91.7)(fastestsmallesttextencoderdecoder@1.0.22):
+  /@solana/spl-token@0.4.6(@solana/web3.js@1.91.8)(fastestsmallesttextencoderdecoder@1.0.22):
     resolution: {integrity: sha512-1nCnUqfHVtdguFciVWaY/RKcQz1IF4b31jnKgAmjU9QVN1q7dRUkTEWJZgTYIEtsULjVnC9jRqlhgGN39WbKKA==}
     engines: {node: '>=16'}
     peerDependencies:
@@ -1141,9 +1141,9 @@ packages:
     dependencies:
       '@solana/buffer-layout': 4.0.1
       '@solana/buffer-layout-utils': 0.2.0
-      '@solana/spl-token-group': 0.0.4(@solana/web3.js@1.91.7)(fastestsmallesttextencoderdecoder@1.0.22)
-      '@solana/spl-token-metadata': 0.1.4(@solana/web3.js@1.91.7)(fastestsmallesttextencoderdecoder@1.0.22)
-      '@solana/web3.js': 1.91.7
+      '@solana/spl-token-group': 0.0.4(@solana/web3.js@1.91.8)(fastestsmallesttextencoderdecoder@1.0.22)
+      '@solana/spl-token-metadata': 0.1.4(@solana/web3.js@1.91.8)(fastestsmallesttextencoderdecoder@1.0.22)
+      '@solana/web3.js': 1.91.8
       buffer: 6.0.3
     transitivePeerDependencies:
       - bufferutil
@@ -1159,8 +1159,8 @@ packages:
       buffer: 6.0.3
     dev: false
 
-  /@solana/web3.js@1.91.7:
-    resolution: {integrity: sha512-HqljZKDwk6Z4TajKRGhGLlRsbGK4S8EY27DA7v1z6yakewiUY3J7ZKDZRxcqz2MYV/ZXRrJ6wnnpiHFkPdv0WA==}
+  /@solana/web3.js@1.91.8:
+    resolution: {integrity: sha512-USa6OS1jbh8zOapRJ/CBZImZ8Xb7AJjROZl5adql9TpOoBN9BUzyyouS5oPuZHft7S7eB8uJPuXWYjMi6BHgOw==}
     dependencies:
       '@babel/runtime': 7.24.5
       '@noble/curves': 1.4.0
@@ -1175,7 +1175,7 @@ packages:
       fast-stable-stringify: 1.0.0
       jayson: 4.1.0
       node-fetch: 2.7.0
-      rpc-websockets: 7.10.0
+      rpc-websockets: 7.11.0
       superstruct: 0.14.2
     transitivePeerDependencies:
       - bufferutil
@@ -1191,8 +1191,8 @@ packages:
     resolution: {integrity: sha512-IDRKejAq+B+pZE+qnIj0qYbF8TBOyKofeY/zo6/Lk+PIAetareEZrF+avlDvkTeKIQS1t9fd0DOPcvbsV5ZS9A==}
     engines: {node: '>=11'}
     dependencies:
-      '@project-serum/borsh': 0.2.5(@solana/web3.js@1.91.7)
-      '@solana/web3.js': 1.91.7
+      '@project-serum/borsh': 0.2.5(@solana/web3.js@1.91.8)
+      '@solana/web3.js': 1.91.8
       base64-js: 1.5.1
       bn.js: 5.2.1
       bs58: 4.0.1
@@ -1215,8 +1215,8 @@ packages:
   /@staratlas/atlas-prime@0.13.1(fastestsmallesttextencoderdecoder@1.0.22):
     resolution: {integrity: sha512-fFMjy0dFUgB+b9m+SZIIMSrrvB+8SVq/wJTFNVzDenr0YrXehbgtkfZWaxpffEAXdp433hbkP9yAArlf+weMPg==}
     dependencies:
-      '@solana/spl-token': 0.3.11(@solana/web3.js@1.91.7)(fastestsmallesttextencoderdecoder@1.0.22)
-      '@solana/web3.js': 1.91.7
+      '@solana/spl-token': 0.3.11(@solana/web3.js@1.91.8)(fastestsmallesttextencoderdecoder@1.0.22)
+      '@solana/web3.js': 1.91.8
       '@staratlas/anchor': 0.25.1
       '@staratlas/data-source': 0.7.4(fastestsmallesttextencoderdecoder@1.0.22)
       '@staratlas/player-profile': 0.9.1(fastestsmallesttextencoderdecoder@1.0.22)
@@ -1236,8 +1236,8 @@ packages:
   /@staratlas/cargo@1.0.2(fastestsmallesttextencoderdecoder@1.0.22):
     resolution: {integrity: sha512-pVh5Yl9drxyyV97xx64o5w6BZyuhQzi+cvxA8mX1YQZv0xCLCdskwshiqMclTlZkYXxHAmMui9sFRZZVPZDZqg==}
     dependencies:
-      '@solana/spl-token': 0.3.11(@solana/web3.js@1.91.7)(fastestsmallesttextencoderdecoder@1.0.22)
-      '@solana/web3.js': 1.91.7
+      '@solana/spl-token': 0.3.11(@solana/web3.js@1.91.8)(fastestsmallesttextencoderdecoder@1.0.22)
+      '@solana/web3.js': 1.91.8
       '@staratlas/anchor': 0.25.1
       '@staratlas/data-source': 0.7.4(fastestsmallesttextencoderdecoder@1.0.22)
       '@staratlas/player-profile': 0.9.1(fastestsmallesttextencoderdecoder@1.0.22)
@@ -1251,8 +1251,8 @@ packages:
   /@staratlas/claim-stake@0.11.3(fastestsmallesttextencoderdecoder@1.0.22):
     resolution: {integrity: sha512-ClrlGMVqYtiyMTwLeRpDUMdE3hD6Tv7i9ruL+B2RqOS5tE+6ZMy9dqDk1pqleZo8pvx9U//8pfMoAKRuVe50/g==}
     dependencies:
-      '@solana/spl-token': 0.3.11(@solana/web3.js@1.91.7)(fastestsmallesttextencoderdecoder@1.0.22)
-      '@solana/web3.js': 1.91.7
+      '@solana/spl-token': 0.3.11(@solana/web3.js@1.91.8)(fastestsmallesttextencoderdecoder@1.0.22)
+      '@solana/web3.js': 1.91.8
       '@staratlas/anchor': 0.25.1
       '@staratlas/data-source': 0.7.4(fastestsmallesttextencoderdecoder@1.0.22)
     transitivePeerDependencies:
@@ -1265,8 +1265,8 @@ packages:
   /@staratlas/crafting@1.0.2(fastestsmallesttextencoderdecoder@1.0.22):
     resolution: {integrity: sha512-3JDBjMz2z+MtXHQEOhDm7HooPTKAoC57t0mxqT56wd38lShZxGH28qp87wU9FvcHYyrygq831LnAxgA874wZZg==}
     dependencies:
-      '@solana/spl-token': 0.3.11(@solana/web3.js@1.91.7)(fastestsmallesttextencoderdecoder@1.0.22)
-      '@solana/web3.js': 1.91.7
+      '@solana/spl-token': 0.3.11(@solana/web3.js@1.91.8)(fastestsmallesttextencoderdecoder@1.0.22)
+      '@solana/web3.js': 1.91.8
       '@staratlas/anchor': 0.25.1
       '@staratlas/data-source': 0.7.4(fastestsmallesttextencoderdecoder@1.0.22)
       '@staratlas/player-profile': 0.9.1(fastestsmallesttextencoderdecoder@1.0.22)
@@ -1283,8 +1283,8 @@ packages:
     resolution: {integrity: sha512-DY4fGLJjKbn/c+h+PdbLHjg8r3skDvnj3ctJQpk4LsNKFYR7zRq/0x+H24WB53DgZbGelxcJIdhsY6178732TA==}
     dependencies:
       '@noble/curves': 1.4.0
-      '@solana/spl-token': 0.3.11(@solana/web3.js@1.91.7)(fastestsmallesttextencoderdecoder@1.0.22)
-      '@solana/web3.js': 1.91.7
+      '@solana/spl-token': 0.3.11(@solana/web3.js@1.91.8)(fastestsmallesttextencoderdecoder@1.0.22)
+      '@solana/web3.js': 1.91.8
       '@staratlas/anchor': 0.25.1
       bs58: 5.0.0
       camelcase: 7.0.1
@@ -1300,7 +1300,7 @@ packages:
   /@staratlas/player-profile@0.9.1(fastestsmallesttextencoderdecoder@1.0.22):
     resolution: {integrity: sha512-bqPXn6fGl+gg5zZBEK4+/Cv9oriVzrNOTW1Z+6TMFSB/vMsE51DsdyN7BWMkvwfBg2XdHfL9VntlU8j8OYD8jQ==}
     dependencies:
-      '@solana/web3.js': 1.91.7
+      '@solana/web3.js': 1.91.8
       '@staratlas/anchor': 0.25.1
       '@staratlas/data-source': 0.7.4(fastestsmallesttextencoderdecoder@1.0.22)
     transitivePeerDependencies:
@@ -1313,8 +1313,8 @@ packages:
   /@staratlas/points@1.0.2(fastestsmallesttextencoderdecoder@1.0.22):
     resolution: {integrity: sha512-78N+Nz4MR3UKdAVm/OVRD+wxi4oKrVmcHdA2g+pizKKM0/qWCMRb7wZcM7xlqYuGOxYIRFOSV97TqHfcpCkxaA==}
     dependencies:
-      '@solana/spl-token': 0.3.11(@solana/web3.js@1.91.7)(fastestsmallesttextencoderdecoder@1.0.22)
-      '@solana/web3.js': 1.91.7
+      '@solana/spl-token': 0.3.11(@solana/web3.js@1.91.8)(fastestsmallesttextencoderdecoder@1.0.22)
+      '@solana/web3.js': 1.91.8
       '@staratlas/anchor': 0.25.1
       '@staratlas/data-source': 0.7.4(fastestsmallesttextencoderdecoder@1.0.22)
       '@staratlas/player-profile': 0.9.1(fastestsmallesttextencoderdecoder@1.0.22)
@@ -1328,8 +1328,8 @@ packages:
   /@staratlas/profile-faction@0.4.1(fastestsmallesttextencoderdecoder@1.0.22):
     resolution: {integrity: sha512-RaE7ZqX7VyPZBMpZm0sblFPykGhBr4IrtMsxVtgbU2hgtZk0rqXWA8vv8hR55fEtmweGuon06JPnGQfLBz4/yQ==}
     dependencies:
-      '@solana/spl-token': 0.3.11(@solana/web3.js@1.91.7)(fastestsmallesttextencoderdecoder@1.0.22)
-      '@solana/web3.js': 1.91.7
+      '@solana/spl-token': 0.3.11(@solana/web3.js@1.91.8)(fastestsmallesttextencoderdecoder@1.0.22)
+      '@solana/web3.js': 1.91.8
       '@staratlas/anchor': 0.25.1
       '@staratlas/data-source': 0.7.4(fastestsmallesttextencoderdecoder@1.0.22)
       '@staratlas/player-profile': 0.9.1(fastestsmallesttextencoderdecoder@1.0.22)
@@ -1343,8 +1343,8 @@ packages:
   /@staratlas/profile-vault@0.9.1(fastestsmallesttextencoderdecoder@1.0.22):
     resolution: {integrity: sha512-nY6t1VTI/kRd/bQLSEeRTqwJ6QWRAC1du6vFN6zufJQyumuuZpmevKNZF1DkrSjZqhe3/2HgyR/ud7d62KGFxg==}
     dependencies:
-      '@solana/spl-token': 0.3.11(@solana/web3.js@1.91.7)(fastestsmallesttextencoderdecoder@1.0.22)
-      '@solana/web3.js': 1.91.7
+      '@solana/spl-token': 0.3.11(@solana/web3.js@1.91.8)(fastestsmallesttextencoderdecoder@1.0.22)
+      '@solana/web3.js': 1.91.8
       '@staratlas/anchor': 0.25.1
       '@staratlas/data-source': 0.7.4(fastestsmallesttextencoderdecoder@1.0.22)
       '@staratlas/player-profile': 0.9.1(fastestsmallesttextencoderdecoder@1.0.22)
@@ -1358,8 +1358,8 @@ packages:
   /@staratlas/sage@1.0.2(fastestsmallesttextencoderdecoder@1.0.22):
     resolution: {integrity: sha512-PWz8eUflXvk14+I+fCupnEAgsuQ2UAkgi32laZ/s3JqINnQOE/Dhpa9DPSgqas/5J5/fti5FS1JacmqpU2DcdQ==}
     dependencies:
-      '@solana/spl-token': 0.3.11(@solana/web3.js@1.91.7)(fastestsmallesttextencoderdecoder@1.0.22)
-      '@solana/web3.js': 1.91.7
+      '@solana/spl-token': 0.3.11(@solana/web3.js@1.91.8)(fastestsmallesttextencoderdecoder@1.0.22)
+      '@solana/web3.js': 1.91.8
       '@staratlas/anchor': 0.25.1
       '@staratlas/cargo': 1.0.2(fastestsmallesttextencoderdecoder@1.0.22)
       '@staratlas/crafting': 1.0.2(fastestsmallesttextencoderdecoder@1.0.22)
@@ -1445,7 +1445,7 @@ packages:
   /@types/connect@3.4.38:
     resolution: {integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==}
     dependencies:
-      '@types/node': 20.12.8
+      '@types/node': 20.12.11
     dev: false
 
   /@types/cookiejar@2.1.5:
@@ -1502,7 +1502,6 @@ packages:
     resolution: {integrity: sha512-vDg9PZ/zi+Nqp6boSOT7plNuthRugEKixDv5sFTIpkE89MmNtEArAShI4mxuX2+UrLEe9pxC1vm2cjm9YlWbJw==}
     dependencies:
       undici-types: 5.26.5
-    dev: true
 
   /@types/node@20.12.8:
     resolution: {integrity: sha512-NU0rJLJnshZWdE/097cdCBbyW1h4hEg0xpovcoAQYHl8dnEyp/NAOiE45pvc+Bd1Dt+2r94v2eGFpQJ4R7g+2w==}
@@ -1548,7 +1547,7 @@ packages:
   /@types/ws@7.4.7:
     resolution: {integrity: sha512-JQbbmxZTZehdc2iszGKs5oC3NFnjeay7mtAWrdt7qNtAVK0g19muApzAy4bm9byz79xa2ZnO/BOBC2R8RC5Lww==}
     dependencies:
-      '@types/node': 20.12.8
+      '@types/node': 20.12.11
     dev: false
 
   /@types/yargs-parser@21.0.3:
@@ -5009,10 +5008,9 @@ packages:
       inherits: 2.0.4
     dev: false
 
-  /rpc-websockets@7.10.0:
-    resolution: {integrity: sha512-cemZ6RiDtYZpPiBzYijdOrkQQzmBCmug0E9SdRH2gIUNT15ql4mwCYWIp0VnSZq6Qrw/JkGUygp4PrK1y9KfwQ==}
+  /rpc-websockets@7.11.0:
+    resolution: {integrity: sha512-IkLYjayPv6Io8C/TdCL5gwgzd1hFz2vmBZrjMw/SPEXo51ETOhnzgS4Qy5GWi2JQN7HKHa66J3+2mv0fgNh/7w==}
     dependencies:
-      '@babel/runtime': 7.24.5
       eventemitter3: 4.0.7
       uuid: 8.3.2
       ws: 8.17.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
@@ -5985,8 +5983,8 @@ packages:
     requiresBuild: true
     dependencies:
       '@coral-xyz/anchor': 0.29.0
-      '@solana/spl-token': 0.4.6(@solana/web3.js@1.91.7)(fastestsmallesttextencoderdecoder@1.0.22)
-      '@solana/web3.js': 1.91.7
+      '@solana/spl-token': 0.4.6(@solana/web3.js@1.91.8)(fastestsmallesttextencoderdecoder@1.0.22)
+      '@solana/web3.js': 1.91.8
       big.js: 6.2.1
       lodash: 4.17.21
       mobx: 6.12.3
