@@ -36,8 +36,8 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.10)
       '@staratlas/claim-stake':
-        specifier: ^0.11.3
-        version: 0.11.3(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.10)
+        specifier: ^0.11.4
+        version: 0.11.4(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.10)
       '@staratlas/crafting':
         specifier: ^1.0.2
         version: 1.0.2(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.10)
@@ -46,7 +46,7 @@ importers:
         version: 0.7.4(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.10)
       '@staratlas/factory':
         specifier: github:mindrunner/factory#develop
-        version: https://codeload.github.com/mindrunner/factory/tar.gz/7b653a8c1711f4514a257b24155afa3cb9046c2a(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.10)
+        version: git+https://git@github.com:mindrunner/factory.git#7b653a8c1711f4514a257b24155afa3cb9046c2a(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.10)
       '@staratlas/player-profile':
         specifier: ^0.9.1
         version: 0.9.1(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.10)
@@ -617,8 +617,8 @@ packages:
   '@staratlas/cargo@1.0.2':
     resolution: {integrity: sha512-pVh5Yl9drxyyV97xx64o5w6BZyuhQzi+cvxA8mX1YQZv0xCLCdskwshiqMclTlZkYXxHAmMui9sFRZZVPZDZqg==}
 
-  '@staratlas/claim-stake@0.11.3':
-    resolution: {integrity: sha512-ClrlGMVqYtiyMTwLeRpDUMdE3hD6Tv7i9ruL+B2RqOS5tE+6ZMy9dqDk1pqleZo8pvx9U//8pfMoAKRuVe50/g==}
+  '@staratlas/claim-stake@0.11.4':
+    resolution: {integrity: sha512-JOitL1oAnc4+gfDI0TpIVI7d8rBY+VTlMMNxbNzjRLb8jtOm/ZGfaJ5eJiCFmvF0A9OWc6xoc3JueTE0ahcmFw==}
 
   '@staratlas/crafting@1.0.2':
     resolution: {integrity: sha512-3JDBjMz2z+MtXHQEOhDm7HooPTKAoC57t0mxqT56wd38lShZxGH28qp87wU9FvcHYyrygq831LnAxgA874wZZg==}
@@ -626,8 +626,8 @@ packages:
   '@staratlas/data-source@0.7.4':
     resolution: {integrity: sha512-DY4fGLJjKbn/c+h+PdbLHjg8r3skDvnj3ctJQpk4LsNKFYR7zRq/0x+H24WB53DgZbGelxcJIdhsY6178732TA==}
 
-  '@staratlas/factory@https://codeload.github.com/mindrunner/factory/tar.gz/7b653a8c1711f4514a257b24155afa3cb9046c2a':
-    resolution: {tarball: https://codeload.github.com/mindrunner/factory/tar.gz/7b653a8c1711f4514a257b24155afa3cb9046c2a}
+  '@staratlas/factory@git+https://git@github.com:mindrunner/factory.git#7b653a8c1711f4514a257b24155afa3cb9046c2a':
+    resolution: {commit: 7b653a8c1711f4514a257b24155afa3cb9046c2a, repo: git@github.com:mindrunner/factory.git, type: git}
     version: 0.6.0
 
   '@staratlas/player-profile@0.9.1':
@@ -1643,6 +1643,7 @@ packages:
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
+    deprecated: Glob versions prior to v9 are no longer supported
 
   globals@11.12.0:
     resolution: {integrity: sha512-WOBp/EEGUiIsJSp7wcv/y6MO+lV9UoncWqxuFfm8eBwzWNgyfBd6Gz+IeKQ9jCmyhoH99g15M3T+QaVHFjizVA==}
@@ -1748,6 +1749,7 @@ packages:
 
   inflight@1.0.6:
     resolution: {integrity: sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==}
+    deprecated: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
 
   inherits@2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
@@ -2571,10 +2573,12 @@ packages:
 
   rimraf@2.7.1:
     resolution: {integrity: sha512-uWjbaKIK3T1OSVptzX7Nl6PvQ3qAGtKEtVRjRuazjfL3Bx5eI409VZSqgND+4UNnmzLVdPj9FqFJNPqBZFve4w==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
+    deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
   ripemd160@2.0.2:
@@ -3877,7 +3881,7 @@ snapshots:
       - fastestsmallesttextencoderdecoder
       - utf-8-validate
 
-  '@staratlas/claim-stake@0.11.3(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.10)':
+  '@staratlas/claim-stake@0.11.4(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.10)':
     dependencies:
       '@solana/spl-token': 0.3.11(@solana/web3.js@1.91.8(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.10)
       '@solana/web3.js': 1.91.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
@@ -3920,7 +3924,7 @@ snapshots:
       - fastestsmallesttextencoderdecoder
       - utf-8-validate
 
-  '@staratlas/factory@https://codeload.github.com/mindrunner/factory/tar.gz/7b653a8c1711f4514a257b24155afa3cb9046c2a(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.10)':
+  '@staratlas/factory@git+https://git@github.com:mindrunner/factory.git#7b653a8c1711f4514a257b24155afa3cb9046c2a(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.10)':
     dependencies:
       '@coral-xyz/anchor': 0.29.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@solana/spl-token': 0.4.6(@solana/web3.js@1.91.8(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.10)

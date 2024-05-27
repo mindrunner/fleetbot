@@ -35,7 +35,7 @@
         "@staratlas/atlas-prime": "^0.13.1",
         "@staratlas/cargo": "^1.0.2",
         "@staratlas/points": "^1.0.2",
-        "@staratlas/claim-stake": "^0.11.3",
+        "@staratlas/claim-stake": "^0.11.4",
         "@staratlas/crafting": "^1.0.2",
         "@staratlas/data-source": "^0.7.4",
         "@staratlas/factory": "github:mindrunner/factory#develop",
