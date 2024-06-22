@@ -38,7 +38,7 @@
         "@staratlas/claim-stake": "^0.11.3",
         "@staratlas/crafting": "^1.0.2",
         "@staratlas/data-source": "^0.7.4",
-        "@staratlas/factory": "github:mindrunner/factory#develop",
+        "@staratlas/factory": "^0.7.0",
         "@staratlas/player-profile": "^0.9.1",
         "@staratlas/profile-faction": "^0.4.1",
         "@staratlas/sage": "^1.0.2",

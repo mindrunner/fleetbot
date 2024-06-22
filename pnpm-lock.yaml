@@ -45,8 +45,8 @@ importers:
         specifier: ^0.7.4
         version: 0.7.4(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.10)
       '@staratlas/factory':
-        specifier: github:mindrunner/factory#develop
-        version: https://codeload.github.com/mindrunner/factory/tar.gz/7b653a8c1711f4514a257b24155afa3cb9046c2a(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.10)
+        specifier: ^0.7.0
+        version: 0.7.0(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.10)
       '@staratlas/player-profile':
         specifier: ^0.9.1
         version: 0.9.1(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.10)
@@ -626,9 +626,8 @@ packages:
   '@staratlas/data-source@0.7.4':
     resolution: {integrity: sha512-DY4fGLJjKbn/c+h+PdbLHjg8r3skDvnj3ctJQpk4LsNKFYR7zRq/0x+H24WB53DgZbGelxcJIdhsY6178732TA==}
 
-  '@staratlas/factory@https://codeload.github.com/mindrunner/factory/tar.gz/7b653a8c1711f4514a257b24155afa3cb9046c2a':
-    resolution: {tarball: https://codeload.github.com/mindrunner/factory/tar.gz/7b653a8c1711f4514a257b24155afa3cb9046c2a}
-    version: 0.6.0
+  '@staratlas/factory@0.7.0':
+    resolution: {integrity: sha512-lhEqin/QWLiBmmBRNt02raKkn5Q0ZM/ynz4h4M56jjucfGdokZaYJ/8yJhUUdHJ2cIFTY7bdBy+8vRmV7zw+NA==}
 
   '@staratlas/player-profile@0.9.1':
     resolution: {integrity: sha512-bqPXn6fGl+gg5zZBEK4+/Cv9oriVzrNOTW1Z+6TMFSB/vMsE51DsdyN7BWMkvwfBg2XdHfL9VntlU8j8OYD8jQ==}
@@ -3920,7 +3919,7 @@ snapshots:
       - fastestsmallesttextencoderdecoder
       - utf-8-validate
 
-  '@staratlas/factory@https://codeload.github.com/mindrunner/factory/tar.gz/7b653a8c1711f4514a257b24155afa3cb9046c2a(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.10)':
+  '@staratlas/factory@0.7.0(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.10)':
     dependencies:
       '@coral-xyz/anchor': 0.29.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@solana/spl-token': 0.4.6(@solana/web3.js@1.91.8(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.10)
