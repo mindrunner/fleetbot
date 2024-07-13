@@ -1,4 +1,4 @@
-import { ExtraErrorData, RewriteFrames } from '@sentry/integrations'
+import { extraErrorDataIntegration, rewriteFramesIntegration } from '@sentry/node'
 import * as Sentry from '@sentry/node'
 import '@sentry/tracing'
 
@@ -10,8 +10,8 @@ Sentry.init({
     normalizeDepth: 10,
     integrations (integrations) {
         return integrations
-            .concat(new ExtraErrorData())
-            .concat(new RewriteFrames({ root: process.cwd() }))
+            .concat(extraErrorDataIntegration)
+            .concat(rewriteFramesIntegration({ root: process.cwd() }))
     }
 })
 
