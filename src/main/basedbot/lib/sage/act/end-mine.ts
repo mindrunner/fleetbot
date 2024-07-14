@@ -4,9 +4,11 @@ import {
 } from '@staratlas/data-source'
 
 import { logger } from '../../../../../logger'
+import { sleep } from '../../../../../service/sleep'
 import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
 import { programs } from '../../programs'
 import { miningHandlerIx } from '../ix/fleet-state-handler'
+import { stopMiningIx } from '../ix/stop-mining'
 import { Player } from '../state/user-account'
 import { FleetInfo } from '../state/user-fleets'
 import { Mineable } from '../state/world-map'
@@ -73,4 +75,13 @@ export const endMine = async (
     const instructions = await ixReturnsToIxs(ix, player.signer)
 
     await sendAndConfirmInstructions(instructions)
+
+    await sleep(2000)
+
+    await sendAndConfirmInstructions(
+        await ixReturnsToIxs(
+            stopMiningIx(fleetInfo, player, mineable, programs),
+            player.signer,
+        ),
+    )
 }
