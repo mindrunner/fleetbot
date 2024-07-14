@@ -1,6 +1,13 @@
-import { getAssociatedTokenAddressSync, TOKEN_PROGRAM_ID } from '@solana/spl-token'
+import {
+    getAssociatedTokenAddressSync,
+    TOKEN_PROGRAM_ID,
+} from '@solana/spl-token'
 import { PublicKey } from '@solana/web3.js'
-import { createAssociatedTokenAccountIdempotent, getParsedTokenAccountsByOwner, ixReturnsToIxs } from '@staratlas/data-source'
+import {
+    createAssociatedTokenAccountIdempotent,
+    getParsedTokenAccountsByOwner,
+    ixReturnsToIxs,
+} from '@staratlas/data-source'
 import BN from 'bn.js'
 
 import { connection } from '../../../../../service/sol'
@@ -9,7 +16,10 @@ import { programs } from '../../programs'
 import { loadCargoIx } from '../ix/load-cargo'
 import { getCargoType } from '../state/cargo-types'
 import { starbaseByCoordinates } from '../state/starbase-by-coordinates'
-import { getCargoPodsForStarbasePlayer, getStarbasePlayer } from '../state/starbase-player'
+import {
+    getCargoPodsForStarbasePlayer,
+    getStarbasePlayer,
+} from '../state/starbase-player'
 import { Player } from '../state/user-account'
 import { FleetInfo } from '../state/user-fleets'
 
@@ -18,12 +28,12 @@ export const loadCargo = async (
     player: Player,
     mint: PublicKey,
     hold: PublicKey,
-    amount: number
+    amount: number,
     // eslint-disable-next-line max-params
 ): Promise<void> => {
     const starbase = await starbaseByCoordinates(fleetInfo.location)
 
-    if(!starbase) {
+    if (!starbase) {
         throw new Error(`No starbase found at ${fleetInfo.location}`)
     }
 
@@ -35,7 +45,10 @@ export const loadCargo = async (
     )
 
     const starbasePlayer = await getStarbasePlayer(player, starbase, programs)
-    const cargoPodFrom = await getCargoPodsForStarbasePlayer(starbasePlayer, programs)
+    const cargoPodFrom = await getCargoPodsForStarbasePlayer(
+        starbasePlayer,
+        programs,
+    )
 
     const allTokenAccounts = await getParsedTokenAccountsByOwner(
         connection,
@@ -48,9 +61,9 @@ export const loadCargo = async (
         cargoPodFrom.key,
         true,
     )
-    const cargoTokenAccount = allTokenAccounts.filter(it =>
+    const [cargoTokenAccount] = allTokenAccounts.filter((it) =>
         it.address.equals(cargoTokenAccountAddress),
-    )[0]
+    )
 
     if (!cargoTokenAccount) {
         throw new Error('Cargo token account not found')
@@ -63,7 +76,7 @@ export const loadCargo = async (
         throw new Error('Cargo not found at origin Starbase')
     }
     if (fuelAmountAtOrigin.lt(new BN(amount))) {
-        throw 'Not enough cargo available at origin Starbase'
+        throw new Error('Not enough cargo available at origin Starbase')
     }
 
     const ix = loadCargoIx(
@@ -78,9 +91,13 @@ export const loadCargo = async (
         mint,
         cargoType.key,
         programs,
-        new BN(amount))
+        new BN(amount),
+    )
 
-    const instructions = await ixReturnsToIxs([fleetCargoTokenResult.instructions, ix], player.signer)
+    const instructions = await ixReturnsToIxs(
+        [fleetCargoTokenResult.instructions, ix],
+        player.signer,
+    )
 
     await sendAndConfirmInstructions(instructions)
 }

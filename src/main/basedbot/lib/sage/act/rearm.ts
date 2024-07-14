@@ -1,4 +1,8 @@
-import { createAssociatedTokenAccountIdempotent, getParsedTokenAccountsByOwner, ixReturnsToIxs } from '@staratlas/data-source'
+import {
+    createAssociatedTokenAccountIdempotent,
+    getParsedTokenAccountsByOwner,
+    ixReturnsToIxs,
+} from '@staratlas/data-source'
 import BN from 'bn.js'
 
 import { connection } from '../../../../../service/sol'
@@ -8,14 +12,17 @@ import { Coordinates } from '../../util/coordinates'
 import { loadCargoIx } from '../ix/load-cargo'
 import { getCargoType } from '../state/cargo-types'
 import { starbaseByCoordinates } from '../state/starbase-by-coordinates'
-import { getCargoPodsForStarbasePlayer, getStarbasePlayer } from '../state/starbase-player'
+import {
+    getCargoPodsForStarbasePlayer,
+    getStarbasePlayer,
+} from '../state/starbase-player'
 import { Player } from '../state/user-account'
 import { FleetInfo } from '../state/user-fleets'
 
 export const rearm = async (
     fleetInfo: FleetInfo,
     coordinates: Coordinates,
-    player: Player
+    player: Player,
 ): Promise<void> => {
     const starbase = await starbaseByCoordinates(coordinates)
 
@@ -23,26 +30,35 @@ export const rearm = async (
         throw new Error(`No starbase found at ${coordinates}`)
     }
 
-    const cargoType = getCargoType(player.cargoTypes, player.game, player.game.data.mints.ammo)
+    const cargoType = getCargoType(
+        player.cargoTypes,
+        player.game,
+        player.game.data.mints.ammo,
+    )
     const fleetFuelTokenResult = createAssociatedTokenAccountIdempotent(
         player.game.data.mints.ammo,
         fleetInfo.fleet.data.ammoBank,
-        true
+        true,
     )
 
     const starbasePlayer = await getStarbasePlayer(player, starbase, programs)
-    const cargoPodFrom = await getCargoPodsForStarbasePlayer(starbasePlayer, programs)
+    const cargoPodFrom = await getCargoPodsForStarbasePlayer(
+        starbasePlayer,
+        programs,
+    )
 
     const starbaseTokenAccounts = await getParsedTokenAccountsByOwner(
         connection,
-        cargoPodFrom.key
+        cargoPodFrom.key,
     )
 
     const currentAmmo = fleetInfo.cargoLevels.ammo
     const maxAmmo = fleetInfo.cargoStats.ammoCapacity
     const ammoNeeded = maxAmmo - currentAmmo
 
-    console.log(`Current Ammo: ${currentAmmo}, Max Ammo: ${maxAmmo}, Ammo Needed: ${ammoNeeded}`)
+    console.log(
+        `Current Ammo: ${currentAmmo}, Max Ammo: ${maxAmmo}, Ammo Needed: ${ammoNeeded}`,
+    )
 
     const ix = loadCargoIx(
         fleetInfo,
@@ -56,9 +72,13 @@ export const rearm = async (
         player.game.data.mints.ammo,
         cargoType.key,
         programs,
-        new BN(ammoNeeded))
+        new BN(ammoNeeded),
+    )
 
-    const instructions = await ixReturnsToIxs([fleetFuelTokenResult.instructions, ix], player.signer)
+    const instructions = await ixReturnsToIxs(
+        [fleetFuelTokenResult.instructions, ix],
+        player.signer,
+    )
 
     await sendAndConfirmInstructions(instructions)
 }

@@ -19,29 +19,30 @@ export const loadCargoIx = (
     tokenMint: PublicKey,
     cargoType: PublicKey,
     programs: StarAtlasPrograms,
-    amount: BN
+    amount: BN,
     // eslint-disable-next-line max-params
-): InstructionReturn => Fleet.depositCargoToFleet(
-    programs.sage,
-    programs.cargo,
-    player.signer,
-    player.profile.key,
-    player.profileFaction.key,
-    'funder',
-    starbase.key,
-    starbasePlayer.key,
-    fleetInfo.fleet.key,
-    cargoPodFrom,
-    cargoPodTo,
-    cargoType,
-    player.game.data.cargo.statsDefinition,
-    tokenFrom,
-    tokenTo,
-    tokenMint,
-    player.game.key,
-    player.game.data.gameState,
-    {
-        amount,
-        keyIndex: 0
-    }
-)
+): InstructionReturn =>
+    Fleet.depositCargoToFleet(
+        programs.sage,
+        programs.cargo,
+        player.signer,
+        player.profile.key,
+        player.profileFaction.key,
+        'funder',
+        starbase.key,
+        starbasePlayer.key,
+        fleetInfo.fleet.key,
+        cargoPodFrom,
+        cargoPodTo,
+        cargoType,
+        player.game.data.cargo.statsDefinition,
+        tokenFrom,
+        tokenTo,
+        tokenMint,
+        player.game.key,
+        player.game.data.gameState,
+        {
+            amount,
+            keyIndex: 0,
+        },
+    )

@@ -8,7 +8,10 @@ import { stopWarpIx } from '../ix/stop-warp'
 import { Player } from '../state/user-account'
 import { FleetInfo } from '../state/user-fleets'
 
-export const endMove = async (fleetInfo: FleetInfo, player: Player): Promise<void> => {
+export const endMove = async (
+    fleetInfo: FleetInfo,
+    player: Player,
+): Promise<void> => {
     const { fleet } = fleetInfo
 
     if (!fleet.state.MoveWarp && !fleet.state.MoveSubwarp) {
@@ -17,7 +20,11 @@ export const endMove = async (fleetInfo: FleetInfo, player: Player): Promise<voi
         return
     }
 
-    const ix = (fleet.state.MoveSubwarp ? stopSubWarpIx : stopWarpIx)(fleetInfo, player, programs)
+    const ix = (fleet.state.MoveSubwarp ? stopSubWarpIx : stopWarpIx)(
+        fleetInfo,
+        player,
+        programs,
+    )
 
     const instructions = await ixReturnsToIxs(ix, player.signer)
 

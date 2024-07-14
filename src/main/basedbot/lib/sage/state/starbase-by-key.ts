@@ -11,12 +11,16 @@ export const starbaseByKey = async (key: PublicKey): Promise<Starbase> => {
         programs.sage,
         key,
         Starbase,
-        'processed'
+        'processed',
     )
 
-    if (!starbase) {throw new Error('no starbase found')}
+    if (!starbase) {
+        throw new Error('no starbase found')
+    }
 
-    if (starbase.type === 'error') {throw new Error('Error reading starbase account')}
+    if (starbase.type === 'error') {
+        throw new Error('Error reading starbase account')
+    }
 
     return starbase.data
 }

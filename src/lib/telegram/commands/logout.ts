@@ -14,7 +14,9 @@ export const logout = (bot: Telegraf<ContextMessageUpdate>): void => {
             }
 
             if (ctx.user.enabled) {
-                await ctx.reply('Your wallet is currently enabled, toggle with /disable command')
+                await ctx.reply(
+                    'Your wallet is currently enabled, toggle with /disable command',
+                )
 
                 return
             }

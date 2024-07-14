@@ -9,5 +9,5 @@ export const resource = {
     food: new PublicKey(config.sol.foodMint),
     fuel: new PublicKey(config.sol.fuelMint),
     ammo: new PublicKey(config.sol.ammoMint),
-    tool: new PublicKey(config.sol.toolMint)
+    tool: new PublicKey(config.sol.toolMint),
 }

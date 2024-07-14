@@ -1,4 +1,12 @@
-import { BaseEntity, Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm'
+import {
+    BaseEntity,
+    Column,
+    Entity,
+    Index,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+    Unique,
+} from 'typeorm'
 
 import { RelationIdColumn } from '../columns'
 
@@ -29,6 +37,8 @@ export class Transaction extends BaseEntity {
     @RelationIdColumn()
     walletPublicKey: Wallet['publicKey']
 
-    @ManyToOne(() => Wallet, wallet => wallet.transactions, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Wallet, (wallet) => wallet.transactions, {
+        onDelete: 'CASCADE',
+    })
     wallet: Wallet
 }

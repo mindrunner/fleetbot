@@ -53,20 +53,23 @@ export const config: Config = {
     app: {
         version: env.get('APP_VERSION'),
         logLevel: env.get('LOG_LEVEL'),
-        quickstart: env.get('QUICKSTART') === 'true'
+        quickstart: env.get('QUICKSTART') === 'true',
     },
     bot: {
         telegramToken: env.get('TELEGRAM_TOKEN'),
-        owner: env.get('BOT_OWNER')
+        owner: env.get('BOT_OWNER'),
     },
     user: {
         keyMode: env.get('KEY_MODE'),
-        secretKey: env.get('SECRET_KEY').split(',').map(s => Number(s)),
+        secretKey: env
+            .get('SECRET_KEY')
+            .split(',')
+            .map((s) => Number(s)),
         pubKey: env.get('PUBKEY'),
         mnemonic: env.get('MNEMONIC'),
         walletId: Number(env.get('WALLET_ID')),
         address1: env.get('BOT_ADDRESS_1'),
-        address2: env.get('BOT_ADDRESS_2')
+        address2: env.get('BOT_ADDRESS_2'),
     },
     db: {
         host: env.get('DATABASE_HOST'),
@@ -74,7 +77,7 @@ export const config: Config = {
         username: env.get('DATABASE_USER'),
         password: env.get('DATABASE_PASSWORD'),
         database: env.get('DATABASE_NAME'),
-        logging: env.get('DATABASE_LOGGING') as LoggerOptions
+        logging: env.get('DATABASE_LOGGING') as LoggerOptions,
     },
     sol: {
         rpcEndpoint: env.get('RPC_ENDPOINT'),
@@ -85,11 +88,11 @@ export const config: Config = {
         toolMint: env.get('TOOL_MINT'),
         foodMint: env.get('FOOD_MINT'),
         fuelMint: env.get('FUEL_MINT'),
-        ammoMint: env.get('AMMO_MINT')
+        ammoMint: env.get('AMMO_MINT'),
     },
     cron: {
         refillInterval: env.get('REFILL_INTERVAL'),
         bookkeeperInterval: env.get('BOOKKEEPER_INTERVAL'),
-        resourceInterval: env.get('RESOURCE_INTERVAL')
-    }
+        resourceInterval: env.get('RESOURCE_INTERVAL'),
+    },
 }

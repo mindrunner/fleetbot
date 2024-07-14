@@ -15,7 +15,9 @@ export const transactions = (bot: Telegraf<ContextMessageUpdate>): void => {
             }
 
             if (!ctx.user.enabled) {
-                await ctx.reply('Your wallet is currently disabled, toggle with /enable command')
+                await ctx.reply(
+                    'Your wallet is currently disabled, toggle with /enable command',
+                )
 
                 return
             }
@@ -23,15 +25,18 @@ export const transactions = (bot: Telegraf<ContextMessageUpdate>): void => {
             const take = 10
 
             await ctx.reply(`Showing the last ${take} transactions`)
-            const userTransactions = await Transaction.find({ where: { walletPublicKey: ctx.user.publicKey }, take, order: { time: 'DESC' } })
+            const userTransactions = await Transaction.find({
+                where: { walletPublicKey: ctx.user.publicKey },
+                take,
+                order: { time: 'DESC' },
+            })
 
             for (const transaction of userTransactions) {
                 // eslint-disable-next-line no-await-in-loop
                 await ctx.replyWithHTML(`
 <b>Signature:</b>  <a href="https://solscan.io/tx/${transaction.signature}">click</a>
 <b>Time:</b> ${transaction.time.toLocaleDateString()} ${transaction.time.toLocaleTimeString()}
-<b>Amount:</b> ${transaction.amount.toFixed(AD)} ATLAS`
-                )
+<b>Amount:</b> ${transaction.amount.toFixed(AD)} ATLAS`)
             }
         })
     })

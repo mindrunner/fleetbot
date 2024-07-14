@@ -17,12 +17,17 @@ const initKeypairBySecretKey = (key: number[], pubKey: PublicKey): Keypair => {
     throw new Error('PubKey does not match Private key')
 }
 
-const initKeypairByMnemonic = (mnemonic: string, pubKey: PublicKey): Keypair => {
+const initKeypairByMnemonic = (
+    mnemonic: string,
+    pubKey: PublicKey,
+): Keypair => {
     const seed = mnemonicToSeedSync(mnemonic, '')
 
     for (let i = 0; i < 1000; ++i) {
         const path = `m/44'/501'/${i}'/0'`
-        const keypair = Keypair.fromSeed(derivePath(path, seed.toString('hex')).key)
+        const keypair = Keypair.fromSeed(
+            derivePath(path, seed.toString('hex')).key,
+        )
 
         logger.debug(`${path} => ${keypair.publicKey.toBase58()}`)
 
@@ -36,6 +41,13 @@ const initKeypairByMnemonic = (mnemonic: string, pubKey: PublicKey): Keypair => 
     throw new Error('PubKey not found in derivation Path')
 }
 
-export const keyPair = config.user.keyMode === 'mnemonic'
-    ? initKeypairByMnemonic(config.user.mnemonic, new PublicKey(config.user.pubKey))
-    : initKeypairBySecretKey(config.user.secretKey, new PublicKey(config.user.pubKey))
+export const keyPair =
+    config.user.keyMode === 'mnemonic'
+        ? initKeypairByMnemonic(
+              config.user.mnemonic,
+              new PublicKey(config.user.pubKey),
+          )
+        : initKeypairBySecretKey(
+              config.user.secretKey,
+              new PublicKey(config.user.pubKey),
+          )

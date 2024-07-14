@@ -10,21 +10,22 @@ export const exitRespawnIx = (
     player: Player,
     starbase: Starbase,
     starbasePlayer: StarbasePlayer,
-    programs: StarAtlasPrograms
-): InstructionReturn => Fleet.respawnToLoadingBay(
-    programs.sage,
-    player.signer,
-    player.profile.key,
-    player.profileFaction.key,
-    fleetInfo.fleet.key,
-    starbase.key,
-    starbasePlayer.key,
-    fleetInfo.fleet.data.cargoHold,
-    fleetInfo.fleet.data.fuelTank,
-    fleetInfo.fleet.data.ammoBank,
-    player.game.key,
-    player.game.data.gameState,
-    {
-        keyIndex: 0
-    }
-)
+    programs: StarAtlasPrograms,
+): InstructionReturn =>
+    Fleet.respawnToLoadingBay(
+        programs.sage,
+        player.signer,
+        player.profile.key,
+        player.profileFaction.key,
+        fleetInfo.fleet.key,
+        starbase.key,
+        starbasePlayer.key,
+        fleetInfo.fleet.data.cargoHold,
+        fleetInfo.fleet.data.fuelTank,
+        fleetInfo.fleet.data.ammoBank,
+        player.game.key,
+        player.game.data.gameState,
+        {
+            keyIndex: 0,
+        },
+    )

@@ -18,8 +18,7 @@ export const porn = (bot: Telegraf<ContextMessageUpdate>): void => {
                 const imageUrl = `https://storage.googleapis.com/nft-assets/items/${imageName}.jpg`
 
                 await ctx.replyWithPhoto(imageUrl)
-            }
-            catch (e: any) {
+            } catch (e: any) {
                 logger.error(`Cannot send Photo: ${e.message}`)
                 await ctx.reply(':-*')
             }

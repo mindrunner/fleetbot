@@ -27,22 +27,30 @@ export type Mineable = {
     mineItem: MineItem
 }
 
-export const planetsByStarbase =
-    (planets: Map<StarbaseId, Set<Planet>>, starbase: Starbase): Set<Planet> =>
-        planets.get(starbase.key.toBase58()) ?? new Set<Planet>()
+export const planetsByStarbase = (
+    planets: Map<StarbaseId, Set<Planet>>,
+    starbase: Starbase,
+): Set<Planet> => planets.get(starbase.key.toBase58()) ?? new Set<Planet>()
 
-export const resourcesByPlanet =
-    (resources: Map<PlanetId, Set<Resource>>, planet: Planet): Set<Resource> =>
-        resources.get(planet.key.toBase58()) ?? new Set<Resource>()
+export const resourcesByPlanet = (
+    resources: Map<PlanetId, Set<Resource>>,
+    planet: Planet,
+): Set<Resource> => resources.get(planet.key.toBase58()) ?? new Set<Resource>()
 
-export const mineItemByResource =
-    (mineItems: Map<ResourceId, MineItem>, resource: Resource): MineItem | undefined =>
-        mineItems.get(resource.key.toBase58())
+export const mineItemByResource = (
+    mineItems: Map<ResourceId, MineItem>,
+    resource: Resource,
+): MineItem | undefined => mineItems.get(resource.key.toBase58())
 
-export const mineableByCoordinates = (map: WorldMap, coordinates: Coordinates): Set<Mineable> => {
-    const starbase = map.starbases.find(s => transformSector(s.data.sector).equals(coordinates))
+export const mineableByCoordinates = (
+    map: WorldMap,
+    coordinates: Coordinates,
+): Set<Mineable> => {
+    const starbase = map.starbases.find((s) =>
+        transformSector(s.data.sector).equals(coordinates),
+    )
 
-    if(!starbase) {
+    if (!starbase) {
         logger.warn(`No starbase found at ${coordinates}`)
 
         return new Set<Mineable>()
@@ -56,12 +64,12 @@ export const mineableByCoordinates = (map: WorldMap, coordinates: Coordinates): 
         resources.forEach((resource) => {
             const mineItem = mineItemByResource(map.mineItems, resource)
 
-            if(mineItem) {
+            if (mineItem) {
                 minables.add({
                     starbase,
                     planet,
                     resource,
-                    mineItem
+                    mineItem,
                 })
             }
         })
@@ -75,7 +83,7 @@ export const getMapContext = async (game: Game): Promise<WorldMap> => {
         getStarbases(game),
         getPlanets(game),
         getMineItems(game),
-        getResources(game)
+        getResources(game),
     ])
 
     const planets = new Map<StarbaseId, Set<Planet>>()
@@ -86,7 +94,9 @@ export const getMapContext = async (game: Game): Promise<WorldMap> => {
         const location = transformSector(s.data.sector)
         const planetSet = planets.get(s.key.toBase58()) ?? new Set<Planet>()
 
-        pl.filter(p => transformSector(p.data.sector).equals(location)).forEach((p) => {
+        pl.filter((p) =>
+            transformSector(p.data.sector).equals(location),
+        ).forEach((p) => {
             planetSet.add(p)
         })
 
@@ -94,9 +104,13 @@ export const getMapContext = async (game: Game): Promise<WorldMap> => {
     })
 
     res.forEach((r) => {
-        const resourceSet = resources.get(r.data.location.toBase58()) ?? new Set<Resource>()
+        const resourceSet =
+            resources.get(r.data.location.toBase58()) ?? new Set<Resource>()
 
-        mineItems.set(r.key.toBase58(), mI.find(m => m.key.equals(r.data.mineItem))!)
+        mineItems.set(
+            r.key.toBase58(),
+            mI.find((m) => m.key.equals(r.data.mineItem))!,
+        )
 
         resourceSet.add(r)
         resources.set(r.data.location.toBase58(), resourceSet)
@@ -106,6 +120,6 @@ export const getMapContext = async (game: Game): Promise<WorldMap> => {
         starbases,
         planets,
         mineItems,
-        resources
+        resources,
     }
 }

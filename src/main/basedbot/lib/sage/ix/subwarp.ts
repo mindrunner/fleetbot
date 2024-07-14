@@ -10,17 +10,18 @@ export const subWarpIx = (
     fleetInfo: FleetInfo,
     coordinates: Coordinates,
     player: Player,
-    programs: StarAtlasPrograms
-): InstructionReturn => Fleet.startSubwarp(
-    programs.sage,
-    player.signer,
-    player.profile.key,
-    player.profileFaction.key,
-    fleetInfo.fleet.key,
-    player.game.key,
-    player.game.data.gameState,
-    {
-        toSector: coordinates.toArray(),
-        keyIndex: player.keyIndex,
-    }
-)
+    programs: StarAtlasPrograms,
+): InstructionReturn =>
+    Fleet.startSubwarp(
+        programs.sage,
+        player.signer,
+        player.profile.key,
+        player.profileFaction.key,
+        fleetInfo.fleet.key,
+        player.game.key,
+        player.game.data.gameState,
+        {
+            toSector: coordinates.toArray(),
+            keyIndex: player.keyIndex,
+        },
+    )

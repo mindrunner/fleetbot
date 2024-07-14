@@ -9,7 +9,11 @@ import { Player } from './user-account'
 import { FleetInfo } from './user-fleets'
 import { mineableByCoordinates, WorldMap } from './world-map'
 
-export const settleFleet = async (fleetInfo: FleetInfo, player: Player, map: WorldMap): Promise<void> => {
+export const settleFleet = async (
+    fleetInfo: FleetInfo,
+    player: Player,
+    map: WorldMap,
+): Promise<void> => {
     switch (fleetInfo.fleetState.type) {
         case 'MoveWarp': {
             const { warpFinish } = fleetInfo.fleetState.data
@@ -31,7 +35,9 @@ export const settleFleet = async (fleetInfo: FleetInfo, player: Player, map: Wor
             const { end } = fleetInfo.fleetState.data
 
             if (end.isBefore(now())) {
-                const [mineable] = Array.from(mineableByCoordinates(map, fleetInfo.location))
+                const [mineable] = Array.from(
+                    mineableByCoordinates(map, fleetInfo.location),
+                )
 
                 await endMine(fleetInfo, player, mineable)
             }
@@ -42,11 +48,17 @@ export const settleFleet = async (fleetInfo: FleetInfo, player: Player, map: Wor
 
             if (ETA.isBefore(now())) {
                 // TODO: Respawn at Home Base based on Faction
-                await exitRespawn(fleetInfo, Coordinates.fromNumber(-40, 30), player)
+                await exitRespawn(
+                    fleetInfo,
+                    Coordinates.fromNumber(-40, 30),
+                    player,
+                )
             }
             break
         }
         default:
-            logger.info(`Fleet: ${fleetInfo.fleetName} is ${fleetInfo.fleetState.type}`)
+            logger.info(
+                `Fleet: ${fleetInfo.fleetName} is ${fleetInfo.fleetState.type}`,
+            )
     }
 }

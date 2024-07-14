@@ -1,6 +1,12 @@
-import { getAssociatedTokenAddressSync, TOKEN_PROGRAM_ID } from '@solana/spl-token'
+import {
+    getAssociatedTokenAddressSync,
+    TOKEN_PROGRAM_ID,
+} from '@solana/spl-token'
 import { PublicKey } from '@solana/web3.js'
-import { createAssociatedTokenAccountIdempotent, ixReturnsToIxs } from '@staratlas/data-source'
+import {
+    createAssociatedTokenAccountIdempotent,
+    ixReturnsToIxs,
+} from '@staratlas/data-source'
 import { Fleet } from '@staratlas/sage'
 import BN from 'bn.js'
 import bs58 from 'bs58'
@@ -18,29 +24,16 @@ type PartialTokenAccount = {
     owner: string
     delegate: string | null
     delegatedAmount: number
-};
+}
 
 const getTokenAccountForKey = async (
-    key: PublicKey
+    key: PublicKey,
 ): Promise<PartialTokenAccount[]> => {
     const tokenAccounts = await connection.getTokenAccountsByOwner(key, {
-        programId: TOKEN_PROGRAM_ID
+        programId: TOKEN_PROGRAM_ID,
     })
 
     const result: PartialTokenAccount[] = []
-    /** Account data format:
-     * mint: Pubkey
-     * owner: Pubkey
-     * amount: u64
-     * delegate: Coption<Pubkey>
-     * state: AccountState
-     * is_native: Coption<u64>
-     * delegated_amount: u64
-     * close_authority: Coption<Pubkey>
-     * Options are 4 byte paddings:
-     * Found by Jerry:
-     * https://github.com/solana-labs/solana-program-library/blob/6ed7254d1a578ffbc2b091d28cb92b25e7cc511d/token/js/src/state/account.ts#L69
-     */
 
     for (const tokenAccount of tokenAccounts.value) {
         const accountKey = tokenAccount.pubkey.toBase58()
@@ -52,35 +45,44 @@ const getTokenAccountForKey = async (
             owner: bs58.encode(accountData.slice(32, 64)),
             tokenAccount: accountKey,
             delegate: bs58.encode(accountData.slice(76, 108)),
-            delegatedAmount: new BN(accountData.slice(121, 129), 'le').toNumber()
+            delegatedAmount: new BN(
+                accountData.slice(121, 129),
+                'le',
+            ).toNumber(),
         })
     }
 
     return result
 }
 
-const getBalance = async (mint: PublicKey, bank: PublicKey, player: Player): Promise<number> => {
-    const tokenAccount = getAssociatedTokenAddressSync(
-        mint,
-        bank,
-        true
-    )
+const getBalance = async (
+    mint: PublicKey,
+    bank: PublicKey,
+    player: Player,
+): Promise<number> => {
+    const tokenAccount = getAssociatedTokenAddressSync(mint, bank, true)
 
     try {
         const balance = await connection.getTokenAccountBalance(tokenAccount)
 
         return balance.value.uiAmount ?? 0
-    }
-    catch (e) {
+    } catch (e) {
         if ((e as Error).message.includes('could not find account')) {
-            logger.warn(`No balance found for ${mint.toBase58()} at ${bank.toBase58()} creating new account`)
+            logger.warn(
+                `No balance found for ${mint.toBase58()} at ${bank.toBase58()} creating new account`,
+            )
             const fleetFuelTokenResult = createAssociatedTokenAccountIdempotent(
                 mint,
                 bank,
                 true,
             )
 
-            await sendAndConfirmInstructions(await ixReturnsToIxs(fleetFuelTokenResult.instructions, player.signer))
+            await sendAndConfirmInstructions(
+                await ixReturnsToIxs(
+                    fleetFuelTokenResult.instructions,
+                    player.signer,
+                ),
+            )
 
             return 0
         }
@@ -89,13 +91,18 @@ const getBalance = async (mint: PublicKey, bank: PublicKey, player: Player): Pro
     return 0
 }
 
-const getFleetCargoBalances = async (fleet: Fleet): Promise<Map<string, number>> => {
+const getFleetCargoBalances = async (
+    fleet: Fleet,
+): Promise<Map<string, number>> => {
     const cargoHoldBalances = await getTokenAccountForKey(
-        new PublicKey(fleet.data.cargoHold)
+        new PublicKey(fleet.data.cargoHold),
     )
 
     return new Map(
-        cargoHoldBalances.map(tokenAccount => [tokenAccount.mint, tokenAccount.delegatedAmount])
+        cargoHoldBalances.map((tokenAccount) => [
+            tokenAccount.mint,
+            tokenAccount.delegatedAmount,
+        ]),
     )
 }
 
@@ -107,11 +114,14 @@ export type FleetCargo = {
     toolkit: number
 }
 
-export const getFleetCargoBalance = async (fleet: Fleet, player: Player): Promise<FleetCargo> => {
+export const getFleetCargoBalance = async (
+    fleet: Fleet,
+    player: Player,
+): Promise<FleetCargo> => {
     const [ammo, fuel, cargo] = await Promise.all([
         getBalance(player.game.data.mints.ammo, fleet.data.ammoBank, player),
         getBalance(player.game.data.mints.fuel, fleet.data.fuelTank, player),
-        getFleetCargoBalances(fleet)
+        getFleetCargoBalances(fleet),
     ])
 
     return {
@@ -119,6 +129,6 @@ export const getFleetCargoBalance = async (fleet: Fleet, player: Player): Promis
         cargo,
         food: cargo.get(player.game.data.mints.food.toBase58()) ?? 0,
         fuel,
-        toolkit: cargo.get(player.game.data.mints.repairKit.toBase58()) ?? 0
+        toolkit: cargo.get(player.game.data.mints.repairKit.toBase58()) ?? 0,
     }
 }

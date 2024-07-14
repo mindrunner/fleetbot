@@ -10,14 +10,17 @@ export const getMineItems = async (game: Game): Promise<Array<MineItem>> => {
         programs.sage,
         MineItem,
         'processed',
-        [{
-            memcmp: {
-                offset: 8 + 1,
-                bytes: game.key.toBase58(),
+        [
+            {
+                memcmp: {
+                    offset: 8 + 1,
+                    bytes: game.key.toBase58(),
+                },
             },
-        }])
+        ],
+    )
 
     return mineItems
-        .filter(p => p.type === 'ok' && 'data' in p)
-        .map(p => (p as any).data)
+        .filter((p) => p.type === 'ok' && 'data' in p)
+        .map((p) => (p as any).data)
 }

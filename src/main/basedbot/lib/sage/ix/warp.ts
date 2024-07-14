@@ -10,23 +10,24 @@ export const warpIx = (
     fleetInfo: FleetInfo,
     coordinates: Coordinates,
     player: Player,
-    programs: StarAtlasPrograms
-): InstructionReturn => Fleet.warpToCoordinate(
-    programs.sage,
-    player.signer,
-    player.profile.key,
-    player.profileFaction.key,
-    fleetInfo.fleet.key,
-    fleetInfo.fleet.data.fuelTank,
-    player.fuelCargoType.key,
-    player.game.data.cargo.statsDefinition,
-    fleetInfo.fuelTokenAccount,
-    player.game.data.mints.fuel,
-    player.game.data.gameState,
-    player.game.key,
-    programs.cargo,
-    {
-        toSector: coordinates.toArray(),
-        keyIndex: player.keyIndex,
-    }
-)
+    programs: StarAtlasPrograms,
+): InstructionReturn =>
+    Fleet.warpToCoordinate(
+        programs.sage,
+        player.signer,
+        player.profile.key,
+        player.profileFaction.key,
+        fleetInfo.fleet.key,
+        fleetInfo.fleet.data.fuelTank,
+        player.fuelCargoType.key,
+        player.game.data.cargo.statsDefinition,
+        fleetInfo.fuelTokenAccount,
+        player.game.data.mints.fuel,
+        player.game.data.gameState,
+        player.game.key,
+        programs.cargo,
+        {
+            toSector: coordinates.toArray(),
+            keyIndex: player.keyIndex,
+        },
+    )

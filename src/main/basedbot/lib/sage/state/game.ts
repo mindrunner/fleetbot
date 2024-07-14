@@ -10,9 +10,12 @@ export const sageGame = async (): Promise<Game> => {
         programs.sage,
         Game,
         'processed',
-        [])
+        [],
+    )
 
-    if (game.type === 'error') {throw new Error('Error reading game account')}
+    if (game.type === 'error') {
+        throw new Error('Error reading game account')
+    }
 
     return game.data
 }

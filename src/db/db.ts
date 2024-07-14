@@ -11,7 +11,10 @@ export let dataSource: DataSource
 export const connect = async (logging?: LoggerOptions): Promise<DataSource> => {
     logger.info(`Attempting db connection for ${config.db.database}`)
 
-    dataSource = new DataSource({ ...dbConfig, logging: logging || dbConfig.logging })
+    dataSource = new DataSource({
+        ...dbConfig,
+        logging: logging || dbConfig.logging,
+    })
 
     await dataSource.initialize()
 

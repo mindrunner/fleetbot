@@ -5,4 +5,8 @@ import { keyPair } from '../wallet'
 
 import { connection } from './const'
 
-export const anchorProvider = new AnchorProvider(connection, new Wallet(keyPair), {})
+export const anchorProvider = new AnchorProvider(
+    connection,
+    new Wallet(keyPair),
+    {},
+)
