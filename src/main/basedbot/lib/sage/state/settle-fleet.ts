@@ -1,6 +1,5 @@
 import { now } from '../../../../../dayjs'
 import { logger } from '../../../../../logger'
-import { Coordinates } from '../../util/coordinates'
 import { endMine } from '../act/end-mine'
 import { endMove } from '../act/end-move'
 import { exitRespawn } from '../act/exit-respawn'
@@ -47,12 +46,7 @@ export const settleFleet = async (
             const { ETA } = fleetInfo.fleetState.data
 
             if (ETA.isBefore(now())) {
-                // TODO: Respawn at Home Base based on Faction
-                await exitRespawn(
-                    fleetInfo,
-                    Coordinates.fromNumber(-40, 30),
-                    player,
-                )
+                await exitRespawn(fleetInfo, player.homeStarbase, player)
             }
             break
         }

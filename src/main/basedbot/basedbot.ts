@@ -1,8 +1,16 @@
+import {
+    getAssociatedTokenAddressSync,
+    TOKEN_PROGRAM_ID,
+} from '@solana/spl-token'
+import { getParsedTokenAccountsByOwner } from '@staratlas/data-source'
+import BN from 'bn.js'
+
 import { Sentry } from '../../sentry'
 
 import { config } from '../../config'
 import { logger } from '../../logger'
 import { sleep } from '../../service/sleep'
+import { connection } from '../../service/sol'
 import { keyPair } from '../../service/wallet'
 
 import { mineBiomass } from './fsm/configs/mine-biomass'
@@ -18,6 +26,7 @@ import { mineSilicia } from './fsm/configs/mine-silicia'
 import { mineTitaniumOre } from './fsm/configs/mine-titanium-ore'
 import { createMiningStrategy } from './fsm/mine'
 import { Strategy } from './fsm/strategy'
+import { depositCargo } from './lib/sage/act/deposit-cargo'
 import { settleFleet } from './lib/sage/state/settle-fleet'
 import { getPlayerContext, Player } from './lib/sage/state/user-account'
 import {
@@ -30,6 +39,7 @@ import {
     mineableByCoordinates,
     WorldMap,
 } from './lib/sage/state/world-map'
+// eslint-disable-next-line import/max-dependencies
 import { Coordinates } from './lib/util/coordinates'
 
 // eslint-disable-next-line require-await
@@ -69,12 +79,56 @@ const applyStrategy = (
     return strategy.send(fleetInfo)
 }
 
+const importR4 = async (player: Player): Promise<void> => {
+    await Promise.all(
+        [
+            player.game.data.mints.food,
+            player.game.data.mints.ammo,
+            player.game.data.mints.fuel,
+            player.game.data.mints.repairKit,
+        ].map(async (mint) => {
+            //TODO: Make it easier to get the amount of a token
+            //      This is being used in multiple places
+            const allTokenAccounts = await getParsedTokenAccountsByOwner(
+                connection,
+                player.signer.publicKey(),
+                TOKEN_PROGRAM_ID,
+            )
+
+            const sourceTokenAccount = getAssociatedTokenAddressSync(
+                mint,
+                player.signer.publicKey(),
+                true,
+            )
+            const [mintTokenAccount] = allTokenAccounts.filter((it) =>
+                it.address.equals(sourceTokenAccount),
+            )
+            const amountAtOrigin = new BN(mintTokenAccount.amount.toString())
+
+            if (amountAtOrigin.gtn(0)) {
+                logger.info(
+                    `Importing R4 for ${mint.toBase58()}: ${amountAtOrigin}`,
+                )
+
+                await depositCargo(
+                    player,
+                    player.homeStarbase,
+                    mint,
+                    amountAtOrigin,
+                )
+            }
+        }),
+    )
+}
+
 const basedbot = async (botConfig: BotConfig) => {
     const { player, map } = botConfig
     const fleets = await getUserFleets(player)
     const fleetInfos = await Promise.all(
         fleets.map((f) => getFleetInfo(f, player, map)),
     )
+
+    await importR4(player)
 
     await Promise.all(
         fleetInfos.map((fleetInfo) => settleFleet(fleetInfo, player, map)),
