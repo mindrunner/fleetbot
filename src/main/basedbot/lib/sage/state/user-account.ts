@@ -1,6 +1,10 @@
 import { Keypair, PublicKey } from '@solana/web3.js'
 import { CargoType } from '@staratlas/cargo'
-import { AsyncSigner, keypairToAsyncSigner, readAllFromRPC } from '@staratlas/data-source'
+import {
+    AsyncSigner,
+    keypairToAsyncSigner,
+    readAllFromRPC,
+} from '@staratlas/data-source'
 import { PlayerProfile } from '@staratlas/player-profile'
 import { PointsModifier } from '@staratlas/points'
 import { ProfileFactionAccount } from '@staratlas/profile-faction'
@@ -40,14 +44,17 @@ export type Player = {
     ammoCargoType: CargoType
 }
 
-const getXpAccount = async (playerProfile: PublicKey, xpCategory: PublicKey): Promise<XpAccount> => {
+const getXpAccount = async (
+    playerProfile: PublicKey,
+    xpCategory: PublicKey,
+): Promise<XpAccount> => {
     const [userXpAccount] = PublicKey.findProgramAddressSync(
         [
             Buffer.from('UserPointsAccount'),
             xpCategory.toBuffer(),
-            playerProfile.toBuffer()
+            playerProfile.toBuffer(),
         ],
-        programs.points.programId
+        programs.points.programId,
     )
 
     const [pointsModifierAccount] = await readAllFromRPC(
@@ -59,23 +66,30 @@ const getXpAccount = async (playerProfile: PublicKey, xpCategory: PublicKey): Pr
             {
                 memcmp: {
                     offset: 9,
-                    bytes: xpCategory.toBase58()
-                }
+                    bytes: xpCategory.toBase58(),
+                },
             },
-        ])
+        ],
+    )
 
-    if (pointsModifierAccount.type === 'error') {throw new Error('Error reading points modifier account')}
+    if (pointsModifierAccount.type === 'error') {
+        throw new Error('Error reading points modifier account')
+    }
 
     return {
         userPointsAccount: userXpAccount,
         pointsModifierAccount: pointsModifierAccount.key,
-        pointsCategory: xpCategory
+        pointsCategory: xpCategory,
     }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getKeyIndex = (_: PlayerProfile): number => 0
 
-export const getPlayerContext = async (user: PublicKey, signer: Keypair): Promise<Player> => {
+export const getPlayerContext = async (
+    user: PublicKey,
+    signer: Keypair,
+): Promise<Player> => {
     const myProfiles = await readAllFromRPC(
         connection,
         programs.playerProfile,
@@ -85,10 +99,10 @@ export const getPlayerContext = async (user: PublicKey, signer: Keypair): Promis
             {
                 memcmp: {
                     offset: PlayerProfile.MIN_DATA_SIZE + 2,
-                    bytes: user.toBase58()
-                }
-            }
-        ]
+                    bytes: user.toBase58(),
+                },
+            },
+        ],
     )
 
     // TODO: only support one profile for now
@@ -99,27 +113,52 @@ export const getPlayerContext = async (user: PublicKey, signer: Keypair): Promis
         throw new Error('no player profile found')
     }
 
-    if (profile.type === 'error') {throw new Error('Error reading account')}
+    if (profile.type === 'error') {
+        throw new Error('Error reading account')
+    }
 
     const keyIndex = getKeyIndex(profile.data)
 
-    const [profileFaction] = await readAllFromRPC(connection, programs.profileFaction as any, ProfileFactionAccount, 'processed', [
-        {
-            memcmp: {
-                offset: 9,
-                bytes: profile.key.toBase58()
-            }
-        }
-    ])
+    const [profileFaction] = await readAllFromRPC(
+        connection,
+        programs.profileFaction as any,
+        ProfileFactionAccount,
+        'processed',
+        [
+            {
+                memcmp: {
+                    offset: 9,
+                    bytes: profile.key.toBase58(),
+                },
+            },
+        ],
+    )
 
-    if (profileFaction.type === 'error') {throw new Error('Error reading faction account')}
+    if (profileFaction.type === 'error') {
+        throw new Error('Error reading faction account')
+    }
 
     const xpAccounts = {
-        councilRank: await getXpAccount(profile.key, new PublicKey(xpCategoryIds.councilRankXpCategory)),
-        dataRunning: await getXpAccount(profile.key, new PublicKey(xpCategoryIds.dataRunningXpCategory)),
-        piloting: await getXpAccount(profile.key, new PublicKey(xpCategoryIds.pilotingXpCategory)),
-        mining: await getXpAccount(profile.key, new PublicKey(xpCategoryIds.miningXpCategory)),
-        crafting: await getXpAccount(profile.key, new PublicKey(xpCategoryIds.craftingXpCategory))
+        councilRank: await getXpAccount(
+            profile.key,
+            new PublicKey(xpCategoryIds.councilRankXpCategory),
+        ),
+        dataRunning: await getXpAccount(
+            profile.key,
+            new PublicKey(xpCategoryIds.dataRunningXpCategory),
+        ),
+        piloting: await getXpAccount(
+            profile.key,
+            new PublicKey(xpCategoryIds.pilotingXpCategory),
+        ),
+        mining: await getXpAccount(
+            profile.key,
+            new PublicKey(xpCategoryIds.miningXpCategory),
+        ),
+        crafting: await getXpAccount(
+            profile.key,
+            new PublicKey(xpCategoryIds.craftingXpCategory),
+        ),
     }
 
     const game = await sageGame()
@@ -135,7 +174,7 @@ export const getPlayerContext = async (user: PublicKey, signer: Keypair): Promis
         cargoTypes,
         fuelCargoType: getCargoType(cargoTypes, game, game.data.mints.fuel),
         foodCargoType: getCargoType(cargoTypes, game, game.data.mints.food),
-        ammoCargoType: getCargoType(cargoTypes, game, game.data.mints.ammo)
+        ammoCargoType: getCargoType(cargoTypes, game, game.data.mints.ammo),
     }
 }
 

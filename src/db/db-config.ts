@@ -9,7 +9,9 @@ const dbConfig: DataSourceOptions = {
     synchronize: false,
     entities: [`${__dirname}/entities/**/!(*test).{ts,js}`],
     migrations: [`${__dirname}/migrations/**/*.{ts,js}`],
-    logging: ((config.db.logging || 'all') as string).split(',').map(l => l.trim()) as LoggerOptions
+    logging: ((config.db.logging || 'all') as string)
+        .split(',')
+        .map((l) => l.trim()) as LoggerOptions,
 }
 
 export default dbConfig

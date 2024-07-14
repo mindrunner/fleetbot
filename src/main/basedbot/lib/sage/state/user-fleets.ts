@@ -6,10 +6,10 @@ import BN from 'bn.js'
 
 import { connection } from '../../../../../service/sol'
 import { keyPair } from '../../../../../service/wallet'
-import { FleetState } from '../../fleet-state/types'
-import { Coordinates } from '../../util/coordinates'
 import { getFleetState } from '../../fleet-state/fleet-state'
+import { FleetState } from '../../fleet-state/types'
 import { programs } from '../../programs'
+import { Coordinates } from '../../util/coordinates'
 import { getName } from '../util'
 
 import { FleetCargo, getFleetCargoBalance } from './fleet-cargo'
@@ -81,20 +81,27 @@ export const getUserFleets = async (player: Player): Promise<Array<Fleet>> => {
             {
                 memcmp: {
                     offset: 8 + 1 + 32, // 8 (discriminator) + 1 (version) + 32 (gameId)
-                    bytes: player.profile.key.toBase58()
-                }
-            }
-        ]
+                    bytes: player.profile.key.toBase58(),
+                },
+            },
+        ],
     )
 
-    return fleets.filter(f => f.type === 'ok' && 'data' in f).map(f => (f as any).data)
+    return fleets
+        .filter((f) => f.type === 'ok' && 'data' in f)
+        .map((f) => (f as any).data)
 }
 
-export const getFleetInfo = async (fleet: Fleet, player: Player, map: WorldMap): Promise<FleetInfo> => {
+export const getFleetInfo = async (
+    fleet: Fleet,
+    player: Player,
+    map: WorldMap,
+): Promise<FleetInfo> => {
     const cargoLevels = await getFleetCargoBalance(fleet, player)
     const fleetState = await getFleetState(fleet, map, cargoLevels)
     const shipCounts = fleet.data.shipCounts as unknown as ShipCounts
-    const movementStats = fleet.data.stats.movementStats as unknown as MovementStats
+    const movementStats = fleet.data.stats
+        .movementStats as unknown as MovementStats
     const cargoStats = fleet.data.stats.cargoStats as unknown as CargoStats
     const miscStats = fleet.data.stats.miscStats as unknown as MiscStats
     const location = fleetState.data.sector
@@ -105,7 +112,7 @@ export const getFleetInfo = async (fleet: Fleet, player: Player, map: WorldMap):
         keyPair,
         player.game.data.mints.fuel,
         fleet.data.fuelTank,
-        true
+        true,
     )
 
     return {

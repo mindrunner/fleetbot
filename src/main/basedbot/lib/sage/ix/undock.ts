@@ -10,16 +10,17 @@ export const undockIx = (
     player: Player,
     starbase: Starbase,
     starbasePlayer: StarbasePlayer,
-    programs: StarAtlasPrograms
-): InstructionReturn => Fleet.loadingBayToIdle(
-    programs.sage,
-    player.signer,
-    player.profile.key,
-    player.profileFaction.key,
-    fleetInfo.fleet.key,
-    starbase.key,
-    starbasePlayer.key,
-    player.game.key,
-    player.game.data.gameState,
-    player.keyIndex
-)
+    programs: StarAtlasPrograms,
+): InstructionReturn =>
+    Fleet.loadingBayToIdle(
+        programs.sage,
+        player.signer,
+        player.profile.key,
+        player.profileFaction.key,
+        fleetInfo.fleet.key,
+        starbase.key,
+        starbasePlayer.key,
+        player.game.key,
+        player.game.data.gameState,
+        player.keyIndex,
+    )

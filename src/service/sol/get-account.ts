@@ -5,15 +5,19 @@ import { Resource } from '../wallet'
 
 const resourceAccounts: Map<string, PublicKey> = new Map()
 
-export const getAccount = async (player: PublicKey, resource: Resource): Promise<PublicKey> => {
+export const getAccount = async (
+    player: PublicKey,
+    resource: Resource,
+): Promise<PublicKey> => {
     if (!resourceAccounts.get(resource.toString())) {
-        const ret = await PublicKey.findProgramAddress([
-            player.toBuffer(),
-            TOKEN_PROGRAM_ID.toBuffer(),
-            resource.toBuffer()
-        ], new PublicKey(
-            'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL'
-        ))
+        const ret = await PublicKey.findProgramAddress(
+            [
+                player.toBuffer(),
+                TOKEN_PROGRAM_ID.toBuffer(),
+                resource.toBuffer(),
+            ],
+            new PublicKey('ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL'),
+        )
 
         resourceAccounts.set(resource.toString(), ret[0])
     }

@@ -1,5 +1,4 @@
 import { logger } from '../../../../../logger'
-import { getName } from '../util'
 
 import { FleetInfo } from './user-fleets'
 
@@ -12,6 +11,6 @@ export const showFleetCargoInfo = (fleetInfo: FleetInfo): void => {
     logger.info(`Fuel: ${fuel}`)
     logger.info(`Toolkit: ${toolkit}`)
     for (const [mint, amount] of cargo.entries()) {
-        logger.info(`${getName(mint)}: ${amount}`)
+        logger.info(`${mint}: ${amount}`)
     }
 }

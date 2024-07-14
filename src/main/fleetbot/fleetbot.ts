@@ -2,7 +2,12 @@ import { CronJob } from 'cron'
 
 import { config } from '../../config'
 import * as db from '../../db'
-import { checkTransactions, refill, stockResources, telegramBot } from '../../lib'
+import {
+    checkTransactions,
+    refill,
+    stockResources,
+    telegramBot,
+} from '../../lib'
 import { logger } from '../../logger'
 import { initOrderBook } from '../../service/gm'
 
@@ -28,8 +33,7 @@ export const stop = async (): Promise<void> => {
             refillCronJob.stop()
         }
         await db.close()
-    }
-    catch (e) {
+    } catch (e) {
         logger.error(e)
     }
 }
@@ -38,18 +42,26 @@ export const start = async (): Promise<void> => {
     await initOrderBook()
     // https://github.com/telegraf/telegraf/issues/1749
     // eslint-disable-next-line promise/prefer-await-to-then
-    telegramBot.launch().catch(e => logger.error(e))
+    telegramBot.launch().catch((e) => logger.error(e))
 
     if (config.app.quickstart) {
         await stockResources()
         await checkTransactions()
         await refill()
     }
-    resourcesCronJob = CronJob.from({ cronTime: config.cron.resourceInterval, onTick: stockResources, start: true })
-    refillCronJob = CronJob.from({ cronTime: config.cron.refillInterval, onTick: refill, start: true })
+    resourcesCronJob = CronJob.from({
+        cronTime: config.cron.resourceInterval,
+        onTick: stockResources,
+        start: true,
+    })
+    refillCronJob = CronJob.from({
+        cronTime: config.cron.refillInterval,
+        onTick: refill,
+        start: true,
+    })
     transactionCronJob = CronJob.from({
         cronTime: config.cron.bookkeeperInterval,
         onTick: checkTransactions,
-        start: true
+        start: true,
     })
 }

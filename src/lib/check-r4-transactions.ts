@@ -1,6 +1,12 @@
 import { getAssociatedTokenAddressSync } from '@solana/spl-token'
 // eslint-disable-next-line import/named
-import { ParsedInstruction, PublicKey, SignaturesForAddressOptions } from '@solana/web3.js'
+import {
+    // eslint-disable-next-line import/named
+    ParsedInstruction,
+    PublicKey,
+    // eslint-disable-next-line import/named
+    SignaturesForAddressOptions,
+} from '@solana/web3.js'
 import Big from 'big.js'
 
 import dayjs from '../dayjs'
@@ -106,7 +112,7 @@ export const checkR4Transactions = async (
                     // eslint-disable-next-line max-depth
                     if (sender === keyPair.publicKey.toString()) {
                         const receiver = tx.meta?.postTokenBalances?.filter(
-                            tb =>
+                            (tb) =>
                                 tb.owner?.toString() !==
                                 keyPair.publicKey.toString(),
                         )[0].owner as string
@@ -128,8 +134,7 @@ export const checkR4Transactions = async (
                                 time,
                             }).save()
                         }
-                    }
-                    else {
+                    } else {
                         log(
                             `${sender} +${originalAmount} ${resourceName.toUpperCase()} worth ${price.toFixed(AD)} ATLAS ${dayjs.duration(dayjs().diff(time)).humanize(false)} ago`,
                         )

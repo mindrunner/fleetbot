@@ -10,14 +10,17 @@ export const getStarbases = async (game: Game): Promise<Array<Starbase>> => {
         programs.sage,
         Starbase,
         'processed',
-        [{
-            memcmp: {
-                offset: 8 + 1,
-                bytes: game.key.toBase58(),
+        [
+            {
+                memcmp: {
+                    offset: 8 + 1,
+                    bytes: game.key.toBase58(),
+                },
             },
-        }])
+        ],
+    )
 
     return starbases
-        .filter(p => p.type === 'ok' && 'data' in p)
-        .map(p => (p as any).data)
+        .filter((p) => p.type === 'ok' && 'data' in p)
+        .map((p) => (p as any).data)
 }

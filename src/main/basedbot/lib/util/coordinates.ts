@@ -16,37 +16,39 @@ export class Coordinates {
 
     public static fromBN = (x: BN, y: BN): Coordinates => new Coordinates(x, y)
 
-    public static fromNumber = (x: number, y: number): Coordinates => new Coordinates(x, y)
+    public static fromNumber = (x: number, y: number): Coordinates =>
+        new Coordinates(x, y)
 
-    private constructor (x: BN | number, y: BN | number) {
+    private constructor(x: BN | number, y: BN | number) {
         this._x = typeof x === 'number' ? new BN(x, 10) : x
         this._y = typeof y === 'number' ? new BN(y, 10) : y
         // logger.debug('Coordinates', { x: this._x.toNumber(), y: this._y.toNumber() })
     }
 
-    private static toB58 = (bn: BN): string => bs58.encode(bn.toTwos(64).toArrayLike(Buffer, 'le', 8))
+    private static toB58 = (bn: BN): string =>
+        bs58.encode(bn.toTwos(64).toArrayLike(Buffer, 'le', 8))
 
-    get xBN (): BN {
+    get xBN(): BN {
         return this._x
     }
 
-    get yBN (): BN {
+    get yBN(): BN {
         return this._y
     }
 
-    get xB58 (): string {
+    get xB58(): string {
         return Coordinates.toB58(this._x)
     }
 
-    get yB58 (): string {
+    get yB58(): string {
         return Coordinates.toB58(this._y)
     }
 
-    get x (): number {
+    get x(): number {
         return this._x.toNumber()
     }
 
-    get y (): number {
+    get y(): number {
         return this._y.toNumber()
     }
 
@@ -57,9 +59,11 @@ export class Coordinates {
         return Math.sqrt(x.mul(x).add(y.mul(y)).toNumber())
     }
 
-    public equals = (other: Coordinates): boolean => this._x.eq(other._x) && this._y.eq(other._y)
+    public equals = (other: Coordinates): boolean =>
+        this._x.eq(other._x) && this._y.eq(other._y)
 
-    public toString = (): string => `${this._x.toNumber()},${this._y.toNumber()}`
+    public toString = (): string =>
+        `${this._x.toNumber()},${this._y.toNumber()}`
 
     public toArray = (): [BN, BN] => [this._x, this._y]
 }

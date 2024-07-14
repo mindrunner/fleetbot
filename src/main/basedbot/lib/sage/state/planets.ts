@@ -10,14 +10,17 @@ export const getPlanets = async (game: Game): Promise<Array<Planet>> => {
         programs.sage,
         Planet,
         'processed',
-        [{
-            memcmp: {
-                offset: 8 + 1 + 64,
-                bytes: game.key.toBase58(),
+        [
+            {
+                memcmp: {
+                    offset: 8 + 1 + 64,
+                    bytes: game.key.toBase58(),
+                },
             },
-        }])
+        ],
+    )
 
     return planets
-        .filter(p => p.type === 'ok' && 'data' in p)
-        .map(p => (p as any).data)
+        .filter((p) => p.type === 'ok' && 'data' in p)
+        .map((p) => (p as any).data)
 }

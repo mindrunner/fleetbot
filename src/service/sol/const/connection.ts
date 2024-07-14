@@ -8,8 +8,8 @@ export const connection = new Connection(config.sol.rpcEndpoint, {
     commitment: 'confirmed',
     fetch: (
         input: RequestInfo | URL,
-        init?: RequestInit
+        init?: RequestInit,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
-    ): Promise<Response> => fetchWithRetries(input, init, 5)
+    ): Promise<Response> => fetchWithRetries(input, init, 5),
 })

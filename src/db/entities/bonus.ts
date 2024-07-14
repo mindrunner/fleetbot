@@ -1,4 +1,10 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import {
+    BaseEntity,
+    Column,
+    Entity,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+} from 'typeorm'
 
 import { RelationIdColumn } from '../columns'
 
@@ -21,6 +27,8 @@ export class Bonus extends BaseEntity {
     @RelationIdColumn()
     walletPublicKey: Wallet['publicKey']
 
-    @ManyToOne(() => Wallet, wallet => wallet.transactions, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Wallet, (wallet) => wallet.transactions, {
+        onDelete: 'CASCADE',
+    })
     wallet: Wallet
 }

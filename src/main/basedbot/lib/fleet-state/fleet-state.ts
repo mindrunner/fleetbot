@@ -27,12 +27,11 @@ const calculateCurrentPosition = (
     destPos: Coordinates,
     startTime: BN,
     endTime: BN,
-    currentTime: BN
+    currentTime: BN,
 ): Coordinates => {
     if (currentTime.gte(endTime)) {
         return destPos
-    }
-    else if (currentTime.lte(startTime)) {
+    } else if (currentTime.lte(startTime)) {
         return startPos
     }
 
@@ -71,10 +70,15 @@ type MiningStats = {
 const getMiningStats = (
     fleet: Fleet,
     cargoLevels: FleetCargo,
-    mineAsteroidData: RawMineAsteroidData
+    mineAsteroidData: RawMineAsteroidData,
 ): MiningStats => {
     const cargoStats = fleet.data.stats.cargoStats as unknown as CargoStats
-    const { miningRate, cargoCapacity, foodConsumptionRate, ammoConsumptionRate } = cargoStats
+    const {
+        miningRate,
+        cargoCapacity,
+        foodConsumptionRate,
+        ammoConsumptionRate,
+    } = cargoStats
 
     const startTime = mineAsteroidData.start
 
@@ -91,12 +95,23 @@ const getMiningStats = (
     const foodConsumptionRatePerSecond = foodConsumptionRate / 10000
 
     const durationToFull = cargoSpace / miningRatePerSecond
-    const durationToammoDepletion = cargoLevels.ammo / ammoConsumptionRatePerSecond
-    const durationToFoodDepletion = cargoLevels.food / foodConsumptionRatePerSecond
+    const durationToammoDepletion =
+        cargoLevels.ammo / ammoConsumptionRatePerSecond
+    const durationToFoodDepletion =
+        cargoLevels.food / foodConsumptionRatePerSecond
 
-    const maxMiningDuration = Math.min(durationToFull, durationToammoDepletion, durationToFoodDepletion)
+    const maxMiningDuration = Math.min(
+        durationToFull,
+        durationToammoDepletion,
+        durationToFoodDepletion,
+    )
 
-    const endReason = maxMiningDuration === durationToFull ? 'FULL' : maxMiningDuration === durationToammoDepletion ? 'AMMO' : 'FOOD'
+    const endReason =
+        maxMiningDuration === durationToFull
+            ? 'FULL'
+            : maxMiningDuration === durationToammoDepletion
+              ? 'AMMO'
+              : 'FOOD'
 
     const n = new BN(now().unix())
     const miningDuration = n.sub(startTime).toNumber()
@@ -121,11 +136,15 @@ const getMiningStats = (
         foodLevel: cargoLevels.food - foodConsumed,
         endReason,
         maxMiningDuration,
-        isMining: miningDuration < maxMiningDuration
+        isMining: miningDuration < maxMiningDuration,
     }
 }
 
-export const getFleetState = async (fleet: Fleet, map: WorldMap, cargoLevels: FleetCargo): Promise<FleetState> => {
+export const getFleetState = async (
+    fleet: Fleet,
+    map: WorldMap,
+    cargoLevels: FleetCargo,
+): Promise<FleetState> => {
     const fleetStateKeys = Object.keys(fleet.state) as Array<FleetStateType>
     const miscStats = fleet.data.stats.miscStats as unknown as MiscStats
 
@@ -146,19 +165,18 @@ export const getFleetState = async (fleet: Fleet, map: WorldMap, cargoLevels: Fl
         warpCooldownExpiry,
         scanCoolDownExpiry,
         warpCooldown: warpCooldownExpiry.isAfter(now()),
-        scanCooldown: scanCoolDownExpiry.isAfter(now())
+        scanCooldown: scanCoolDownExpiry.isAfter(now()),
     }
 
     switch (type) {
         case 'Idle':
             if (isIdleData(data)) {
-
                 return {
                     type,
                     data: {
                         sector: transformSector(data.sector),
-                        ...baseData
-                    }
+                        ...baseData,
+                    },
                 }
             }
             break
@@ -172,8 +190,8 @@ export const getFleetState = async (fleet: Fleet, map: WorldMap, cargoLevels: Fl
                         starbase,
                         lastUpdate: data.lastUpdate,
                         sector: transformSector(starbase.data.sector),
-                        ...baseData
-                    }
+                        ...baseData,
+                    },
                 }
             }
             break
@@ -184,7 +202,8 @@ export const getFleetState = async (fleet: Fleet, map: WorldMap, cargoLevels: Fl
                 const miningStats = getMiningStats(fleet, cargoLevels, data)
 
                 return {
-                    type, data: {
+                    type,
+                    data: {
                         sector: transformSector(planet.data.sector),
                         lastUpdate: transformTime(data.lastUpdate),
                         amountMined: new BN(miningStats.amountMined),
@@ -193,15 +212,16 @@ export const getFleetState = async (fleet: Fleet, map: WorldMap, cargoLevels: Fl
                         mineItem: map.mineItems.get(data.resource.toBase58())!,
                         start: transformTime(data.start),
                         endReason: miningStats.endReason,
-                        ...baseData
-                    }
+                        ...baseData,
+                    },
                 }
             }
             break
         case 'MoveWarp':
             if (isMoveWarpData(data)) {
                 return {
-                    type, data: {
+                    type,
+                    data: {
                         fromSector: transformSector(data.fromSector),
                         toSector: transformSector(data.toSector),
                         warpStart: transformTime(data.warpStart),
@@ -211,18 +231,18 @@ export const getFleetState = async (fleet: Fleet, map: WorldMap, cargoLevels: Fl
                             transformSector(data.toSector),
                             data.warpStart,
                             data.warpFinish,
-                            new BN(now().unix())
+                            new BN(now().unix()),
                         ),
-                        ...baseData
-
-                    }
+                        ...baseData,
+                    },
                 }
             }
             break
         case 'MoveSubwarp':
             if (isMoveSubWarpData(data)) {
                 return {
-                    type, data: {
+                    type,
+                    data: {
                         fromSector: transformSector(data.fromSector),
                         toSector: transformSector(data.toSector),
                         departureTime: transformTime(data.departureTime),
@@ -234,22 +254,25 @@ export const getFleetState = async (fleet: Fleet, map: WorldMap, cargoLevels: Fl
                             transformSector(data.toSector),
                             data.departureTime,
                             data.arrivalTime,
-                            new BN(now().unix())
+                            new BN(now().unix()),
                         ),
-                        ...baseData
-                    }
+                        ...baseData,
+                    },
                 }
             }
             break
         case 'Respawn':
             if (isRespawnData(data)) {
                 return {
-                    type, data: {
+                    type,
+                    data: {
                         sector: transformSector(data.sector),
                         destructionTime: transformTime(data.start),
-                        ETA: transformTime(data.start.add(new BN(miscStats.respawnTime))),
-                        ...baseData
-                    }
+                        ETA: transformTime(
+                            data.start.add(new BN(miscStats.respawnTime)),
+                        ),
+                        ...baseData,
+                    },
                 }
             }
             break

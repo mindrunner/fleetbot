@@ -1,7 +1,7 @@
-import { config } from '../../config'
-
-import { logger } from '../../logger'
 import { Sentry } from '../../sentry'
+
+import { config } from '../../config'
+import { logger } from '../../logger'
 import { sleep } from '../../service/sleep'
 import { keyPair } from '../../service/wallet'
 
@@ -20,8 +20,16 @@ import { createMiningStrategy } from './fsm/mine'
 import { Strategy } from './fsm/strategy'
 import { settleFleet } from './lib/sage/state/settle-fleet'
 import { getPlayerContext, Player } from './lib/sage/state/user-account'
-import { FleetInfo, getFleetInfo, getUserFleets } from './lib/sage/state/user-fleets'
-import { getMapContext, mineableByCoordinates, WorldMap } from './lib/sage/state/world-map'
+import {
+    FleetInfo,
+    getFleetInfo,
+    getUserFleets,
+} from './lib/sage/state/user-fleets'
+import {
+    getMapContext,
+    mineableByCoordinates,
+    WorldMap,
+} from './lib/sage/state/world-map'
 import { Coordinates } from './lib/util/coordinates'
 
 // eslint-disable-next-line require-await
@@ -42,7 +50,10 @@ type BotConfig = {
     fleetStrategies: FleetStrategies
 }
 
-const applyStrategy = (fleetInfo: FleetInfo, fleetStrategies: FleetStrategies): Promise<void> => {
+const applyStrategy = (
+    fleetInfo: FleetInfo,
+    fleetStrategies: FleetStrategies,
+): Promise<void> => {
     const strategy = fleetStrategies.get(fleetInfo.fleetName)
 
     if (!strategy) {
@@ -61,56 +72,135 @@ const applyStrategy = (fleetInfo: FleetInfo, fleetStrategies: FleetStrategies): 
 const basedbot = async (botConfig: BotConfig) => {
     const { player, map } = botConfig
     const fleets = await getUserFleets(player)
-    const fleetInfos = await Promise.all(fleets.map(f => getFleetInfo(f, player, map)))
+    const fleetInfos = await Promise.all(
+        fleets.map((f) => getFleetInfo(f, player, map)),
+    )
 
-    await Promise.all(fleetInfos.map(fleetInfo => settleFleet(fleetInfo, player, map)))
-    await Promise.all(fleetInfos.map(fleetInfo => applyStrategy(fleetInfo, botConfig.fleetStrategies)))
+    await Promise.all(
+        fleetInfos.map((fleetInfo) => settleFleet(fleetInfo, player, map)),
+    )
+    await Promise.all(
+        fleetInfos.map((fleetInfo) =>
+            applyStrategy(fleetInfo, botConfig.fleetStrategies),
+        ),
+    )
 }
 
 export const start = async (): Promise<void> => {
     const player = await getPlayerContext(keyPair.publicKey, keyPair)
     const map = await getMapContext(player.game)
 
-    const fleetStrategies: Map<string, Strategy> = config.sol.rpcEndpoint.includes('atlasnet') ? new Map([
-        ['Atlantic Goliath Grouper Fleet', createMiningStrategy(mineBiomass(map), player)],
-        ['Baboon Fleet', createMiningStrategy(mineConfig({
-            homeBase: Coordinates.fromNumber(-40, 30),
-            targetBase: Coordinates.fromNumber(-19, 40),
-            resource: mineableByCoordinates(map, Coordinates.fromNumber(-19, 40)).values().next().value
-        }), player)],
-        ['Silkworm Fleet', createMiningStrategy(mineConfig({
-            homeBase: Coordinates.fromNumber(-40, 30),
-            targetBase: Coordinates.fromNumber(-18, 23),
-            resource: mineableByCoordinates(map, Coordinates.fromNumber(-18, 23)).values().next().value
-        }), player)],
-        ['Broadclub Cuttlefish Fleet', createMiningStrategy(mineCarbon(map), player)],
-        ['Elephant Fleet', createMiningStrategy(mineNitrogen(map), player)],
-        ['Gelada Fleet', createMiningStrategy(mineSilicia(map), player)],
-        ['Hectors Dolphin Fleet', createMiningStrategy(mineLumanite(map), player)],
-        ['Groundhog Fleet', createMiningStrategy(mineCopperOre(map), player)],
-        ['Lion Fleet', createMiningStrategy(mineIronOre(map), player)],
-        ['Rock Hyrax Fleet', createMiningStrategy(mineHydrogen(map), player)],
-        ['Snakes Fleet', createMiningStrategy(mineRochinol(map), player)],
-        ['Sugar Gliders Fleet', createMiningStrategy(mineHydrogen(map), player)],
-        ['Tortoise Fleet', createMiningStrategy(mineTitaniumOre(map), player)]
-    ]) : new Map([
-        ['Bearded Dragon Fleet', createMiningStrategy(mineLumanite(map), player)],
-        ['Deer Mouse Fleet', createMiningStrategy(mineBiomass(map), player)],
-        ['Emu Fleet', createMiningStrategy(mineNitrogen(map), player)],
-        ['Toad Fleet', createMiningStrategy(mineSilicia(map), player)],
-        ['Tortoise Fleet', createMiningStrategy(mineHydrogen(map), player)]
-    ])
+    const fleetStrategies: Map<string, Strategy> =
+        config.sol.rpcEndpoint.includes('atlasnet')
+            ? new Map([
+                  [
+                      'Atlantic Goliath Grouper Fleet',
+                      createMiningStrategy(mineBiomass(map), player),
+                  ],
+                  [
+                      'Baboon Fleet',
+                      createMiningStrategy(
+                          mineConfig({
+                              homeBase: Coordinates.fromNumber(-40, 30),
+                              targetBase: Coordinates.fromNumber(-19, 40),
+                              resource: mineableByCoordinates(
+                                  map,
+                                  Coordinates.fromNumber(-19, 40),
+                              )
+                                  .values()
+                                  .next().value,
+                          }),
+                          player,
+                      ),
+                  ],
+                  [
+                      'Silkworm Fleet',
+                      createMiningStrategy(
+                          mineConfig({
+                              homeBase: Coordinates.fromNumber(-40, 30),
+                              targetBase: Coordinates.fromNumber(-18, 23),
+                              resource: mineableByCoordinates(
+                                  map,
+                                  Coordinates.fromNumber(-18, 23),
+                              )
+                                  .values()
+                                  .next().value,
+                          }),
+                          player,
+                      ),
+                  ],
+                  [
+                      'Broadclub Cuttlefish Fleet',
+                      createMiningStrategy(mineCarbon(map), player),
+                  ],
+                  [
+                      'Elephant Fleet',
+                      createMiningStrategy(mineNitrogen(map), player),
+                  ],
+                  [
+                      'Gelada Fleet',
+                      createMiningStrategy(mineSilicia(map), player),
+                  ],
+                  [
+                      'Hectors Dolphin Fleet',
+                      createMiningStrategy(mineLumanite(map), player),
+                  ],
+                  [
+                      'Groundhog Fleet',
+                      createMiningStrategy(mineCopperOre(map), player),
+                  ],
+                  [
+                      'Lion Fleet',
+                      createMiningStrategy(mineIronOre(map), player),
+                  ],
+                  [
+                      'Rock Hyrax Fleet',
+                      createMiningStrategy(mineHydrogen(map), player),
+                  ],
+                  [
+                      'Snakes Fleet',
+                      createMiningStrategy(mineRochinol(map), player),
+                  ],
+                  [
+                      'Sugar Gliders Fleet',
+                      createMiningStrategy(mineHydrogen(map), player),
+                  ],
+                  [
+                      'Tortoise Fleet',
+                      createMiningStrategy(mineTitaniumOre(map), player),
+                  ],
+              ])
+            : new Map([
+                  [
+                      'Bearded Dragon Fleet',
+                      createMiningStrategy(mineLumanite(map), player),
+                  ],
+                  [
+                      'Deer Mouse Fleet',
+                      createMiningStrategy(mineBiomass(map), player),
+                  ],
+                  [
+                      'Emu Fleet',
+                      createMiningStrategy(mineNitrogen(map), player),
+                  ],
+                  [
+                      'Toad Fleet',
+                      createMiningStrategy(mineSilicia(map), player),
+                  ],
+                  [
+                      'Tortoise Fleet',
+                      createMiningStrategy(mineHydrogen(map), player),
+                  ],
+              ])
 
     // eslint-disable-next-line no-constant-condition
     while (true) {
         try {
             await basedbot({ player, map, fleetStrategies })
-        }
-        catch (e) {
+        } catch (e) {
             Sentry.captureException(e)
             logger.error(e)
-        }
-        finally {
+        } finally {
             await sleep(10000)
         }
     }

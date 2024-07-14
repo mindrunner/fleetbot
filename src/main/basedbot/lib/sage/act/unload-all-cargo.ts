@@ -1,5 +1,10 @@
 import { PublicKey } from '@solana/web3.js'
-import { createAssociatedTokenAccountIdempotent, getParsedTokenAccountsByOwner, InstructionReturn, ixReturnsToIxs } from '@staratlas/data-source'
+import {
+    createAssociatedTokenAccountIdempotent,
+    getParsedTokenAccountsByOwner,
+    InstructionReturn,
+    ixReturnsToIxs,
+} from '@staratlas/data-source'
 import BN from 'bn.js'
 
 import { connection } from '../../../../../service/sol'
@@ -9,7 +14,10 @@ import { Coordinates } from '../../util/coordinates'
 import { unloadCargoIx } from '../ix/unload-cargo'
 import { getCargoType } from '../state/cargo-types'
 import { starbaseByCoordinates } from '../state/starbase-by-coordinates'
-import { getCargoPodsForStarbasePlayer, getStarbasePlayer } from '../state/starbase-player'
+import {
+    getCargoPodsForStarbasePlayer,
+    getStarbasePlayer,
+} from '../state/starbase-player'
 import { Player } from '../state/user-account'
 import { FleetInfo } from '../state/user-fleets'
 
@@ -17,7 +25,7 @@ export const unloadAllCargo = async (
     fleetInfo: FleetInfo,
     coordinates: Coordinates,
     player: Player,
-    hold: PublicKey
+    hold: PublicKey,
     // eslint-disable-next-line max-params
 ): Promise<void> => {
     const starbase = await starbaseByCoordinates(coordinates)
@@ -26,11 +34,14 @@ export const unloadAllCargo = async (
         throw new Error(`No starbase found at ${coordinates}`)
     }
     const starbasePlayer = await getStarbasePlayer(player, starbase, programs)
-    const cargoPodTo = await getCargoPodsForStarbasePlayer(starbasePlayer, programs)
+    const cargoPodTo = await getCargoPodsForStarbasePlayer(
+        starbasePlayer,
+        programs,
+    )
 
     const fleetTokenAccounts = await getParsedTokenAccountsByOwner(
         connection,
-        hold
+        hold,
     )
 
     const tokenAddresses: string[] = []
@@ -41,7 +52,7 @@ export const unloadAllCargo = async (
         const tokenToResult = createAssociatedTokenAccountIdempotent(
             fleetTokenAccount.mint,
             (await getCargoPodsForStarbasePlayer(starbasePlayer, programs)).key,
-            true
+            true,
         )
 
         if (!tokenAddresses.includes(tokenToResult.address.toBase58())) {
@@ -49,23 +60,33 @@ export const unloadAllCargo = async (
             withdrawInstructions.push(tokenToResult.instructions)
         }
 
-        const cargoType = getCargoType(player.cargoTypes, player.game, fleetTokenAccount.mint)
-
-        withdrawInstructions.push(unloadCargoIx(
-            fleetInfo,
-            player,
-            starbase,
-            starbasePlayer,
-            fleetInfo.fleet.data.cargoHold,
-            cargoPodTo.key,
-            fleetTokenAccount.address,
-            tokenToResult.address,
+        const cargoType = getCargoType(
+            player.cargoTypes,
+            player.game,
             fleetTokenAccount.mint,
-            cargoType.key,
-            programs,
-            new BN(fleetTokenAccount.delegatedAmount.toString())))
+        )
+
+        withdrawInstructions.push(
+            unloadCargoIx(
+                fleetInfo,
+                player,
+                starbase,
+                starbasePlayer,
+                fleetInfo.fleet.data.cargoHold,
+                cargoPodTo.key,
+                fleetTokenAccount.address,
+                tokenToResult.address,
+                fleetTokenAccount.mint,
+                cargoType.key,
+                programs,
+                new BN(fleetTokenAccount.delegatedAmount.toString()),
+            ),
+        )
     }
-    const instructions = await ixReturnsToIxs(withdrawInstructions, player.signer)
+    const instructions = await ixReturnsToIxs(
+        withdrawInstructions,
+        player.signer,
+    )
 
     await sendAndConfirmInstructions(instructions)
 }

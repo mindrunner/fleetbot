@@ -11,12 +11,16 @@ export const planetByKey = async (key: PublicKey): Promise<Planet> => {
         programs.sage,
         key,
         Planet,
-        'processed'
+        'processed',
     )
 
-    if (!planet) {throw new Error('no planet found')}
+    if (!planet) {
+        throw new Error('no planet found')
+    }
 
-    if (planet.type === 'error') {throw new Error('Error reading planet account')}
+    if (planet.type === 'error') {
+        throw new Error('Error reading planet account')
+    }
 
     return planet.data
 }

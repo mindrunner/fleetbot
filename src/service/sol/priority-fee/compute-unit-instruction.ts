@@ -1,4 +1,11 @@
-import { AddressLookupTableAccount, ComputeBudgetProgram, PublicKey, TransactionInstruction, TransactionMessage, VersionedTransaction } from '@solana/web3.js'
+import {
+    AddressLookupTableAccount,
+    ComputeBudgetProgram,
+    PublicKey,
+    TransactionInstruction,
+    TransactionMessage,
+    VersionedTransaction,
+} from '@solana/web3.js'
 
 import { logger } from '../../../logger'
 import { keyPair } from '../../wallet'
@@ -7,24 +14,24 @@ import { connection } from '../const'
 const getSimulationUnits = async (
     instructions: TransactionInstruction[],
     payer: PublicKey,
-    lookupTables: AddressLookupTableAccount[]
+    lookupTables: AddressLookupTableAccount[],
 ): Promise<number | undefined> => {
     const testInstructions = [
         ComputeBudgetProgram.setComputeUnitLimit({ units: 1_400_000 }),
-        ...instructions
+        ...instructions,
     ]
 
     const testVersionedTxn = new VersionedTransaction(
         new TransactionMessage({
             instructions: testInstructions,
             payerKey: payer,
-            recentBlockhash: PublicKey.default.toString()
-        }).compileToV0Message(lookupTables)
+            recentBlockhash: PublicKey.default.toString(),
+        }).compileToV0Message(lookupTables),
     )
 
     const simulation = await connection.simulateTransaction(testVersionedTxn, {
         replaceRecentBlockhash: true,
-        sigVerify: false
+        sigVerify: false,
     })
 
     if (simulation.value.err) {
@@ -34,11 +41,14 @@ const getSimulationUnits = async (
     return simulation.value.unitsConsumed
 }
 
-export const createComputeUnitInstruction =
-    async (instructions: TransactionInstruction[]): Promise<TransactionInstruction> => {
-        const units = await getSimulationUnits(instructions, keyPair.publicKey, [])
+export const createComputeUnitInstruction = async (
+    instructions: TransactionInstruction[],
+): Promise<TransactionInstruction> => {
+    const units = await getSimulationUnits(instructions, keyPair.publicKey, [])
 
-        logger.debug(`Esitmated Compute Units: ${units}`)
+    logger.debug(`Esitmated Compute Units: ${units}`)
 
-        return ComputeBudgetProgram.setComputeUnitLimit({ units: units ? units + 500 : 200_000 })
-    }
+    return ComputeBudgetProgram.setComputeUnitLimit({
+        units: units ? units + 500 : 200_000,
+    })
+}

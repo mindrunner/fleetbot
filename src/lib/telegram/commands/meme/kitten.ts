@@ -11,8 +11,7 @@ export const kitten = (bot: Telegraf<ContextMessageUpdate>): void => {
 
             try {
                 await ctx.replyWithPhoto(`https://placekitten.com/${x}/${x}`)
-            }
-            catch (e: any) {
+            } catch (e: any) {
                 logger.error(`Cannot send Photo: ${e.message}`)
                 await ctx.reply('Meow!')
             }

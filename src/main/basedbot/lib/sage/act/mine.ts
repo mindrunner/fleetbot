@@ -2,8 +2,8 @@ import { ixReturnsToIxs } from '@staratlas/data-source'
 
 import { logger } from '../../../../../logger'
 import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
-import { startMiningIx } from '../ix/start-mining'
 import { programs } from '../../programs'
+import { startMiningIx } from '../ix/start-mining'
 import { getStarbasePlayer } from '../state/starbase-player'
 import { Player } from '../state/user-account'
 import { FleetInfo } from '../state/user-fleets'
@@ -14,7 +14,7 @@ import { undock } from './undock'
 export const mine = async (
     fleetInfo: FleetInfo,
     player: Player,
-    mineable: Mineable
+    mineable: Mineable,
 ): Promise<void> => {
     const { fleet } = fleetInfo
 
@@ -27,7 +27,9 @@ export const mine = async (
     }
 
     if (fleet.state.StarbaseLoadingBay) {
-        logger.info(`Fleet: ${fleetInfo.fleetName} is in the loading bay at ${fleet.state.StarbaseLoadingBay.starbase}, undocking...`)
+        logger.info(
+            `Fleet: ${fleetInfo.fleetName} is in the loading bay at ${fleet.state.StarbaseLoadingBay.starbase}, undocking...`,
+        )
 
         await undock(fleet, fleetInfo.location, player)
     }
@@ -37,14 +39,18 @@ export const mine = async (
 
         return
     }
-    const starbasePlayer = await getStarbasePlayer(player, mineable.starbase, programs)
+    const starbasePlayer = await getStarbasePlayer(
+        player,
+        mineable.starbase,
+        programs,
+    )
 
     const ix = startMiningIx(
         fleetInfo,
         player,
         mineable,
         starbasePlayer,
-        programs
+        programs,
     )
 
     const instructions = await ixReturnsToIxs(ix, player.signer)

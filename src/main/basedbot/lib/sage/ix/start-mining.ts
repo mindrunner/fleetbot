@@ -11,23 +11,24 @@ export const startMiningIx = (
     player: Player,
     mineable: Mineable,
     starbasePlayer: StarbasePlayer,
-    programs: StarAtlasPrograms
+    programs: StarAtlasPrograms,
     // eslint-disable-next-line max-params
-): InstructionReturn => Fleet.startMiningAsteroid(
-    programs.sage,
-    player.signer,
-    player.profile.key,
-    player.profileFaction.key,
-    fleetInfo.fleet.key,
-    mineable.starbase.key,
-    starbasePlayer.key,
-    mineable.mineItem.key,
-    mineable.resource.key,
-    mineable.planet.key,
-    player.game.data.gameState,
-    player.game.key,
-    fleetInfo.fuelTokenAccount,
-    {
-        keyIndex: player.keyIndex
-    }
-)
+): InstructionReturn =>
+    Fleet.startMiningAsteroid(
+        programs.sage,
+        player.signer,
+        player.profile.key,
+        player.profileFaction.key,
+        fleetInfo.fleet.key,
+        mineable.starbase.key,
+        starbasePlayer.key,
+        mineable.mineItem.key,
+        mineable.resource.key,
+        mineable.planet.key,
+        player.game.data.gameState,
+        player.game.key,
+        fleetInfo.fuelTokenAccount,
+        {
+            keyIndex: player.keyIndex,
+        },
+    )
