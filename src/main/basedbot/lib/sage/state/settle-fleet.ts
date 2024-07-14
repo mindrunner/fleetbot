@@ -58,7 +58,7 @@ export const settleFleet = async (
         }
         default:
             logger.info(
-                `Fleet: ${fleetInfo.fleetName} is ${fleetInfo.fleetState.type}`,
+                `${fleetInfo.fleetName} is ${fleetInfo.fleetState.type}`,
             )
     }
 }

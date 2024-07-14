@@ -30,16 +30,14 @@ export const move = async (
 
     if (fleet.state.StarbaseLoadingBay) {
         logger.info(
-            `Fleet: ${fleetInfo.fleetName} is in the loading bay at ${fleet.state.StarbaseLoadingBay.starbase}, undocking...`,
+            `${fleetInfo.fleetName} is in the loading bay at ${fleet.state.StarbaseLoadingBay.starbase}, undocking...`,
         )
 
         await undock(fleet, fleetInfo.location, player)
     }
 
     if (fleet.state.MineAsteroid) {
-        logger.info(
-            `Fleet: ${fleetInfo.fleetName} is mining an asteroid, cannot move`,
-        )
+        logger.info(`${fleetInfo.fleetName} is mining an asteroid, cannot move`)
 
         return
     }

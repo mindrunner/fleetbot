@@ -62,63 +62,61 @@ const transition = async (
 
             if (!currentStarbase && cargoLevelFuel < 1) {
                 logger.warn(
-                    `Fleet: ${fleetName} is out of fuel and not at a starbase, need self destruction`,
+                    `${fleetName} is out of fuel and not at a starbase, need self destruction`,
                 )
 
                 return Promise.resolve()
             }
             if (isAtHomeBase) {
-                logger.info(`Fleet: ${fleetName} is at home base`)
+                logger.info(`${fleetName} is at home base`)
                 if (hasCargo) {
                     logger.info(
-                        `Fleet: ${fleetName} has ${cargoLoad} ${resourceName}, docking to unload`,
+                        `${fleetName} has ${cargoLoad} ${resourceName}, docking to unload`,
                     )
 
                     return dock(fleetInfo, location, player)
                 }
                 if (!hasEnoughFood || !hasEnoughFuel || !hasEnoughAmmo) {
                     logger.info(
-                        `Fleet: ${fleetName} doesn't have enough resources, docking to resupply`,
+                        `${fleetName} doesn't have enough resources, docking to resupply`,
                     )
 
                     return dock(fleetInfo, location, player)
                 }
                 if (isSameBase) {
-                    logger.info(
-                        `Fleet: ${fleetName} is at home/target base, mining`,
-                    )
+                    logger.info(`${fleetName} is at home/target base, mining`)
 
                     return mine(fleetInfo, player, resource)
                 }
                 logger.info(
-                    `Fleet: ${fleetName} is at home base, moving to target base`,
+                    `${fleetName} is at home base, moving to target base`,
                 )
 
                 return move(fleetInfo, targetBase, player, warpMode)
             }
 
             if (isAtTargetBase && !isSameBase) {
-                logger.info(`Fleet: ${fleetName} is at target base`)
+                logger.info(`${fleetName} is at target base`)
                 if (hasCargo) {
                     logger.info(
-                        `Fleet: ${fleetName} has ${cargoLoad} ${resourceName}, returning home`,
+                        `${fleetName} has ${cargoLoad} ${resourceName}, returning home`,
                     )
 
                     return move(fleetInfo, homeBase, player, warpMode)
                 }
                 if (hasEnoughFood) {
-                    logger.info(`Fleet: ${fleetName} has enough food, mining`)
+                    logger.info(`${fleetName} has enough food, mining`)
 
                     return mine(fleetInfo, player, resource)
                 }
                 logger.info(
-                    `Fleet: ${fleetName} doesn't have enough food, returning home`,
+                    `${fleetName} doesn't have enough food, returning home`,
                 )
 
                 return move(fleetInfo, homeBase, player, warpMode)
             }
 
-            logger.info(`Fleet: ${fleetName} is at ${location}`)
+            logger.info(`${fleetName} is at ${location}`)
 
             return move(
                 fleetInfo,
@@ -129,12 +127,12 @@ const transition = async (
         }
         case 'StarbaseLoadingBay': {
             logger.info(
-                `Fleet: ${fleetInfo.fleetName} is in the loading bay at ${getName(fleetInfo.fleetState.data.starbase)}`,
+                `${fleetInfo.fleetName} is in the loading bay at ${getName(fleetInfo.fleetState.data.starbase)}`,
             )
 
             if (hasCargo) {
                 logger.info(
-                    `Fleet: ${fleetInfo.fleetName} has ${cargoLoad} cargo, unloading`,
+                    `${fleetInfo.fleetName} has ${cargoLoad} cargo, unloading`,
                 )
 
                 return unloadAllCargo(
@@ -146,7 +144,7 @@ const transition = async (
             }
 
             if (!hasEnoughFuel) {
-                logger.info(`Fleet: ${fleetInfo.fleetName} is refueling`)
+                logger.info(`${fleetInfo.fleetName} is refueling`)
 
                 return loadCargo(
                     fleetInfo,
@@ -158,7 +156,7 @@ const transition = async (
             }
 
             if (!hasEnoughAmmo) {
-                logger.info(`Fleet: ${fleetInfo.fleetName} is rearming`)
+                logger.info(`${fleetInfo.fleetName} is rearming`)
 
                 return loadCargo(
                     fleetInfo,
@@ -171,7 +169,7 @@ const transition = async (
 
             if (!hasEnoughFood) {
                 logger.info(
-                    `Fleet: ${fleetInfo.fleetName} is loading ${desiredFood - cargoLevelFood} food`,
+                    `${fleetInfo.fleetName} is loading ${desiredFood - cargoLevelFood} food`,
                 )
 
                 return loadCargo(
@@ -191,7 +189,7 @@ const transition = async (
 
             if (warpFinish.isBefore(now())) {
                 logger.info(
-                    `Fleet: ${fleetInfo.fleetName} has arrived at ${fleetInfo.fleetState.data.toSector}`,
+                    `${fleetInfo.fleetName} has arrived at ${fleetInfo.fleetState.data.toSector}`,
                 )
             } else {
                 logger.info(
@@ -206,7 +204,7 @@ const transition = async (
 
             if (arrivalTime.isBefore(now())) {
                 logger.info(
-                    `Fleet: ${fleetInfo.fleetName} has arrived at ${fleetInfo.fleetState.data.toSector}`,
+                    `${fleetInfo.fleetName} has arrived at ${fleetInfo.fleetState.data.toSector}`,
                 )
             } else {
                 logger.info(
@@ -221,7 +219,7 @@ const transition = async (
 
             if (end.isBefore(now())) {
                 logger.info(
-                    `Fleet: ${fleetInfo.fleetName} has finished mining ${getName(mineItem)} for ${amountMined}`,
+                    `${fleetInfo.fleetName} has finished mining ${getName(mineItem)} for ${amountMined}`,
                 )
 
                 return endMine(fleetInfo, player, config.resource)
@@ -230,7 +228,7 @@ const transition = async (
             const log = endReason === 'FULL' ? logger.info : logger.warn
 
             log(
-                `Fleet: ${fleetInfo.fleetName} mining ${getName(mineItem)} for ${amountMined}. Time remaining: ${dayjs.duration(end.diff(now())).humanize(false)} until ${endReason}`,
+                `${fleetInfo.fleetName} mining ${getName(mineItem)} for ${amountMined}. Time remaining: ${dayjs.duration(end.diff(now())).humanize(false)} until ${endReason}`,
             )
 
             break
@@ -239,17 +237,17 @@ const transition = async (
             const { destructionTime, ETA } = fleetInfo.fleetState.data
 
             if (ETA.isBefore(now())) {
-                logger.info(`Fleet: ${fleetInfo.fleetName} has respawned`)
+                logger.info(`${fleetInfo.fleetName} has respawned`)
             } else {
                 logger.info(
-                    `Fleet: ${fleetInfo.fleetName} respawning at ${fleetInfo.fleetState.data.sector}. ETA: ${dayjs.duration(ETA.diff(now())).humanize(false)}. Destruction time: ${destructionTime}`,
+                    `${fleetInfo.fleetName} respawning at ${fleetInfo.fleetState.data.sector}. ETA: ${dayjs.duration(ETA.diff(now())).humanize(false)}. Destruction time: ${destructionTime}`,
                 )
             }
             break
         }
         default:
             logger.info(
-                `Fleet: ${fleetInfo.fleetName} is ${fleetInfo.fleetState.type}`,
+                `${fleetInfo.fleetName} is ${fleetInfo.fleetState.type}`,
             )
 
             return Promise.resolve()
