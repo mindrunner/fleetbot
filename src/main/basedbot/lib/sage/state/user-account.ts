@@ -8,13 +8,15 @@ import {
 import { PlayerProfile } from '@staratlas/player-profile'
 import { PointsModifier } from '@staratlas/points'
 import { ProfileFactionAccount } from '@staratlas/profile-faction'
-import { Game } from '@staratlas/sage'
+import { Game, Starbase } from '@staratlas/sage'
 
 import { connection } from '../../../../../service/sol'
 import { programs, xpCategoryIds } from '../../programs'
+import { Coordinates } from '../../util/coordinates'
 
 import { getCargoType, getCargoTypes } from './cargo-types'
 import { sageGame } from './game'
+import { starbaseByCoordinates } from './starbase-by-coordinates'
 
 export type XpAccounts = {
     councilRank: XpAccount
@@ -38,6 +40,7 @@ export type Player = {
     xpAccounts: XpAccounts
     signer: AsyncSigner
     game: Game
+    homeStarbase: Starbase
     cargoTypes: Array<CargoType>
     fuelCargoType: CargoType
     foodCargoType: CargoType
@@ -164,6 +167,29 @@ export const getPlayerContext = async (
     const game = await sageGame()
     const cargoTypes = await getCargoTypes()
 
+    let homeCoords
+
+    //TODO: add correct Coordinates for each faction
+    switch (profileFaction.data.data.faction) {
+        case 0:
+            homeCoords = Coordinates.fromNumber(0, 0)
+            break
+        case 1:
+            homeCoords = Coordinates.fromNumber(0, 0)
+            break
+        case 2:
+            homeCoords = Coordinates.fromNumber(-40, 30)
+            break
+        default:
+            throw new Error('Unknown faction')
+    }
+
+    const homeStarbase = await starbaseByCoordinates(homeCoords)
+
+    if (!homeStarbase) {
+        throw new Error('No home starbase found')
+    }
+
     return {
         profile: profile.data,
         profileFaction: profileFaction.data,
@@ -172,14 +198,9 @@ export const getPlayerContext = async (
         signer: keypairToAsyncSigner(signer),
         game,
         cargoTypes,
+        homeStarbase,
         fuelCargoType: getCargoType(cargoTypes, game, game.data.mints.fuel),
         foodCargoType: getCargoType(cargoTypes, game, game.data.mints.food),
         ammoCargoType: getCargoType(cargoTypes, game, game.data.mints.ammo),
     }
 }
-
-// export const getAccountName = (profileProgram: StarAtlasProgram, account: PlayerProfile): string => {
-//     const playerNameAddress = PlayerName.findAddress(profileProgram.program as any, account.key)
-//     const decodedPlayerName = PlayerName.decodeData({
-//     accountInfo: account.accountInfo, accountId: playerNameAddress }, profileProgram.program as any)
-// }
