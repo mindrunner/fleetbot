@@ -19,7 +19,7 @@ export const showFleetInfo = async (fleetInfo: FleetInfo): Promise<void> => {
         }
         case 'StarbaseLoadingBay':
             logger.info(
-                `Fleet: ${fleetInfo.fleetName} is in the loading bay at ${getName(fleetInfo.fleetState.data.starbase)}`,
+                `${fleetInfo.fleetName} is in the loading bay at ${getName(fleetInfo.fleetState.data.starbase)}`,
             )
             break
         case 'MoveWarp': {
@@ -28,7 +28,7 @@ export const showFleetInfo = async (fleetInfo: FleetInfo): Promise<void> => {
 
             if (warpFinish.isBefore(now())) {
                 logger.info(
-                    `Fleet: ${fleetInfo.fleetName} has arrived at ${fleetInfo.fleetState.data.toSector}`,
+                    `${fleetInfo.fleetName} has arrived at ${fleetInfo.fleetState.data.toSector}`,
                 )
             } else {
                 logger.info(
@@ -43,7 +43,7 @@ export const showFleetInfo = async (fleetInfo: FleetInfo): Promise<void> => {
 
             if (arrivalTime.isBefore(now())) {
                 logger.info(
-                    `Fleet: ${fleetInfo.fleetName} has arrived at ${fleetInfo.fleetState.data.toSector}`,
+                    `${fleetInfo.fleetName} has arrived at ${fleetInfo.fleetState.data.toSector}`,
                 )
             } else {
                 logger.info(
@@ -58,20 +58,20 @@ export const showFleetInfo = async (fleetInfo: FleetInfo): Promise<void> => {
 
             if (end.isBefore(now())) {
                 logger.info(
-                    `Fleet: ${fleetInfo.fleetName} has finished mining ${getName(mineItem)} for ${amountMined}`,
+                    `${fleetInfo.fleetName} has finished mining ${getName(mineItem)} for ${amountMined}`,
                 )
             } else {
                 const log = endReason === 'FULL' ? logger.info : logger.warn
 
                 log(
-                    `Fleet: ${fleetInfo.fleetName} mining ${getName(mineItem)} for ${amountMined}. Time remaining: ${dayjs.duration(end.diff(now())).humanize(false)} until ${endReason}`,
+                    `${fleetInfo.fleetName} mining ${getName(mineItem)} for ${amountMined}. Time remaining: ${dayjs.duration(end.diff(now())).humanize(false)} until ${endReason}`,
                 )
             }
             break
         }
         default:
             logger.info(
-                `Fleet: ${fleetInfo.fleetName} is ${fleetInfo.fleetState.type}`,
+                `${fleetInfo.fleetName} is ${fleetInfo.fleetState.type}`,
             )
     }
 }

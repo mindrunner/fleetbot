@@ -4,7 +4,6 @@ import {
 } from '@staratlas/data-source'
 
 import { logger } from '../../../../../logger'
-import { sleep } from '../../../../../service/sleep'
 import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
 import { programs } from '../../programs'
 import { miningHandlerIx } from '../ix/fleet-state-handler'
@@ -26,7 +25,8 @@ export const endMine = async (
         return
     }
 
-    const ix = []
+    const ix1 = []
+    const ix2 = []
 
     const foodTokenFromResult = createAssociatedTokenAccountIdempotent(
         player.game.data.mints.food,
@@ -34,7 +34,7 @@ export const endMine = async (
         true,
     )
 
-    ix.push(foodTokenFromResult.instructions)
+    ix1.push(foodTokenFromResult.instructions)
 
     const ammoTokenFromResult = createAssociatedTokenAccountIdempotent(
         player.game.data.mints.ammo,
@@ -42,7 +42,7 @@ export const endMine = async (
         true,
     )
 
-    ix.push(ammoTokenFromResult.instructions)
+    ix1.push(ammoTokenFromResult.instructions)
 
     const resourceTokenFromResult = createAssociatedTokenAccountIdempotent(
         mineable.mineItem.data.mint,
@@ -50,16 +50,16 @@ export const endMine = async (
         true,
     )
 
-    ix.push(resourceTokenFromResult.instructions)
+    ix1.push(resourceTokenFromResult.instructions)
     const resourceTokenToResult = createAssociatedTokenAccountIdempotent(
         mineable.mineItem.data.mint,
         fleetInfo.fleet.data.cargoHold,
         true,
     )
 
-    ix.push(resourceTokenToResult.instructions)
+    ix1.push(resourceTokenToResult.instructions)
 
-    ix.push(
+    ix1.push(
         miningHandlerIx(
             fleetInfo,
             player,
@@ -71,17 +71,8 @@ export const endMine = async (
             programs,
         ),
     )
+    ix2.push(stopMiningIx(fleetInfo, player, mineable, programs))
 
-    const instructions = await ixReturnsToIxs(ix, player.signer)
-
-    await sendAndConfirmInstructions(instructions)
-
-    await sleep(2000)
-
-    await sendAndConfirmInstructions(
-        await ixReturnsToIxs(
-            stopMiningIx(fleetInfo, player, mineable, programs),
-            player.signer,
-        ),
-    )
+    await sendAndConfirmInstructions(await ixReturnsToIxs(ix1, player.signer))
+    await sendAndConfirmInstructions(await ixReturnsToIxs(ix2, player.signer))
 }

@@ -28,14 +28,14 @@ export const mine = async (
 
     if (fleet.state.StarbaseLoadingBay) {
         logger.info(
-            `Fleet: ${fleetInfo.fleetName} is in the loading bay at ${fleet.state.StarbaseLoadingBay.starbase}, undocking...`,
+            `${fleetInfo.fleetName} is in the loading bay at ${fleet.state.StarbaseLoadingBay.starbase}, undocking...`,
         )
 
         await undock(fleet, fleetInfo.location, player)
     }
 
     if (fleet.state.MoveSubwarp || fleet.state.MoveWarp) {
-        logger.info(`Fleet: ${fleetInfo.fleetName} is moving, cannot mine`)
+        logger.info(`${fleetInfo.fleetName} is moving, cannot mine`)
 
         return
     }

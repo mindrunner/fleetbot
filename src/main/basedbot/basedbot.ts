@@ -169,6 +169,14 @@ export const start = async (): Promise<void> => {
                       'Tortoise Fleet',
                       createMiningStrategy(mineTitaniumOre(map), player),
                   ],
+                  [
+                      'Cotton Rat Fleet',
+                      createMiningStrategy(mineIronOre(map), player),
+                  ],
+                  [
+                      'Greenland Shark Fleet',
+                      createMiningStrategy(mineHydrogen(map), player),
+                  ],
               ])
             : new Map([
                   [
