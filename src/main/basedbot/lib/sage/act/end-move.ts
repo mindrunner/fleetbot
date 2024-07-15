@@ -1,4 +1,7 @@
-import { ixReturnsToIxs } from '@staratlas/data-source'
+import {
+    createAssociatedTokenAccountIdempotent,
+    ixReturnsToIxs,
+} from '@staratlas/data-source'
 
 import { logger } from '../../../../../logger'
 import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
@@ -19,14 +22,23 @@ export const endMove = async (
 
         return
     }
+    const fuelTokenAccount = createAssociatedTokenAccountIdempotent(
+        player.game.data.mints.fuel,
+        fleet.data.fuelTank,
+        true,
+    )
 
     const ix = (fleet.state.MoveSubwarp ? stopSubWarpIx : stopWarpIx)(
         fleetInfo,
         player,
+        fuelTokenAccount.address,
         programs,
     )
 
-    const instructions = await ixReturnsToIxs(ix, player.signer)
+    const instructions = await ixReturnsToIxs(
+        [fuelTokenAccount.instructions, ix],
+        player.signer,
+    )
 
     await sendAndConfirmInstructions(instructions)
 }

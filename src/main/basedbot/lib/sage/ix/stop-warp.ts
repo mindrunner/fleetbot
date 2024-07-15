@@ -1,3 +1,4 @@
+import { PublicKey } from '@solana/web3.js'
 import { InstructionReturn } from '@staratlas/data-source'
 import { Fleet } from '@staratlas/sage'
 
@@ -8,6 +9,7 @@ import { FleetInfo } from '../state/user-fleets'
 export const stopWarpIx = (
     fleetInfo: FleetInfo,
     player: Player,
+    _fuelTokenAccount: PublicKey,
     programs: StarAtlasPrograms,
 ): InstructionReturn =>
     Fleet.moveWarpHandler(

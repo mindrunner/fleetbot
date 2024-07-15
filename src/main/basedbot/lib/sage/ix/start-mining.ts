@@ -1,3 +1,4 @@
+import { PublicKey } from '@solana/web3.js'
 import { InstructionReturn } from '@staratlas/data-source'
 import { Fleet, StarbasePlayer } from '@staratlas/sage'
 
@@ -11,6 +12,7 @@ export const startMiningIx = (
     player: Player,
     mineable: Mineable,
     starbasePlayer: StarbasePlayer,
+    fuelTokenAccount: PublicKey,
     programs: StarAtlasPrograms,
     // eslint-disable-next-line max-params
 ): InstructionReturn =>
@@ -27,7 +29,7 @@ export const startMiningIx = (
         mineable.planet.key,
         player.game.data.gameState,
         player.game.key,
-        fleetInfo.fuelTokenAccount,
+        fuelTokenAccount,
         {
             keyIndex: player.keyIndex,
         },
