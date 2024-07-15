@@ -1,17 +1,14 @@
 import { now } from '../../../../../dayjs'
 import { logger } from '../../../../../logger'
-import { endMine } from '../act/end-mine'
 import { endMove } from '../act/end-move'
 import { exitRespawn } from '../act/exit-respawn'
 
 import { Player } from './user-account'
 import { FleetInfo } from './user-fleets'
-import { mineableByCoordinates, WorldMap } from './world-map'
 
 export const settleFleet = async (
     fleetInfo: FleetInfo,
     player: Player,
-    map: WorldMap,
 ): Promise<void> => {
     switch (fleetInfo.fleetState.type) {
         case 'MoveWarp': {
@@ -27,18 +24,6 @@ export const settleFleet = async (
 
             if (arrivalTime.isBefore(now())) {
                 await endMove(fleetInfo, player)
-            }
-            break
-        }
-        case 'MineAsteroid': {
-            const { end } = fleetInfo.fleetState.data
-
-            if (end.isBefore(now())) {
-                const [mineable] = Array.from(
-                    mineableByCoordinates(map, fleetInfo.location),
-                )
-
-                await endMine(fleetInfo, player, mineable)
             }
             break
         }
