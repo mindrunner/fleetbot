@@ -1,4 +1,7 @@
-import { ixReturnsToIxs } from '@staratlas/data-source'
+import {
+    createAssociatedTokenAccountIdempotent,
+    ixReturnsToIxs,
+} from '@staratlas/data-source'
 
 import dayjs from '../../../../../dayjs'
 import { logger } from '../../../../../logger'
@@ -60,14 +63,24 @@ export const move = async (
         return
     }
 
+    const fuelTokenAccount = createAssociatedTokenAccountIdempotent(
+        player.game.data.mints.fuel,
+        fleet.data.fuelTank,
+        true,
+    )
+
     const ix = (warp ? warpIx : subWarpIx)(
         fleetInfo,
         coordinates,
+        fuelTokenAccount.address,
         player,
         programs,
     )
 
-    const instructions = await ixReturnsToIxs(ix, player.signer)
+    const instructions = await ixReturnsToIxs(
+        [fuelTokenAccount.instructions, ix],
+        player.signer,
+    )
 
     await sendAndConfirmInstructions(instructions)
 }

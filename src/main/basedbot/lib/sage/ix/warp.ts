@@ -1,3 +1,4 @@
+import { PublicKey } from '@solana/web3.js'
 import { InstructionReturn } from '@staratlas/data-source'
 import { Fleet } from '@staratlas/sage'
 
@@ -9,6 +10,7 @@ import { FleetInfo } from '../state/user-fleets'
 export const warpIx = (
     fleetInfo: FleetInfo,
     coordinates: Coordinates,
+    fuelTokenAccount: PublicKey,
     player: Player,
     programs: StarAtlasPrograms,
 ): InstructionReturn =>
@@ -21,7 +23,7 @@ export const warpIx = (
         fleetInfo.fleet.data.fuelTank,
         player.fuelCargoType.key,
         player.game.data.cargo.statsDefinition,
-        fleetInfo.fuelTokenAccount,
+        fuelTokenAccount,
         player.game.data.mints.fuel,
         player.game.data.gameState,
         player.game.key,

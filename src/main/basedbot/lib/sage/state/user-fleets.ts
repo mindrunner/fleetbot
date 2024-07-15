@@ -1,11 +1,8 @@
-import { getOrCreateAssociatedTokenAccount } from '@solana/spl-token'
-import { PublicKey } from '@solana/web3.js'
 import { readAllFromRPC } from '@staratlas/data-source'
 import { Fleet } from '@staratlas/sage'
 import BN from 'bn.js'
 
 import { connection } from '../../../../../service/sol'
-import { keyPair } from '../../../../../service/wallet'
 import { getFleetState } from '../../fleet-state/fleet-state'
 import { FleetState } from '../../fleet-state/types'
 import { programs } from '../../programs'
@@ -61,7 +58,6 @@ export type FleetInfo = {
     location: Coordinates
     fleetName: string
     shipCounts: ShipCounts
-    fuelTokenAccount: PublicKey
     warpCooldownExpiresAt: BN
     scanCooldownExpiresAt: BN
     movementStats: MovementStats
@@ -107,14 +103,6 @@ export const getFleetInfo = async (
     const location = fleetState.data.sector
     const fleetName = getName(fleet)
 
-    const fuelTokenAccount = await getOrCreateAssociatedTokenAccount(
-        connection,
-        keyPair,
-        player.game.data.mints.fuel,
-        fleet.data.fuelTank,
-        true,
-    )
-
     return {
         fleet,
         location,
@@ -122,7 +110,6 @@ export const getFleetInfo = async (
         movementStats,
         cargoStats,
         fleetName,
-        fuelTokenAccount: fuelTokenAccount.address,
         shipCounts,
         fleetState,
         warpCooldownExpiresAt: fleet.data.warpCooldownExpiresAt,
