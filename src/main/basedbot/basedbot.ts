@@ -131,7 +131,7 @@ const basedbot = async (botConfig: BotConfig) => {
     await importR4(player)
 
     await Promise.all(
-        fleetInfos.map((fleetInfo) => settleFleet(fleetInfo, player, map)),
+        fleetInfos.map((fleetInfo) => settleFleet(fleetInfo, player)),
     )
     await Promise.all(
         fleetInfos.map((fleetInfo) =>
