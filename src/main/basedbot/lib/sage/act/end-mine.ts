@@ -25,54 +25,71 @@ export const endMine = async (
         return
     }
 
-    const ix1 = []
-    const ix2 = []
-
-    const foodTokenFromResult = createAssociatedTokenAccountIdempotent(
-        player.game.data.mints.food,
-        fleetInfo.fleet.data.cargoHold,
-        true,
-    )
-
-    ix1.push(foodTokenFromResult.instructions)
-
-    const ammoTokenFromResult = createAssociatedTokenAccountIdempotent(
-        player.game.data.mints.ammo,
-        fleetInfo.fleet.data.ammoBank,
-        true,
-    )
-
-    ix1.push(ammoTokenFromResult.instructions)
-
-    const resourceTokenFromResult = createAssociatedTokenAccountIdempotent(
-        mineable.mineItem.data.mint,
-        mineable.resource.data.mineItem,
-        true,
-    )
-
-    ix1.push(resourceTokenFromResult.instructions)
-    const resourceTokenToResult = createAssociatedTokenAccountIdempotent(
-        mineable.mineItem.data.mint,
-        fleetInfo.fleet.data.cargoHold,
-        true,
-    )
-
-    ix1.push(resourceTokenToResult.instructions)
-
-    ix1.push(
-        miningHandlerIx(
-            fleetInfo,
-            player,
-            mineable,
-            foodTokenFromResult.address,
-            ammoTokenFromResult.address,
-            resourceTokenFromResult.address,
-            resourceTokenToResult.address,
-            programs,
+    const [
+        foodToken,
+        ammoToken,
+        resourceFromToken,
+        resourceToToken,
+        fuelToken,
+    ] = [
+        createAssociatedTokenAccountIdempotent(
+            player.game.data.mints.food,
+            fleet.data.cargoHold,
+            true,
         ),
-    )
-    ix2.push(stopMiningIx(fleetInfo, player, mineable, programs))
+        createAssociatedTokenAccountIdempotent(
+            player.game.data.mints.ammo,
+            fleet.data.ammoBank,
+            true,
+        ),
+        createAssociatedTokenAccountIdempotent(
+            mineable.mineItem.data.mint,
+            mineable.resource.data.mineItem,
+            true,
+        ),
+        createAssociatedTokenAccountIdempotent(
+            mineable.mineItem.data.mint,
+            fleet.data.cargoHold,
+            true,
+        ),
+        createAssociatedTokenAccountIdempotent(
+            player.game.data.mints.fuel,
+            fleet.data.fuelTank,
+            true,
+        ),
+    ]
 
-    await sendAndConfirmInstructions(await ixReturnsToIxs(ix1, player.signer))
-    await sendAndConfirmInstructions(await ixReturnsToIxs(ix2, player.signer))
+    await ixReturnsToIxs(
+        [
+            foodToken.instructions,
+            ammoToken.instructions,
+            resourceFromToken.instructions,
+            resourceToToken.instructions,
+            miningHandlerIx(
+                fleetInfo,
+                player,
+                mineable,
+                foodToken.address,
+                ammoToken.address,
+                resourceFromToken.address,
+                resourceToToken.address,
+                programs,
+            ),
+        ],
+        player.signer,
+    ).then(sendAndConfirmInstructions)
+
+    await ixReturnsToIxs(
+        [
+            fuelToken.instructions,
+            stopMiningIx(
+                fleetInfo,
+                player,
+                mineable,
+                fuelToken.address,
+                programs,
+            ),
+        ],
+        player.signer,
+    ).then(sendAndConfirmInstructions)
 }

@@ -6,12 +6,12 @@ import {
     readAllFromRPC,
 } from '@staratlas/data-source'
 import { PlayerProfile } from '@staratlas/player-profile'
-import { PointsModifier } from '@staratlas/points'
+import { UserPoints } from '@staratlas/points'
 import { ProfileFactionAccount } from '@staratlas/profile-faction'
-import { Game, Starbase } from '@staratlas/sage'
+import { Game, SagePointsCategory, Starbase } from '@staratlas/sage'
 
 import { connection } from '../../../../../service/sol'
-import { programs, xpCategoryIds } from '../../programs'
+import { programs } from '../../programs'
 import { Coordinates } from '../../util/coordinates'
 
 import { getCargoType, getCargoTypes } from './cargo-types'
@@ -47,42 +47,22 @@ export type Player = {
     ammoCargoType: CargoType
 }
 
-const getXpAccount = async (
+const getXpAccount = (
     playerProfile: PublicKey,
-    xpCategory: PublicKey,
-): Promise<XpAccount> => {
-    const [userXpAccount] = PublicKey.findProgramAddressSync(
-        [
-            Buffer.from('UserPointsAccount'),
-            xpCategory.toBuffer(),
-            playerProfile.toBuffer(),
-        ],
-        programs.points.programId,
-    )
-
-    const [pointsModifierAccount] = await readAllFromRPC(
-        connection,
+    pointsCategory: SagePointsCategory,
+): XpAccount => {
+    const pointsCategoryKey = pointsCategory.category
+    const pointsModifierAccount = pointsCategory.modifier
+    const [userPointsAccount] = UserPoints.findAddress(
         programs.points,
-        PointsModifier,
-        'processed',
-        [
-            {
-                memcmp: {
-                    offset: 9,
-                    bytes: xpCategory.toBase58(),
-                },
-            },
-        ],
+        pointsCategoryKey,
+        playerProfile,
     )
-
-    if (pointsModifierAccount.type === 'error') {
-        throw new Error('Error reading points modifier account')
-    }
 
     return {
-        userPointsAccount: userXpAccount,
-        pointsModifierAccount: pointsModifierAccount.key,
-        pointsCategory: xpCategory,
+        userPointsAccount,
+        pointsModifierAccount,
+        pointsCategory: pointsCategoryKey,
     }
 }
 
@@ -140,31 +120,25 @@ export const getPlayerContext = async (
     if (profileFaction.type === 'error') {
         throw new Error('Error reading faction account')
     }
+    const game = await sageGame()
 
     const xpAccounts = {
-        councilRank: await getXpAccount(
+        councilRank: getXpAccount(
             profile.key,
-            new PublicKey(xpCategoryIds.councilRankXpCategory),
+            game.data.points.councilRankXpCategory,
         ),
-        dataRunning: await getXpAccount(
+        dataRunning: getXpAccount(
             profile.key,
-            new PublicKey(xpCategoryIds.dataRunningXpCategory),
+            game.data.points.dataRunningXpCategory,
         ),
-        piloting: await getXpAccount(
+        piloting: getXpAccount(profile.key, game.data.points.pilotXpCategory),
+        mining: getXpAccount(profile.key, game.data.points.miningXpCategory),
+        crafting: getXpAccount(
             profile.key,
-            new PublicKey(xpCategoryIds.pilotingXpCategory),
-        ),
-        mining: await getXpAccount(
-            profile.key,
-            new PublicKey(xpCategoryIds.miningXpCategory),
-        ),
-        crafting: await getXpAccount(
-            profile.key,
-            new PublicKey(xpCategoryIds.craftingXpCategory),
+            game.data.points.craftingXpCategory,
         ),
     }
 
-    const game = await sageGame()
     const cargoTypes = await getCargoTypes()
 
     let homeCoords
