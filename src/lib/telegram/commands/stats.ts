@@ -21,7 +21,9 @@ export const stats = (bot: Telegraf<ContextMessageUpdate>): void => {
         }
 
         if (!ctx.user.enabled) {
-            await ctx.reply('Your wallet is currently disabled, toggle with /enable command')
+            await ctx.reply(
+                'Your wallet is currently disabled, toggle with /enable command',
+            )
 
             return
         }
@@ -34,40 +36,74 @@ export const stats = (bot: Telegraf<ContextMessageUpdate>): void => {
                 const fleets = await getAllFleetsForUserPublicKey(
                     connection,
                     new PublicKey(player.publicKey),
-                    fleetProgram)
-                const [burnRate, price, playerBalance, pendingRewards] = await Promise.all([
-                    getDailyBurnRate(fleets),
-                    getResourcePrices(),
-                    player.getBalance(),
-                    getPendingRewards(fleets)
-                ])
-                const burnPerDay =
-                    burnRate.food.mul(price.food).add(
-                        burnRate.fuel.mul(price.fuel)).add(
-                        burnRate.tool.mul(price.tool)).add(
-                        burnRate.fuel.mul(price.ammo))
-                const balanceTime = burnPerDay.gt(0) ? playerBalance.div(burnPerDay) : Big(0)
+                    fleetProgram,
+                )
+                const [burnRate, price, playerBalance, pendingRewards] =
+                    await Promise.all([
+                        getDailyBurnRate(fleets),
+                        getResourcePrices(),
+                        player.getBalance(),
+                        getPendingRewards(fleets),
+                    ])
+                const burnPerDay = burnRate.food
+                    .mul(price.food)
+                    .add(burnRate.fuel.mul(price.fuel))
+                    .add(burnRate.tool.mul(price.tool))
+                    .add(burnRate.fuel.mul(price.ammo))
+                const balanceTime = burnPerDay.gt(0)
+                    ? playerBalance.div(burnPerDay)
+                    : Big(0)
 
-                const diffToNextRefill = dayjs().diff(player.nextRefill, 'second')
+                const diffToNextRefill = dayjs().diff(
+                    player.nextRefill,
+                    'second',
+                )
 
-                const todayRefills = await Refill.findBy({ walletPublicKey: player.publicKey, time: MoreThanOrEqual(dayjs().startOf('day').toDate()) })
-                const burnToday = todayRefills.reduce((curr, acc) => curr.add(acc.price), Big(0))
+                const todayRefills = await Refill.findBy({
+                    walletPublicKey: player.publicKey,
+                    time: MoreThanOrEqual(dayjs().startOf('day').toDate()),
+                })
+                const burnToday = todayRefills.reduce(
+                    (curr, acc) => curr.add(acc.price),
+                    Big(0),
+                )
 
                 const yesterdayRefills = await Refill.findBy({
-                    walletPublicKey: player.publicKey, time: Between(
+                    walletPublicKey: player.publicKey,
+                    time: Between(
                         dayjs().subtract(1, 'day').startOf('day').toDate(),
-                        dayjs().subtract(1, 'day').endOf('day').toDate()
-                    )
+                        dayjs().subtract(1, 'day').endOf('day').toDate(),
+                    ),
                 })
-                const burnYesterday = yesterdayRefills.reduce((curr, acc) => curr.add(acc.price), Big(0))
+                const burnYesterday = yesterdayRefills.reduce(
+                    (curr, acc) => curr.add(acc.price),
+                    Big(0),
+                )
 
-                const refills7d = await Refill.findBy({ walletPublicKey: player.publicKey, time: MoreThanOrEqual(dayjs().subtract(7, 'day').startOf('day').toDate()) })
-                const burn7d = refills7d.reduce((curr, acc) => curr.add(acc.price), Big(0))
+                const refills7d = await Refill.findBy({
+                    walletPublicKey: player.publicKey,
+                    time: MoreThanOrEqual(
+                        dayjs().subtract(7, 'day').startOf('day').toDate(),
+                    ),
+                })
+                const burn7d = refills7d.reduce(
+                    (curr, acc) => curr.add(acc.price),
+                    Big(0),
+                )
 
-                const refills30d = await Refill.findBy({ walletPublicKey: player.publicKey, time: MoreThanOrEqual(dayjs().subtract(30, 'day').startOf('day').toDate()) })
-                const burn30d = refills30d.reduce((curr, acc) => curr.add(acc.price), Big(0))
+                const refills30d = await Refill.findBy({
+                    walletPublicKey: player.publicKey,
+                    time: MoreThanOrEqual(
+                        dayjs().subtract(30, 'day').startOf('day').toDate(),
+                    ),
+                })
+                const burn30d = refills30d.reduce(
+                    (curr, acc) => curr.add(acc.price),
+                    Big(0),
+                )
 
-                const avg = (b: Big[]) => b.reduce((c, a) => c.add(a), Big(0)).div(b.length)
+                const avg = (b: Big[]) =>
+                    b.reduce((c, a) => c.add(a), Big(0)).div(b.length)
 
                 const burnAvg7 = burn7d.div(7)
                 const burnAvg30 = burn30d.div(30)
@@ -76,7 +112,8 @@ export const stats = (bot: Telegraf<ContextMessageUpdate>): void => {
 
                 const drift = burnAvg.sub(burnPerDay)
 
-                await ctx.replyWithMarkdownV2(`
+                await ctx.replyWithMarkdownV2(
+                    `
 *Next refill in:*  ${dayjs.duration(diffToNextRefill, 'second').humanize()}
 *Balance:* ${playerBalance.toFixed(AD)} ATLAS
 *Burn \\(estimate\\):* ${burnPerDay.toFixed(AD)} ATLAS per day
@@ -87,7 +124,7 @@ export const stats = (bot: Telegraf<ContextMessageUpdate>): void => {
 *Drift:* ${drift.toFixed(AD).toString().replace('-', '\\-')} ATLAS
 *Pending Rewards:* ${pendingRewards.toFixed(AD)} ATLAS
 *Credit for:* ${dayjs.duration(balanceTime.toNumber(), 'day').humanize(false)}
-*Current Tips:* ${player.tip * 100} %`.replace(/\./g, '\\.')
+*Current Tips:* ${player.tip * 100} %`.replace(/\./g, '\\.'),
                 )
             }
         })

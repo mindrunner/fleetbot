@@ -9,18 +9,25 @@ type FleetDepletionInfo = {
     human: string
 }
 
-export const fleetDepletionInfo = async (shipStakingInfo: ShipStakingInfo): Promise<FleetDepletionInfo> => {
-    const info = await getScoreVarsShipInfo(connection, fleetProgram, shipStakingInfo.shipMint)
+export const fleetDepletionInfo = async (
+    shipStakingInfo: ShipStakingInfo,
+): Promise<FleetDepletionInfo> => {
+    const info = await getScoreVarsShipInfo(
+        connection,
+        fleetProgram,
+        shipStakingInfo.shipMint,
+    )
     const remainingResources = getFleetRemainingResources(info, shipStakingInfo)
 
     const secondsLeft = Math.min(
         remainingResources.food.secondsLeft,
         remainingResources.ammo.secondsLeft,
         remainingResources.fuel.secondsLeft,
-        remainingResources.tool.secondsLeft)
+        remainingResources.tool.secondsLeft,
+    )
 
     return {
         seconds: secondsLeft,
-        human: dayjs.duration(secondsLeft, 'seconds').humanize(false)
+        human: dayjs.duration(secondsLeft, 'seconds').humanize(false),
     }
 }

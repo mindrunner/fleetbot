@@ -14,7 +14,9 @@ export const disableNotify = (bot: Telegraf<ContextMessageUpdate>): void => {
 
             ctx.user.notify = false
             await ctx.user.save()
-            await ctx.reply('I will stay silent unless there is something urgent happening.')
+            await ctx.reply(
+                'I will stay silent unless there is something urgent happening.',
+            )
         })
     })
 }

@@ -10,5 +10,8 @@ export const getPrice = (amount: Amounts, price?: Amounts): Big => {
     const totalAmmoPrice = amount.ammo.mul(p.ammo)
     const totalToolPrice = amount.tool.mul(p.tool)
 
-    return totalFuelPrice.add(totalFoodPrice).add(totalAmmoPrice).add(totalToolPrice)
+    return totalFuelPrice
+        .add(totalFoodPrice)
+        .add(totalAmmoPrice)
+        .add(totalToolPrice)
 }

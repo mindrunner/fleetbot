@@ -4,7 +4,12 @@ import { Telegraf } from 'telegraf'
 
 import { Wallet } from '../../../db/entities'
 import { ContextMessageUpdate } from '../context-message-update'
-import { alreadyRegistered, authPending, unknownWallet, wrongParamCount } from '../response'
+import {
+    alreadyRegistered,
+    authPending,
+    unknownWallet,
+    wrongParamCount,
+} from '../response'
 
 export const verify = (bot: Telegraf<ContextMessageUpdate>): void => {
     bot.command(['verify'], async (ctx) => {
@@ -40,13 +45,21 @@ export const verify = (bot: Telegraf<ContextMessageUpdate>): void => {
                 return
             }
 
-            ctx.reply('Alright! To verify this wallet belongs to you, I need you to send a small amount of ATLAS to me. Don\'t worry. I will add this to your balance of course.')
+            ctx.reply(
+                "Alright! To verify this wallet belongs to you, I need you to send a small amount of ATLAS to me. Don't worry. I will add this to your balance of course.",
+            )
             wallet.telegramId = ctx.from.id
             wallet.authExpire = dayjs().add(1, 'hour').toDate()
-            wallet.authTxAmount = faker.datatype.number({ min: 0.1, max: 0.999, precision: 0.001 })
+            wallet.authTxAmount = faker.datatype.number({
+                min: 0.1,
+                max: 0.999,
+                precision: 0.001,
+            })
             await wallet.save()
             await authPending(ctx, wallet)
-            ctx.reply('This may take a moment. You can check the status with /verify command')
+            ctx.reply(
+                'This may take a moment. You can check the status with /verify command',
+            )
         })
     })
 }

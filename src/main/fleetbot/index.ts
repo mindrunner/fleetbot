@@ -9,8 +9,7 @@ const stop = async (signal?: NodeJS.Signals) => {
 
     try {
         await app.stop()
-    }
-    catch (error) {
+    } catch (error) {
         Sentry.captureException(error)
         logger.error('Close failed')
         logger.error((error as Error).stack)
@@ -24,8 +23,7 @@ const start = async () => {
     try {
         await app.create()
         await app.start()
-    }
-    catch (error) {
+    } catch (error) {
         Sentry.captureException(error)
         logger.error((error as Error).stack)
 
@@ -35,21 +33,24 @@ const start = async () => {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-process.on('unhandledRejection', async (reason: any | null | undefined, _promise: Promise<any>) => {
-    logger.error('Unhandled rejection')
+process.on(
+    'unhandledRejection',
+    async (reason: any | null | undefined, _promise: Promise<any>) => {
+        logger.error('Unhandled rejection')
 
-    if (reason) {
-        const { message }: { message: string } = reason
+        if (reason) {
+            const { message }: { message: string } = reason
 
-        if (message.includes('Event listener')) {
-            return
+            if (message.includes('Event listener')) {
+                return
+            }
+            logger.error(message)
         }
-        logger.error(message)
-    }
 
-    Sentry.captureException(reason)
-    await stop()
-})
+        Sentry.captureException(reason)
+        await stop()
+    },
+)
 
 process.on('uncaughtException', async (error) => {
     Sentry.captureException(error)
