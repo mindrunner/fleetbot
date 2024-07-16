@@ -6,8 +6,8 @@ import { MineConfig, mineConfig } from './mine-config'
 export const mineLumanite = (map: WorldMap): MineConfig =>
     mineConfig({
         homeBase: Coordinates.fromNumber(-40, 30),
-        targetBase: Coordinates.fromNumber(-22, 32),
-        resource: mineableByCoordinates(map, Coordinates.fromNumber(-22, 32))
+        targetBase: Coordinates.fromNumber(-23, 4),
+        resource: mineableByCoordinates(map, Coordinates.fromNumber(-23, 4))
             .values()
             .next().value,
     })
