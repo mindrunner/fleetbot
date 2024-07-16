@@ -122,6 +122,9 @@ const importR4 = async (player: Player): Promise<void> => {
 }
 
 const basedbot = async (botConfig: BotConfig) => {
+    logger.info(
+        '-------------------------------------------------------------------------------------',
+    )
     const { player, map } = botConfig
     const fleets = await getUserFleets(player)
     const fleetInfos = await Promise.all(
@@ -137,6 +140,9 @@ const basedbot = async (botConfig: BotConfig) => {
         fleetInfos.map((fleetInfo) =>
             applyStrategy(fleetInfo, botConfig.fleetStrategies),
         ),
+    )
+    logger.info(
+        '-------------------------------------------------------------------------------------',
     )
 }
 
