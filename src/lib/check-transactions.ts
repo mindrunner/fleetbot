@@ -1,4 +1,4 @@
-import { LessThan, MoreThan } from 'typeorm'
+import { LessThan } from 'typeorm'
 
 import dayjs from '../dayjs'
 import { Transaction, Wallet } from '../db/entities'
@@ -27,18 +27,24 @@ export const checkTransactions = async (): Promise<void> => {
         resources.fuel.mul(prices.fuel)).add(
         resources.tool.mul(prices.tool))
 
-    const [[lastInTx], [lastOutTx]] = await Promise.all([
-        Transaction.find({ where: { amount: MoreThan(0) }, order: { time: 'DESC' }, take: 1 }),
-        Transaction.find({ where: { amount: LessThan(0) }, order: { time: 'DESC' }, take: 1 })
-    ])
+    // const [[lastInTx], [lastOutTx]] = await Promise.all([
+    //     Transaction.find({ where: { amount: MoreThan(0) }, order: { time: 'DESC' }, take: 1 }),
+    //     Transaction.find({ where: { amount: LessThan(0) }, order: { time: 'DESC' }, take: 1 })
+    // ])
+
+    const [threeMonthsAgoTx] = await Transaction.find({ where: { time: LessThan(dayjs().subtract(3, 'months').toDate()) },order: { time: 'DESC' }, take: 1 })
 
     let getSigOptions
 
-    if (lastInTx && lastOutTx) {
-        const until = dayjs(lastInTx.time).isBefore(lastOutTx.time) ? lastInTx.signature : lastOutTx.signature
-
-        getSigOptions = { until }
+    if (threeMonthsAgoTx) {
+        getSigOptions = { until: threeMonthsAgoTx.signature }
     }
+
+    // if (lastInTx && lastOutTx) {
+    //     const until = dayjs(lastInTx.time).isBefore(lastOutTx.time) ? lastInTx.signature : lastOutTx.signature
+    //
+    //     getSigOptions = { until }
+    // }
 
     logger.info(`Total balance: ${total.toFixed(AD)} ATLAS`)
 
