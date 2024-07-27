@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/named
+import { getAssociatedTokenAddressSync } from '@solana/spl-token'
+// eslint-disable-next-line import/named
 import { ParsedInstruction, ParsedTransactionWithMeta, SignaturesForAddressOptions } from '@solana/web3.js'
-import { getAssociatedTokenAddress } from '@staratlas/factory'
 
 import dayjs from '../dayjs'
 import { Transaction } from '../db/entities'
@@ -11,7 +12,11 @@ import { keyPair, resource } from '../service/wallet'
 import { ensureWallet } from './ensure-wallet'
 
 export const checkAtlasTransactions = async (options?: SignaturesForAddressOptions): Promise<void> => {
-    const atlasTokenAccount = await getAssociatedTokenAddress(keyPair.publicKey, resource.atlas)
+    const atlasTokenAccount = getAssociatedTokenAddressSync(
+        resource.atlas,
+        keyPair.publicKey,
+        true
+    )
     const signatureList = await connection.getSignaturesForAddress(atlasTokenAccount, options)
 
     const transactionList : ParsedTransactionWithMeta[] = []
@@ -39,7 +44,7 @@ export const checkAtlasTransactions = async (options?: SignaturesForAddressOptio
             if (instruction.program === 'spl-token' && instruction.parsed.info.mint === resource.atlas.toString()) {
                 const { info } = instruction.parsed
 
-                const sender = info.authority
+                const sender = info.authority ?? info.multisigAuthority
                 const amount = info.tokenAmount.uiAmount
                 const blockTime = tx.blockTime || 0
                 const time = dayjs.unix(blockTime).toDate()

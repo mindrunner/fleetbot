@@ -79,7 +79,7 @@ export const checkR4Transactions = async (
                 ) {
                     const { info } = instruction.parsed
 
-                    const sender = info.authority
+                    const sender = info.authority ?? info.multisigAuthority
                     const originalAmount =
                         info.tokenAmount?.uiAmount || info.amount
                     const blockTime = tx.blockTime || 0
