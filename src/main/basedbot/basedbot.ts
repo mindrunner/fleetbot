@@ -24,6 +24,7 @@ import { mineNitrogen } from './fsm/configs/mine-nitrogen'
 import { mineRochinol } from './fsm/configs/mine-rochinol'
 import { mineSilicia } from './fsm/configs/mine-silicia'
 import { mineTitaniumOre } from './fsm/configs/mine-titanium-ore'
+import { createInfoStrategy } from './fsm/info'
 import { createMiningStrategy } from './fsm/mine'
 import { Strategy } from './fsm/strategy'
 import { depositCargo } from './lib/sage/act/deposit-cargo'
@@ -67,13 +68,14 @@ const applyStrategy = (
     const strategy = fleetStrategies.get(fleetInfo.fleetName)
 
     if (!strategy) {
-        return Promise.resolve()
-        //     logger.info(`No strategy for fleet: ${fleetInfo.fleetName}. Lazily loading Info Strategy...`)
-        //     const infoStrategy = createInfoStrategy()
-        //
-        //     fleetStrategies.set(fleetInfo.fleetName, infoStrategy)
-        //
-        //     return infoStrategy.send(fleetInfo)
+        logger.info(
+            `No strategy for fleet: ${fleetInfo.fleetName}. Lazily loading Info Strategy...`,
+        )
+        const infoStrategy = createInfoStrategy()
+
+        fleetStrategies.set(fleetInfo.fleetName, infoStrategy)
+
+        return infoStrategy.send(fleetInfo)
     }
 
     return strategy.send(fleetInfo)
@@ -240,24 +242,8 @@ export const start = async (): Promise<void> => {
               ])
             : new Map([
                   [
-                      'Bearded Dragon Fleet',
-                      createMiningStrategy(mineLumanite(map), player),
-                  ],
-                  [
-                      'Deer Mouse Fleet',
-                      createMiningStrategy(mineBiomass(map), player),
-                  ],
-                  [
-                      'Emu Fleet',
-                      createMiningStrategy(mineNitrogen(map), player),
-                  ],
-                  [
-                      'Toad Fleet',
-                      createMiningStrategy(mineSilicia(map), player),
-                  ],
-                  [
-                      'Tortoise Fleet',
-                      createMiningStrategy(mineHydrogen(map), player),
+                      'Vaquita Fleet',
+                      createMiningStrategy(mineTitaniumOre(map), player),
                   ],
               ])
 
