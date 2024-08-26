@@ -243,7 +243,7 @@ export const start = async (): Promise<void> => {
             : new Map([
                   [
                       'Vaquita Fleet',
-                      createMiningStrategy(mineTitaniumOre(map), player),
+                      createMiningStrategy(mineRochinol(map), player),
                   ],
               ])
 
