@@ -42,7 +42,7 @@ export const xpCategoryIds = config.sol.rpcEndpoint.includes('atlasnet')
 
 const programIds = config.sol.rpcEndpoint.includes('atlasnet')
     ? {
-          sage: 'sagEaq3KgZBmUeE9gDYKHiDHbBZ37wcUtxBxMVLpwnU',
+          sage: 'SaGeXGRK85wYGfDqnVDw2bZ61hpdYPFLn1HiRdnRhoC',
           profile: 'PprofUW1pURCnMW2si88GWPXEEK3Bvh9Tksy8WtnoYJ',
           cargo: 'CArGoi989iv3VL3xArrJXmYYDNhjwCX5ey5sY5KKwMG',
           profileFaction: 'pFACzkX2eSpAjDyEohD6i3VRJvREtH9ynbtM1DwVFsj',
