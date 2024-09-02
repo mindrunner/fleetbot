@@ -2,7 +2,9 @@ import {
     getAssociatedTokenAddressSync,
     TOKEN_PROGRAM_ID,
 } from '@solana/spl-token'
+import { PublicKey } from '@solana/web3.js'
 import { getParsedTokenAccountsByOwner } from '@staratlas/data-source'
+import { Fleet } from '@staratlas/sage'
 import BN from 'bn.js'
 
 import { Sentry } from '../../sentry'
@@ -15,6 +17,7 @@ import { keyPair } from '../../service/wallet'
 import { getFleetStrategy } from './fleet-strategies/get-fleet-strategy'
 import { createInfoStrategy } from './fsm/info'
 import { Strategy } from './fsm/strategy'
+import { createFleet } from './lib/sage/act/create-fleet'
 import { depositCargo } from './lib/sage/act/deposit-cargo'
 import { settleFleet } from './lib/sage/state/settle-fleet'
 import { getPlayerContext, Player } from './lib/sage/state/user-account'
@@ -24,6 +27,7 @@ import {
     getUserFleets,
 } from './lib/sage/state/user-fleets'
 import { getMapContext, WorldMap } from './lib/sage/state/world-map'
+import { getName } from './lib/sage/util'
 // eslint-disable-next-line import/max-dependencies
 
 // eslint-disable-next-line require-await
@@ -106,6 +110,36 @@ const importR4 = async (player: Player): Promise<void> => {
     )
 }
 
+const ensureFleets = async (
+    fleets: Array<Fleet>,
+    botConfig: BotConfig,
+): Promise<void> => {
+    const existingFleets = fleets.map(getName)
+    const wantedFleets = Array.from(botConfig.fleetStrategies.keys())
+
+    const neededFleets = wantedFleets.filter((f) => !existingFleets.includes(f))
+
+    if (neededFleets.length > 0) {
+        logger.info('Creating fleets:', neededFleets)
+    }
+
+    const fleetMint = new PublicKey(
+        '9tGU2Mvtvvr2n7Fjmw3zbsdr5YrfGbLtPxR31bi5hTA4',
+    )
+
+    await Promise.all(
+        neededFleets.map((fleetName) =>
+            createFleet(
+                botConfig.player,
+                botConfig.player.homeStarbase,
+                fleetMint,
+                fleetName,
+                1,
+            ),
+        ),
+    )
+}
+
 const basedbot = async (botConfig: BotConfig) => {
     logger.info(
         '-------------------------------------------------------------------------------------',
@@ -116,7 +150,7 @@ const basedbot = async (botConfig: BotConfig) => {
         fleets.map((f) => getFleetInfo(f, player, map)),
     )
 
-    await importR4(player)
+    await Promise.all([importR4(player), ensureFleets(fleets, botConfig)])
 
     await Promise.all(
         fleetInfos.map((fleetInfo) => settleFleet(fleetInfo, player)),

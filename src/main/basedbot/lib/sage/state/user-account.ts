@@ -13,6 +13,7 @@ import { Game, SagePointsCategory, Starbase } from '@staratlas/sage'
 import { connection } from '../../../../../service/sol'
 import { programs } from '../../programs'
 import { Coordinates } from '../../util/coordinates'
+import { Faction, galaxySectorsData } from '../../util/galaxy-sectors-data'
 
 import { getCargoType, getCargoTypes } from './cargo-types'
 import { sageGame } from './game'
@@ -37,10 +38,12 @@ export type Player = {
     keyIndex: number
     profile: PlayerProfile
     profileFaction: ProfileFactionAccount
+    faction: Faction
     xpAccounts: XpAccounts
     signer: AsyncSigner
     game: Game
     homeStarbase: Starbase
+    homeCoordinates: Coordinates
     cargoTypes: Array<CargoType>
     fuelCargoType: CargoType
     foodCargoType: CargoType
@@ -141,24 +144,18 @@ export const getPlayerContext = async (
 
     const cargoTypes = await getCargoTypes()
 
-    let homeCoords
+    const homeCoordinates = galaxySectorsData()
+        .filter(
+            (sector) =>
+                sector.closestFaction === profileFaction.data.data.faction,
+        )
+        .find((sector) => sector.name.includes('CSS'))?.coordinates
 
-    //TODO: add correct Coordinates for each faction
-    switch (profileFaction.data.data.faction) {
-        case 0:
-            homeCoords = Coordinates.fromNumber(0, 0)
-            break
-        case 1:
-            homeCoords = Coordinates.fromNumber(0, 0)
-            break
-        case 2:
-            homeCoords = Coordinates.fromNumber(-40, 30)
-            break
-        default:
-            throw new Error('Unknown faction')
+    if (!homeCoordinates) {
+        throw new Error('No home coordinates found')
     }
 
-    const homeStarbase = await starbaseByCoordinates(homeCoords)
+    const homeStarbase = await starbaseByCoordinates(homeCoordinates)
 
     if (!homeStarbase) {
         throw new Error('No home starbase found')
@@ -168,9 +165,11 @@ export const getPlayerContext = async (
         publicKey: user,
         profile: profile.data,
         profileFaction: profileFaction.data,
+        faction: profileFaction.data.data.faction,
         keyIndex,
         xpAccounts,
         signer: keypairToAsyncSigner(signer),
+        homeCoordinates,
         game,
         cargoTypes,
         homeStarbase,
