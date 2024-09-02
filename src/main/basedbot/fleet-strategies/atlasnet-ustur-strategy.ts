@@ -5,7 +5,7 @@ import { Player } from '../lib/sage/state/user-account'
 import { WorldMap } from '../lib/sage/state/world-map'
 import { galaxySectorsData } from '../lib/util/galaxy-sectors-data'
 
-export const atlasnetFcStrategy =
+export const atlasnetUsturStrategy =
     (count: number) =>
     (map: WorldMap, player: Player): Map<string, Strategy> => {
         const ans: Map<string, Strategy> = new Map<string, Strategy>()
@@ -15,7 +15,7 @@ export const atlasnetFcStrategy =
 
         for (let i = 0; i < count; i++) {
             ans.set(
-                `basedbot-mud-${i}`,
+                `basedbot-ustur-${i}`,
                 createMiningStrategy(
                     mine(
                         map,

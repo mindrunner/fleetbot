@@ -2,8 +2,9 @@ import { Strategy } from '../fsm/strategy'
 import { Player } from '../lib/sage/state/user-account'
 import { WorldMap } from '../lib/sage/state/world-map'
 
-import { atlasnetFcStrategy } from './atlasnet-fc-strategy'
+import { atlasnetMudStrategy } from './atlasnet-mud-strategy'
 import { atlasnetLuStrategy } from './atlasnet-lu-strategy'
+import { atlasnetUsturStrategy } from './atlasnet-ustur-strategy'
 import { mainnetLuStrategy } from './mainnet-lu-strategy'
 
 export const getFleetStrategy = (
@@ -16,7 +17,9 @@ export const getFleetStrategy = (
         case 'AePY3wEoUFcFuXeUU9X26YK6tNKQMZovBgvY54LK2B8N':
             return mainnetLuStrategy(map, player)
         case 'CgHvzwGbwWv3CwLTvEgeqSKeD8EwMdTfiiCG3dFrKVVC':
-            return atlasnetFcStrategy(100)(map, player)
+            return atlasnetMudStrategy(100)(map, player)
+        case '9KBrgWVjsmdZ3YEjcsa3wrbbJREgZgS7vDbgoz2aHaNm':
+            return atlasnetUsturStrategy(100)(map, player)
         default:
             throw new Error('Unknown strategy')
     }
