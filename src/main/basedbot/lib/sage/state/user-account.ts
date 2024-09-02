@@ -33,7 +33,7 @@ export type XpAccount = {
 }
 
 export type Player = {
-    // TODO: what is this?
+    publicKey: PublicKey
     keyIndex: number
     profile: PlayerProfile
     profileFaction: ProfileFactionAccount
@@ -165,6 +165,7 @@ export const getPlayerContext = async (
     }
 
     return {
+        publicKey: user,
         profile: profile.data,
         profileFaction: profileFaction.data,
         keyIndex,
