@@ -5,9 +5,13 @@ import { Player } from '../lib/sage/state/user-account'
 import { WorldMap } from '../lib/sage/state/world-map'
 import { galaxySectorsData } from '../lib/util/galaxy-sectors-data'
 
-export const atlasnetUsturStrategy =
+export const atlasnetFcStrategy =
     (count: number) =>
-    (map: WorldMap, player: Player): Map<string, Strategy> => {
+    (
+        map: WorldMap,
+        player: Player,
+        namePrefix: string,
+    ): Map<string, Strategy> => {
         const ans: Map<string, Strategy> = new Map<string, Strategy>()
         const sectors = galaxySectorsData()
             .filter((sector) => sector.closestFaction === player.faction)
@@ -15,7 +19,7 @@ export const atlasnetUsturStrategy =
 
         for (let i = 0; i < count; i++) {
             ans.set(
-                `basedbot-ustur-${i}`,
+                `${namePrefix}-${i}`,
                 createMiningStrategy(
                     mine(
                         map,
