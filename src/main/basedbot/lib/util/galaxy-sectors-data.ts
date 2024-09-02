@@ -1,9 +1,9 @@
 import { Coordinates } from './coordinates'
 
 export enum Faction {
-    UST = 0,
     MUD = 1,
     ONI = 2,
+    UST = 3,
 }
 
 export interface SectorInfo {
