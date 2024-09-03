@@ -33,7 +33,7 @@
         "@solana/spl-token": "^0.4.6",
         "@solana/web3.js": "^1.91.8",
         "@staratlas/atlas-prime": "^0.13.1",
-        "@staratlas/cargo": "^1.0.2",
+        "@staratlas/cargo": "^1.0.5",
         "@staratlas/points": "^1.0.4",
         "@staratlas/claim-stake": "^0.11.5",
         "@staratlas/crafting": "^1.0.2",
