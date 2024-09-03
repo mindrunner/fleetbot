@@ -9,6 +9,7 @@ export const createPriorityFeeInstruction =
             await connection.getRecentPrioritizationFees()
 
         const maxPriorityFee = Math.max(
+            0,
             ...recentPriorityFees.map((fee) => fee.prioritizationFee.valueOf()),
         )
 
