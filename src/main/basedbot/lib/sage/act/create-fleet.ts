@@ -1,6 +1,5 @@
-import { PublicKey } from '@solana/web3.js'
 import { InstructionReturn, ixReturnsToIxs } from '@staratlas/data-source'
-import { Starbase } from '@staratlas/sage'
+import { Ship, Starbase, WrappedShipEscrow } from '@staratlas/sage'
 
 import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
 import { programs } from '../../programs'
@@ -12,7 +11,7 @@ import { Player } from '../state/user-account'
 export const createFleet = async (
     player: Player,
     starbase: Starbase,
-    _mint: PublicKey,
+    ship: Ship,
     name: string,
     amount: number,
     // eslint-disable-next-line max-params
@@ -20,10 +19,14 @@ export const createFleet = async (
     const instructions: InstructionReturn[] = []
 
     const starbasePlayer = await getStarbasePlayer(player, starbase, programs)
-    // TODO: Ask Sammy about this
-    const [shipEscrow] = starbasePlayer.wrappedShipEscrows
 
     const [cargoStatsDefinition] = await getCargoStatsDefinition()
+    const pred = (v: WrappedShipEscrow) => v.ship.equals(ship.key)
+    const index = starbasePlayer.wrappedShipEscrows.findIndex(pred)
+
+    if (index === -1) {
+        throw new Error('Ship not found')
+    }
 
     instructions.push(
         createFleetIx(
@@ -31,11 +34,11 @@ export const createFleet = async (
             starbase,
             starbasePlayer,
             programs,
-            shipEscrow.ship,
-            0,
+            ship.key,
             cargoStatsDefinition.key,
             amount,
             name,
+            index,
         ).instructions,
     )
 

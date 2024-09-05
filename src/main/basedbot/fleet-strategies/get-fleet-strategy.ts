@@ -21,6 +21,8 @@ export const getFleetStrategy = (
             return atlasnetFcStrategy(100)(map, player, 'basedbot-ustur')
         case 'FUwHSqujzcPD44SDZYJXuk73NbkEyYQwcLMioHhpjbx2':
             return atlasnetFcStrategy(100)(map, player, 'basedbot-oni')
+        case '34ghznSJCYEMrS1aC55UYZZUuxfuurA9441aKnigmYyz':
+            return atlasnetFcStrategy(10)(map, player, 'le.local')
         default:
             throw new Error('Unknown strategy')
     }

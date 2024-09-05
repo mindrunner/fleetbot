@@ -2,9 +2,8 @@ import {
     getAssociatedTokenAddressSync,
     TOKEN_PROGRAM_ID,
 } from '@solana/spl-token'
-import { PublicKey } from '@solana/web3.js'
 import { getParsedTokenAccountsByOwner } from '@staratlas/data-source'
-import { Fleet } from '@staratlas/sage'
+import { Fleet, Ship } from '@staratlas/sage'
 import BN from 'bn.js'
 
 import { Sentry } from '../../sentry'
@@ -17,9 +16,13 @@ import { keyPair } from '../../service/wallet'
 import { getFleetStrategy } from './fleet-strategies/get-fleet-strategy'
 import { createInfoStrategy } from './fsm/info'
 import { Strategy } from './fsm/strategy'
+import { programs } from './lib/programs'
 import { createFleet } from './lib/sage/act/create-fleet'
 import { depositCargo } from './lib/sage/act/deposit-cargo'
+import { ensureShips } from './lib/sage/act/deposit-ship'
+import { Fimbul, ships } from './lib/sage/ships'
 import { settleFleet } from './lib/sage/state/settle-fleet'
+import { getShipByMint } from './lib/sage/state/starbase-player'
 import { getPlayerContext, Player } from './lib/sage/state/user-account'
 import {
     FleetInfo,
@@ -111,8 +114,11 @@ const importR4 = async (player: Player): Promise<void> => {
 }
 
 const ensureFleets = async (
+    player: Player,
     fleets: Array<Fleet>,
     botConfig: BotConfig,
+    ship: Ship,
+    count: number,
 ): Promise<void> => {
     const existingFleets = fleets.map(getName)
     const wantedFleets = Array.from(botConfig.fleetStrategies.keys())
@@ -123,20 +129,19 @@ const ensureFleets = async (
         logger.info('Creating fleets:', neededFleets)
     }
 
-    const fleetMint = new PublicKey(
-        '9tGU2Mvtvvr2n7Fjmw3zbsdr5YrfGbLtPxR31bi5hTA4',
-    )
-
     await Promise.all(
-        neededFleets.map((fleetName) =>
-            createFleet(
-                botConfig.player,
-                botConfig.player.homeStarbase,
-                fleetMint,
-                fleetName,
-                1,
-            ),
-        ),
+        neededFleets.map((fleetName) => {
+            ensureShips(player, player.homeStarbase, ship, new BN(count)).then(
+                () =>
+                    createFleet(
+                        botConfig.player,
+                        botConfig.player.homeStarbase,
+                        ship,
+                        fleetName,
+                        count,
+                    ),
+            )
+        }),
     )
 }
 
@@ -150,7 +155,13 @@ const basedbot = async (botConfig: BotConfig) => {
         fleets.map((f) => getFleetInfo(f, player, map)),
     )
 
-    await Promise.all([importR4(player), ensureFleets(fleets, botConfig)])
+    const shipMint = ships[Fimbul.Lowbie].mint
+    const ship = await getShipByMint(shipMint, player.game, programs)
+
+    await Promise.all([
+        importR4(player),
+        ensureFleets(player, fleets, botConfig, ship, 5),
+    ])
 
     await Promise.all(
         fleetInfos.map((fleetInfo) => settleFleet(fleetInfo, player)),

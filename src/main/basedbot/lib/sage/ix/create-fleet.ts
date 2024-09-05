@@ -19,10 +19,10 @@ export const createFleetIx = (
     starbasePlayer: StarbasePlayer,
     programs: StarAtlasPrograms,
     ship: PublicKey,
-    shipEscrowIndex: number,
     cargoStatsDefinition: PublicKey,
     shipAmount: number,
     name: string,
+    shipEscrowIndex: number,
     // eslint-disable-next-line max-params
 ): CreateFleetReturn =>
     Fleet.createFleet(
