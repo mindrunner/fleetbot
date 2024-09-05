@@ -1,6 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
 import { InstructionReturn } from '@staratlas/data-source'
-import { Fleet } from '@staratlas/sage'
+import { Fleet, Game } from '@staratlas/sage'
 
 import { StarAtlasPrograms } from '../../programs'
 import { Player } from '../state/user-account'
@@ -10,6 +10,7 @@ import { Mineable } from '../state/world-map'
 export const stopMiningIx = (
     fleetInfo: FleetInfo,
     player: Player,
+    game: Game,
     mineable: Mineable,
     fuelTokenAccount: PublicKey,
     programs: StarAtlasPrograms,
@@ -28,7 +29,7 @@ export const stopMiningIx = (
         mineable.planet.key,
         fleetInfo.fleet.data.fuelTank,
         player.fuelCargoType.key,
-        player.game.data.cargo.statsDefinition,
+        game.data.cargo.statsDefinition,
         player.xpAccounts.mining.userPointsAccount,
         player.xpAccounts.mining.pointsCategory,
         player.xpAccounts.mining.pointsModifierAccount,
@@ -38,10 +39,10 @@ export const stopMiningIx = (
         player.xpAccounts.councilRank.userPointsAccount,
         player.xpAccounts.councilRank.pointsCategory,
         player.xpAccounts.councilRank.pointsModifierAccount,
-        player.game.data.gameState,
-        player.game.key,
+        game.data.gameState,
+        game.key,
         fuelTokenAccount,
-        player.game.data.mints.fuel,
+        game.data.mints.fuel,
         {
             keyIndex: player.keyIndex,
         },

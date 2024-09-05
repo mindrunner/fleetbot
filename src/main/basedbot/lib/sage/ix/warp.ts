@@ -1,6 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
 import { InstructionReturn } from '@staratlas/data-source'
-import { Fleet } from '@staratlas/sage'
+import { Fleet, Game } from '@staratlas/sage'
 
 import { StarAtlasPrograms } from '../../programs'
 import { Coordinates } from '../../util/coordinates'
@@ -12,6 +12,7 @@ export const warpIx = (
     coordinates: Coordinates,
     fuelTokenAccount: PublicKey,
     player: Player,
+    game: Game,
     programs: StarAtlasPrograms,
 ): InstructionReturn =>
     Fleet.warpToCoordinate(
@@ -22,11 +23,11 @@ export const warpIx = (
         fleetInfo.fleet.key,
         fleetInfo.fleet.data.fuelTank,
         player.fuelCargoType.key,
-        player.game.data.cargo.statsDefinition,
+        game.data.cargo.statsDefinition,
         fuelTokenAccount,
-        player.game.data.mints.fuel,
-        player.game.data.gameState,
-        player.game.key,
+        game.data.mints.fuel,
+        game.data.gameState,
+        game.key,
         programs.cargo,
         {
             toSector: coordinates.toArray(),

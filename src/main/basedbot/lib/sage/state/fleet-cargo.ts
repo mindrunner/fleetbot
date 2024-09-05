@@ -15,6 +15,7 @@ import { logger } from '../../../../../logger'
 import { connection } from '../../../../../service/sol'
 import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
 
+import { sageGame } from './game'
 import { Player } from './user-account'
 
 type PartialTokenAccount = {
@@ -118,17 +119,18 @@ export const getFleetCargoBalance = async (
     fleet: Fleet,
     player: Player,
 ): Promise<FleetCargo> => {
+    const game = await sageGame()
     const [ammo, fuel, cargo] = await Promise.all([
-        getBalance(player.game.data.mints.ammo, fleet.data.ammoBank, player),
-        getBalance(player.game.data.mints.fuel, fleet.data.fuelTank, player),
+        getBalance(game.data.mints.ammo, fleet.data.ammoBank, player),
+        getBalance(game.data.mints.fuel, fleet.data.fuelTank, player),
         getFleetCargoBalances(fleet),
     ])
 
     return {
         ammo,
         cargo,
-        food: cargo.get(player.game.data.mints.food.toBase58()) ?? 0,
+        food: cargo.get(game.data.mints.food.toBase58()) ?? 0,
         fuel,
-        toolkit: cargo.get(player.game.data.mints.repairKit.toBase58()) ?? 0,
+        toolkit: cargo.get(game.data.mints.repairKit.toBase58()) ?? 0,
     }
 }

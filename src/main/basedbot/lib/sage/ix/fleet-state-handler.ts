@@ -1,6 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
 import { InstructionReturn } from '@staratlas/data-source'
-import { Fleet } from '@staratlas/sage'
+import { Fleet, Game } from '@staratlas/sage'
 
 import { StarAtlasPrograms } from '../../programs'
 import { getCargoType } from '../state/cargo-types'
@@ -17,6 +17,7 @@ export const miningHandlerIx = (
     resourceTokenFrom: PublicKey,
     resourceTokenTo: PublicKey,
     programs: StarAtlasPrograms,
+    game: Game,
     // eslint-disable-next-line max-params
 ): InstructionReturn =>
     Fleet.asteroidMiningHandler(
@@ -31,18 +32,14 @@ export const miningHandlerIx = (
         fleetInfo.fleet.data.ammoBank,
         player.foodCargoType.key,
         player.ammoCargoType.key,
-        getCargoType(
-            player.cargoTypes,
-            player.game,
-            mineable.mineItem.data.mint,
-        ).key,
-        player.game.data.cargo.statsDefinition,
-        player.game.data.gameState,
-        player.game.key,
+        getCargoType(player.cargoTypes, game, mineable.mineItem.data.mint).key,
+        game.data.cargo.statsDefinition,
+        game.data.gameState,
+        game.key,
         foodTokenFrom,
         ammoTokenFrom,
         resourceTokenFrom,
         resourceTokenTo,
-        player.game.data.mints.food,
-        player.game.data.mints.ammo,
+        game.data.mints.food,
+        game.data.mints.ammo,
     )

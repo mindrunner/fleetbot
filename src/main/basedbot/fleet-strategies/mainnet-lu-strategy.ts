@@ -1,3 +1,5 @@
+import { Game } from '@staratlas/sage'
+
 import { mineRochinol } from '../fsm/configs/mine-rochinol'
 import { createMiningStrategy } from '../fsm/mine'
 import { Strategy } from '../fsm/strategy'
@@ -7,7 +9,11 @@ import { WorldMap } from '../lib/sage/state/world-map'
 export const mainnetLuStrategy = (
     map: WorldMap,
     player: Player,
+    game: Game,
 ): Map<string, Strategy> =>
     new Map([
-        ['Vaquita Fleet', createMiningStrategy(mineRochinol(map), player)],
+        [
+            'Vaquita Fleet',
+            createMiningStrategy(mineRochinol(map), player, game),
+        ],
     ])

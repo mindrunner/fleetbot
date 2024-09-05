@@ -1,10 +1,9 @@
 import { ixReturnsToIxs } from '@staratlas/data-source'
-import { Fleet } from '@staratlas/sage'
+import { Fleet, Game } from '@staratlas/sage'
 
 import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
 import { programs } from '../../programs'
 import { Coordinates } from '../../util/coordinates'
-import { sageGame } from '../state/game'
 import { starbaseByCoordinates } from '../state/starbase-by-coordinates'
 import { getStarbasePlayer } from '../state/starbase-player'
 import { Player } from '../state/user-account'
@@ -13,6 +12,7 @@ export const undock = async (
     fleet: Fleet,
     coordinates: Coordinates,
     player: Player,
+    game: Game,
 ): Promise<void> => {
     const starbase = await starbaseByCoordinates(coordinates)
 
@@ -20,7 +20,6 @@ export const undock = async (
         throw new Error(`No starbase found at ${coordinates}`)
     }
     const { sage } = programs
-    const game = await sageGame()
     const starbasePlayer = await getStarbasePlayer(player, starbase, programs)
 
     const ix = Fleet.loadingBayToIdle(

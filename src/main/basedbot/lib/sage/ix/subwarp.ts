@@ -1,6 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
 import { InstructionReturn } from '@staratlas/data-source'
-import { Fleet } from '@staratlas/sage'
+import { Fleet, Game } from '@staratlas/sage'
 
 import { StarAtlasPrograms } from '../../programs'
 import { Coordinates } from '../../util/coordinates'
@@ -12,6 +12,7 @@ export const subWarpIx = (
     coordinates: Coordinates,
     _fuelTokenAccount: PublicKey,
     player: Player,
+    game: Game,
     programs: StarAtlasPrograms,
 ): InstructionReturn =>
     Fleet.startSubwarp(
@@ -20,8 +21,8 @@ export const subWarpIx = (
         player.profile.key,
         player.profileFaction.key,
         fleetInfo.fleet.key,
-        player.game.key,
-        player.game.data.gameState,
+        game.key,
+        game.data.gameState,
         {
             toSector: coordinates.toArray(),
             keyIndex: player.keyIndex,

@@ -1,5 +1,5 @@
 import { InstructionReturn } from '@staratlas/data-source'
-import { Fleet, Starbase, StarbasePlayer } from '@staratlas/sage'
+import { Fleet, Game, Starbase, StarbasePlayer } from '@staratlas/sage'
 
 import { StarAtlasPrograms } from '../../programs'
 import { Player } from '../state/user-account'
@@ -8,6 +8,7 @@ import { FleetInfo } from '../state/user-fleets'
 export const dockIx = (
     fleetInfo: FleetInfo,
     player: Player,
+    game: Game,
     starbase: Starbase,
     starbasePlayer: StarbasePlayer,
     programs: StarAtlasPrograms,
@@ -20,7 +21,7 @@ export const dockIx = (
         fleetInfo.fleet.key,
         starbase.key,
         starbasePlayer.key,
-        player.game.key,
-        player.game.data.gameState,
+        game.key,
+        game.data.gameState,
         player.keyIndex,
     )

@@ -1,6 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
 import { InstructionReturn, stringToByteArray } from '@staratlas/data-source'
-import { Fleet, Starbase, StarbasePlayer } from '@staratlas/sage'
+import { Fleet, Game, Starbase, StarbasePlayer } from '@staratlas/sage'
 
 import { StarAtlasPrograms } from '../../programs'
 import { Player } from '../state/user-account'
@@ -15,6 +15,7 @@ type CreateFleetReturn = {
 
 export const createFleetIx = (
     player: Player,
+    game: Game,
     starbase: Starbase,
     starbasePlayer: StarbasePlayer,
     programs: StarAtlasPrograms,
@@ -34,8 +35,8 @@ export const createFleetIx = (
         ship,
         starbasePlayer.key,
         starbase.key,
-        player.game.key,
-        player.game.data.gameState,
+        game.key,
+        game.data.gameState,
         cargoStatsDefinition,
         {
             shipAmount,

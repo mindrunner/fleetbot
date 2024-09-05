@@ -1,6 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
 import { InstructionReturn } from '@staratlas/data-source'
-import { Fleet } from '@staratlas/sage'
+import { Fleet, Game } from '@staratlas/sage'
 
 import { StarAtlasPrograms } from '../../programs'
 import { Player } from '../state/user-account'
@@ -9,6 +9,7 @@ import { FleetInfo } from '../state/user-fleets'
 export const stopWarpIx = (
     fleetInfo: FleetInfo,
     player: Player,
+    game: Game,
     _fuelTokenAccount: PublicKey,
     programs: StarAtlasPrograms,
 ): InstructionReturn =>
@@ -23,5 +24,5 @@ export const stopWarpIx = (
         player.xpAccounts.councilRank.userPointsAccount,
         player.xpAccounts.councilRank.pointsCategory,
         player.xpAccounts.councilRank.pointsModifierAccount,
-        player.game.key,
+        game.key,
     )

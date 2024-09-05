@@ -2,6 +2,7 @@ import {
     createAssociatedTokenAccountIdempotent,
     ixReturnsToIxs,
 } from '@staratlas/data-source'
+import { Game } from '@staratlas/sage'
 
 import { logger } from '../../../../../logger'
 import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
@@ -17,6 +18,7 @@ import { undock } from './undock'
 export const mine = async (
     fleetInfo: FleetInfo,
     player: Player,
+    game: Game,
     mineable: Mineable,
 ): Promise<void> => {
     const { fleet } = fleetInfo
@@ -34,7 +36,7 @@ export const mine = async (
             `${fleetInfo.fleetName} is in the loading bay at ${fleet.state.StarbaseLoadingBay.starbase}, undocking...`,
         )
 
-        await undock(fleet, fleetInfo.location, player)
+        await undock(fleet, fleetInfo.location, player, game)
     }
 
     if (fleet.state.MoveSubwarp || fleet.state.MoveWarp) {
@@ -48,7 +50,7 @@ export const mine = async (
         programs,
     )
     const fuelTokenAccount = createAssociatedTokenAccountIdempotent(
-        player.game.data.mints.fuel,
+        game.data.mints.fuel,
         fleet.data.fuelTank,
         true,
     )
@@ -56,6 +58,7 @@ export const mine = async (
     const ix = startMiningIx(
         fleetInfo,
         player,
+        game,
         mineable,
         starbasePlayer,
         fuelTokenAccount.address,

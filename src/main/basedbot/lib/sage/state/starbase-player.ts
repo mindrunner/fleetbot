@@ -14,6 +14,7 @@ import { connection } from '../../../../../service/sol'
 import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
 import { StarAtlasPrograms } from '../../programs'
 
+import { sageGame } from './game'
 import { Player } from './user-account'
 
 export const getCargoPodsForStarbasePlayer = async (
@@ -109,11 +110,13 @@ export const getStarbasePlayer = async (
         ],
     )
 
+    const game = await sageGame()
+
     if (!starbasePlayer) {
         const [sageProfileAddress] = SagePlayerProfile.findAddress(
             programs.sage,
             player.profile.key,
-            player.game.key,
+            game.key,
         )
         const [starbasePlayerAddress] = StarbasePlayer.findAddress(
             programs.sage,
@@ -128,8 +131,8 @@ export const getStarbasePlayer = async (
                 player.profileFaction.key,
                 sageProfileAddress,
                 starbase.key,
-                player.game.key,
-                player.game.data.gameState,
+                game.key,
+                game.data.gameState,
                 starbase.data.seqId,
             ),
             StarbasePlayer.createCargoPod(
@@ -140,9 +143,9 @@ export const getStarbasePlayer = async (
                 player.profile.key,
                 player.profileFaction.key,
                 starbase.key,
-                player.game.data.cargo.statsDefinition,
-                player.game.key,
-                player.game.data.gameState,
+                game.data.cargo.statsDefinition,
+                game.key,
+                game.data.gameState,
                 {
                     keyIndex: 0,
                     podSeeds: Array.from(

@@ -8,7 +8,7 @@ import {
 import { PlayerProfile } from '@staratlas/player-profile'
 import { UserPoints } from '@staratlas/points'
 import { ProfileFactionAccount } from '@staratlas/profile-faction'
-import { Game, SagePointsCategory, Starbase } from '@staratlas/sage'
+import { SagePointsCategory, Starbase } from '@staratlas/sage'
 
 import { connection } from '../../../../../service/sol'
 import { programs } from '../../programs'
@@ -41,7 +41,6 @@ export type Player = {
     faction: Faction
     xpAccounts: XpAccounts
     signer: AsyncSigner
-    game: Game
     homeStarbase: Starbase
     homeCoordinates: Coordinates
     cargoTypes: Array<CargoType>
@@ -170,7 +169,6 @@ export const getPlayerContext = async (
         xpAccounts,
         signer: keypairToAsyncSigner(signer),
         homeCoordinates,
-        game,
         cargoTypes,
         homeStarbase,
         fuelCargoType: getCargoType(cargoTypes, game, game.data.mints.fuel),

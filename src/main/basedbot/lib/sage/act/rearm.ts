@@ -3,6 +3,7 @@ import {
     getParsedTokenAccountsByOwner,
     ixReturnsToIxs,
 } from '@staratlas/data-source'
+import { Game } from '@staratlas/sage'
 import BN from 'bn.js'
 
 import { connection } from '../../../../../service/sol'
@@ -23,6 +24,7 @@ export const rearm = async (
     fleetInfo: FleetInfo,
     coordinates: Coordinates,
     player: Player,
+    game: Game,
 ): Promise<void> => {
     const starbase = await starbaseByCoordinates(coordinates)
 
@@ -32,11 +34,11 @@ export const rearm = async (
 
     const cargoType = getCargoType(
         player.cargoTypes,
-        player.game,
-        player.game.data.mints.ammo,
+        game,
+        game.data.mints.ammo,
     )
     const fleetFuelTokenResult = createAssociatedTokenAccountIdempotent(
-        player.game.data.mints.ammo,
+        game.data.mints.ammo,
         fleetInfo.fleet.data.ammoBank,
         true,
     )
@@ -63,13 +65,14 @@ export const rearm = async (
     const ix = loadCargoIx(
         fleetInfo,
         player,
+        game,
         starbase,
         starbasePlayer,
         cargoPodFrom.key,
         fleetInfo.fleet.data.ammoBank,
         starbaseTokenAccounts[0].address,
         fleetFuelTokenResult.address,
-        player.game.data.mints.ammo,
+        game.data.mints.ammo,
         cargoType.key,
         programs,
         new BN(ammoNeeded),

@@ -2,6 +2,7 @@ import {
     createAssociatedTokenAccountIdempotent,
     ixReturnsToIxs,
 } from '@staratlas/data-source'
+import { Game } from '@staratlas/sage'
 
 import { logger } from '../../../../../logger'
 import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
@@ -14,6 +15,7 @@ import { FleetInfo } from '../state/user-fleets'
 export const endMove = async (
     fleetInfo: FleetInfo,
     player: Player,
+    game: Game,
 ): Promise<void> => {
     const { fleet } = fleetInfo
 
@@ -23,7 +25,7 @@ export const endMove = async (
         return
     }
     const fuelTokenAccount = createAssociatedTokenAccountIdempotent(
-        player.game.data.mints.fuel,
+        game.data.mints.fuel,
         fleet.data.fuelTank,
         true,
     )
@@ -31,6 +33,7 @@ export const endMove = async (
     const ix = (fleet.state.MoveSubwarp ? stopSubWarpIx : stopWarpIx)(
         fleetInfo,
         player,
+        game,
         fuelTokenAccount.address,
         programs,
     )

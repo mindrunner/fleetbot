@@ -5,6 +5,7 @@ import {
     InstructionReturn,
     ixReturnsToIxs,
 } from '@staratlas/data-source'
+import { Game } from '@staratlas/sage'
 import BN from 'bn.js'
 
 import { connection } from '../../../../../service/sol'
@@ -25,6 +26,7 @@ export const unloadAllCargo = async (
     fleetInfo: FleetInfo,
     coordinates: Coordinates,
     player: Player,
+    game: Game,
     hold: PublicKey,
     // eslint-disable-next-line max-params
 ): Promise<void> => {
@@ -62,7 +64,7 @@ export const unloadAllCargo = async (
 
         const cargoType = getCargoType(
             player.cargoTypes,
-            player.game,
+            game,
             fleetTokenAccount.mint,
         )
 
@@ -70,6 +72,7 @@ export const unloadAllCargo = async (
             unloadCargoIx(
                 fleetInfo,
                 player,
+                game,
                 starbase,
                 starbasePlayer,
                 fleetInfo.fleet.data.cargoHold,

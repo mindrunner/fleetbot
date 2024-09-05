@@ -3,7 +3,7 @@ import {
     TOKEN_PROGRAM_ID,
 } from '@solana/spl-token'
 import { getParsedTokenAccountsByOwner } from '@staratlas/data-source'
-import { Fleet, Ship } from '@staratlas/sage'
+import { Fleet, Game, Ship } from '@staratlas/sage'
 import BN from 'bn.js'
 
 import { Sentry } from '../../sentry'
@@ -21,6 +21,7 @@ import { createFleet } from './lib/sage/act/create-fleet'
 import { depositCargo } from './lib/sage/act/deposit-cargo'
 import { ensureShips } from './lib/sage/act/deposit-ship'
 import { Fimbul, ships } from './lib/sage/ships'
+import { sageGame } from './lib/sage/state/game'
 import { settleFleet } from './lib/sage/state/settle-fleet'
 import { getShipByMint } from './lib/sage/state/starbase-player'
 import { getPlayerContext, Player } from './lib/sage/state/user-account'
@@ -71,13 +72,13 @@ const applyStrategy = (
     return strategy.send(fleetInfo)
 }
 
-const importR4 = async (player: Player): Promise<void> => {
+const importR4 = async (player: Player, game: Game): Promise<void> => {
     await Promise.all(
         [
-            player.game.data.mints.food,
-            player.game.data.mints.ammo,
-            player.game.data.mints.fuel,
-            player.game.data.mints.repairKit,
+            game.data.mints.food,
+            game.data.mints.ammo,
+            game.data.mints.fuel,
+            game.data.mints.repairKit,
         ].map(async (mint) => {
             //TODO: Make it easier to get the amount of a token
             //      This is being used in multiple places
@@ -104,6 +105,7 @@ const importR4 = async (player: Player): Promise<void> => {
 
                 await depositCargo(
                     player,
+                    game,
                     player.homeStarbase,
                     mint,
                     amountAtOrigin,
@@ -115,6 +117,7 @@ const importR4 = async (player: Player): Promise<void> => {
 
 const ensureFleets = async (
     player: Player,
+    game: Game,
     fleets: Array<Fleet>,
     botConfig: BotConfig,
     ship: Ship,
@@ -131,15 +134,21 @@ const ensureFleets = async (
 
     await Promise.all(
         neededFleets.map((fleetName) => {
-            ensureShips(player, player.homeStarbase, ship, new BN(count)).then(
-                () =>
-                    createFleet(
-                        botConfig.player,
-                        botConfig.player.homeStarbase,
-                        ship,
-                        fleetName,
-                        count,
-                    ),
+            return ensureShips(
+                player,
+                game,
+                player.homeStarbase,
+                ship,
+                new BN(count),
+            ).then(() =>
+                createFleet(
+                    botConfig.player,
+                    game,
+                    botConfig.player.homeStarbase,
+                    ship,
+                    fleetName,
+                    count,
+                ),
             )
         }),
     )
@@ -150,21 +159,24 @@ const basedbot = async (botConfig: BotConfig) => {
         '-------------------------------------------------------------------------------------',
     )
     const { player, map } = botConfig
-    const fleets = await getUserFleets(player)
+    const [fleets, game] = await Promise.all([
+        getUserFleets(player),
+        sageGame(),
+    ])
     const fleetInfos = await Promise.all(
         fleets.map((f) => getFleetInfo(f, player, map)),
     )
 
     const shipMint = ships[Fimbul.Lowbie].mint
-    const ship = await getShipByMint(shipMint, player.game, programs)
+    const ship = await getShipByMint(shipMint, game, programs)
 
     await Promise.all([
-        importR4(player),
-        ensureFleets(player, fleets, botConfig, ship, 5),
+        importR4(player, game),
+        ensureFleets(player, game, fleets, botConfig, ship, 5),
     ])
 
     await Promise.all(
-        fleetInfos.map((fleetInfo) => settleFleet(fleetInfo, player)),
+        fleetInfos.map((fleetInfo) => settleFleet(fleetInfo, player, game)),
     )
     await Promise.all(
         fleetInfos.map((fleetInfo) =>
@@ -178,7 +190,9 @@ const basedbot = async (botConfig: BotConfig) => {
 
 export const start = async (): Promise<void> => {
     const player = await getPlayerContext(keyPair.publicKey, keyPair)
-    const map = await getMapContext(player.game)
+    const game = await sageGame()
+    const map = await getMapContext(game)
+    const fleetStrategies = getFleetStrategy(map, player, game)
 
     // eslint-disable-next-line no-constant-condition
     while (true) {
@@ -186,7 +200,7 @@ export const start = async (): Promise<void> => {
             await basedbot({
                 player,
                 map,
-                fleetStrategies: getFleetStrategy(map, player),
+                fleetStrategies,
             })
         } catch (e) {
             Sentry.captureException(e)
