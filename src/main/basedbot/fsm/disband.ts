@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 
 import { now } from '../../../dayjs'
 import { logger } from '../../../logger'
+import { disbandFleet } from '../lib/sage/act/disband-fleet'
 import { dock } from '../lib/sage/act/dock'
 import { endMine } from '../lib/sage/act/end-mine'
 import { endMove } from '../lib/sage/act/end-move'
@@ -62,6 +63,12 @@ const transition = async (
             if (isAtHomeBase) {
                 logger.info(
                     `${fleetInfo.fleetName} is at home base, disbanding...`,
+                )
+                await disbandFleet(
+                    player,
+                    game,
+                    player.homeStarbase,
+                    fleetInfo.fleet,
                 )
             }
             logger.info(
