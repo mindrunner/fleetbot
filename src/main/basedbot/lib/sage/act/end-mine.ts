@@ -2,6 +2,7 @@ import {
     createAssociatedTokenAccountIdempotent,
     ixReturnsToIxs,
 } from '@staratlas/data-source'
+import { Game } from '@staratlas/sage'
 
 import { logger } from '../../../../../logger'
 import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
@@ -15,6 +16,7 @@ import { Mineable } from '../state/world-map'
 export const endMine = async (
     fleetInfo: FleetInfo,
     player: Player,
+    game: Game,
     mineable: Mineable,
 ): Promise<void> => {
     const { fleet } = fleetInfo
@@ -33,12 +35,12 @@ export const endMine = async (
         fuelToken,
     ] = [
         createAssociatedTokenAccountIdempotent(
-            player.game.data.mints.food,
+            game.data.mints.food,
             fleet.data.cargoHold,
             true,
         ),
         createAssociatedTokenAccountIdempotent(
-            player.game.data.mints.ammo,
+            game.data.mints.ammo,
             fleet.data.ammoBank,
             true,
         ),
@@ -53,7 +55,7 @@ export const endMine = async (
             true,
         ),
         createAssociatedTokenAccountIdempotent(
-            player.game.data.mints.fuel,
+            game.data.mints.fuel,
             fleet.data.fuelTank,
             true,
         ),
@@ -74,6 +76,7 @@ export const endMine = async (
                 resourceFromToken.address,
                 resourceToToken.address,
                 programs,
+                game,
             ),
         ],
         player.signer,
@@ -85,6 +88,7 @@ export const endMine = async (
             stopMiningIx(
                 fleetInfo,
                 player,
+                game,
                 mineable,
                 fuelToken.address,
                 programs,

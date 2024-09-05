@@ -5,6 +5,7 @@ import {
     ixReturnsToIxs,
 } from '@staratlas/data-source'
 import {
+    Game,
     SagePlayerProfile,
     Ship,
     Starbase,
@@ -21,6 +22,7 @@ import { Player } from '../state/user-account'
 
 export const depositShip = async (
     player: Player,
+    game: Game,
     starbase: Starbase,
     ship: Ship,
     amount: BN,
@@ -39,7 +41,7 @@ export const depositShip = async (
     const [sagePlayerProfile] = SagePlayerProfile.findAddress(
         programs.sage,
         player.profile.key,
-        player.game.key,
+        game.key,
     )
     const shipEscrowTokenAccountResult = createAssociatedTokenAccountIdempotent(
         mint,
@@ -66,6 +68,7 @@ export const depositShip = async (
     instructions.push(
         addShipIx(
             player,
+            game,
             starbase,
             starbasePlayer,
             sagePlayerProfile,
@@ -84,6 +87,7 @@ export const depositShip = async (
 }
 export const ensureShips = async (
     player: Player,
+    game: Game,
     starbase: Starbase,
     ship: Ship,
     desiredAmount: BN,
@@ -97,7 +101,7 @@ export const ensureShips = async (
         : desiredAmount
 
     if (needed.gt(new BN(0))) {
-        await depositShip(player, starbase, ship, needed)
+        await depositShip(player, game, starbase, ship, needed)
     }
 
     return needed

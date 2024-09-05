@@ -1,5 +1,5 @@
 import { InstructionReturn } from '@staratlas/data-source'
-import { Fleet, Starbase, StarbasePlayer } from '@staratlas/sage'
+import { Fleet, Game, Starbase, StarbasePlayer } from '@staratlas/sage'
 
 import { StarAtlasPrograms } from '../../programs'
 import { Player } from '../state/user-account'
@@ -8,6 +8,7 @@ import { FleetInfo } from '../state/user-fleets'
 export const exitRespawnIx = (
     fleetInfo: FleetInfo,
     player: Player,
+    game: Game,
     starbase: Starbase,
     starbasePlayer: StarbasePlayer,
     programs: StarAtlasPrograms,
@@ -23,8 +24,8 @@ export const exitRespawnIx = (
         fleetInfo.fleet.data.cargoHold,
         fleetInfo.fleet.data.fuelTank,
         fleetInfo.fleet.data.ammoBank,
-        player.game.key,
-        player.game.data.gameState,
+        game.key,
+        game.data.gameState,
         {
             keyIndex: 0,
         },

@@ -1,5 +1,5 @@
 import { InstructionReturn, ixReturnsToIxs } from '@staratlas/data-source'
-import { Ship, Starbase, WrappedShipEscrow } from '@staratlas/sage'
+import { Game, Ship, Starbase, WrappedShipEscrow } from '@staratlas/sage'
 
 import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
 import { programs } from '../../programs'
@@ -10,6 +10,7 @@ import { Player } from '../state/user-account'
 
 export const createFleet = async (
     player: Player,
+    game: Game,
     starbase: Starbase,
     ship: Ship,
     name: string,
@@ -31,6 +32,7 @@ export const createFleet = async (
     instructions.push(
         createFleetIx(
             player,
+            game,
             starbase,
             starbasePlayer,
             programs,

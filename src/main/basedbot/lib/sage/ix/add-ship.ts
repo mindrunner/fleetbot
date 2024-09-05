@@ -1,6 +1,11 @@
 import { PublicKey } from '@solana/web3.js'
 import { InstructionReturn } from '@staratlas/data-source'
-import { SagePlayerProfile, Starbase, StarbasePlayer } from '@staratlas/sage'
+import {
+    Game,
+    SagePlayerProfile,
+    Starbase,
+    StarbasePlayer,
+} from '@staratlas/sage'
 import BN from 'bn.js'
 
 import { StarAtlasPrograms } from '../../programs'
@@ -8,6 +13,7 @@ import { Player } from '../state/user-account'
 
 export const addShipIx = (
     player: Player,
+    game: Game,
     starbase: Starbase,
     starbasePlayer: StarbasePlayer,
     sagePlayerProfile: PublicKey,
@@ -30,8 +36,8 @@ export const addShipIx = (
         shipEscrowTokenAccount,
         starbasePlayer.key,
         starbase.key,
-        player.game.key,
-        player.game.data.gameState,
+        game.key,
+        game.data.gameState,
         {
             shipAmount,
             index: escrowIndex,

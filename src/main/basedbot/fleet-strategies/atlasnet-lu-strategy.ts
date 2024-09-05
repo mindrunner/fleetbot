@@ -1,3 +1,5 @@
+import { Game } from '@staratlas/sage'
+
 import { mineBiomass } from '../fsm/configs/mine-biomass'
 import { mineCarbon } from '../fsm/configs/mine-carbon'
 import { mineConfig } from '../fsm/configs/mine-config'
@@ -18,9 +20,13 @@ import { Coordinates } from '../lib/util/coordinates'
 export const atlasnetLuStrategy = (
     map: WorldMap,
     player: Player,
+    game: Game,
 ): Map<string, Strategy> =>
     new Map([
-        ['Armadillo Fleet', createMiningStrategy(mineBiomass(map), player)],
+        [
+            'Armadillo Fleet',
+            createMiningStrategy(mineBiomass(map), player, game),
+        ],
         [
             'Barnacle Fleet',
             createMiningStrategy(
@@ -35,6 +41,7 @@ export const atlasnetLuStrategy = (
                         .next().value,
                 }),
                 player,
+                game,
             ),
         ],
         [
@@ -51,31 +58,50 @@ export const atlasnetLuStrategy = (
                         .next().value,
                 }),
                 player,
+                game,
             ),
         ],
-        ['Falcon Fleet', createMiningStrategy(mineCarbon(map), player)],
+        ['Falcon Fleet', createMiningStrategy(mineCarbon(map), player, game)],
         [
             'Geoffroys Cat Fleet',
-            createMiningStrategy(mineNitrogen(map), player),
+            createMiningStrategy(mineNitrogen(map), player, game),
         ],
-        ['Gerbils Fleet', createMiningStrategy(mineSilicia(map), player)],
-        ['Grasshopper Fleet', createMiningStrategy(mineLumanite(map), player)],
-        ['Guanaco Fleet', createMiningStrategy(mineCopperOre(map), player)],
-        ['King Cobra Fleet', createMiningStrategy(mineIronOre(map), player)],
+        ['Gerbils Fleet', createMiningStrategy(mineSilicia(map), player, game)],
+        [
+            'Grasshopper Fleet',
+            createMiningStrategy(mineLumanite(map), player, game),
+        ],
+        [
+            'Guanaco Fleet',
+            createMiningStrategy(mineCopperOre(map), player, game),
+        ],
+        [
+            'King Cobra Fleet',
+            createMiningStrategy(mineIronOre(map), player, game),
+        ],
         [
             'Pacific Sardine Fleet',
-            createMiningStrategy(mineHydrogen(map), player),
+            createMiningStrategy(mineHydrogen(map), player, game),
         ],
-        ['Porpoise Fleet', createMiningStrategy(mineRochinol(map), player)],
-        ['Rabbit Fleet', createMiningStrategy(mineHydrogen(map), player)],
+        [
+            'Porpoise Fleet',
+            createMiningStrategy(mineRochinol(map), player, game),
+        ],
+        ['Rabbit Fleet', createMiningStrategy(mineHydrogen(map), player, game)],
         [
             'Smalltooth Sawfish Fleet',
-            createMiningStrategy(mineTitaniumOre(map), player),
+            createMiningStrategy(mineTitaniumOre(map), player, game),
         ],
-        ['Sugar Gliders Fleet', createMiningStrategy(mineIronOre(map), player)],
-        ['Turkey Fleet', createMiningStrategy(mineHydrogen(map), player)],
+        [
+            'Sugar Gliders Fleet',
+            createMiningStrategy(mineIronOre(map), player, game),
+        ],
+        ['Turkey Fleet', createMiningStrategy(mineHydrogen(map), player, game)],
 
-        ['Aardwolf Fleet', createMiningStrategy(mineBiomass(map), player)],
+        [
+            'Aardwolf Fleet',
+            createMiningStrategy(mineBiomass(map), player, game),
+        ],
         [
             'Antelope Fleet',
             createMiningStrategy(
@@ -90,6 +116,7 @@ export const atlasnetLuStrategy = (
                         .next().value,
                 }),
                 player,
+                game,
             ),
         ],
         [
@@ -106,30 +133,52 @@ export const atlasnetLuStrategy = (
                         .next().value,
                 }),
                 player,
+                game,
             ),
         ],
-        ['Chinchillas Fleet', createMiningStrategy(mineCarbon(map), player)],
+        [
+            'Chinchillas Fleet',
+            createMiningStrategy(mineCarbon(map), player, game),
+        ],
         [
             'Fathead Sculpin Fleet',
-            createMiningStrategy(mineNitrogen(map), player),
+            createMiningStrategy(mineNitrogen(map), player, game),
         ],
         [
             'Giant Tortoise Fleet',
-            createMiningStrategy(mineSilicia(map), player),
+            createMiningStrategy(mineSilicia(map), player, game),
         ],
-        ['Kultarr Fleet', createMiningStrategy(mineLumanite(map), player)],
+        [
+            'Kultarr Fleet',
+            createMiningStrategy(mineLumanite(map), player, game),
+        ],
         [
             'Leopard Seal Fleet',
-            createMiningStrategy(mineCopperOre(map), player),
+            createMiningStrategy(mineCopperOre(map), player, game),
         ],
-        ['Pangolin Fleet', createMiningStrategy(mineIronOre(map), player)],
-        ['Rhinoceros Fleet', createMiningStrategy(mineHydrogen(map), player)],
-        ['Snow Leopard Fleet', createMiningStrategy(mineRochinol(map), player)],
+        [
+            'Pangolin Fleet',
+            createMiningStrategy(mineIronOre(map), player, game),
+        ],
+        [
+            'Rhinoceros Fleet',
+            createMiningStrategy(mineHydrogen(map), player, game),
+        ],
+        [
+            'Snow Leopard Fleet',
+            createMiningStrategy(mineRochinol(map), player, game),
+        ],
         [
             'Southern White Faced Owl Fleet',
-            createMiningStrategy(mineHydrogen(map), player),
+            createMiningStrategy(mineHydrogen(map), player, game),
         ],
-        ['Turkeys Fleet', createMiningStrategy(mineTitaniumOre(map), player)],
-        ['Zebra Fleet', createMiningStrategy(mineIronOre(map), player)],
-        ['Guinea Fowl Fleet', createMiningStrategy(mineHydrogen(map), player)],
+        [
+            'Turkeys Fleet',
+            createMiningStrategy(mineTitaniumOre(map), player, game),
+        ],
+        ['Zebra Fleet', createMiningStrategy(mineIronOre(map), player, game)],
+        [
+            'Guinea Fowl Fleet',
+            createMiningStrategy(mineHydrogen(map), player, game),
+        ],
     ])

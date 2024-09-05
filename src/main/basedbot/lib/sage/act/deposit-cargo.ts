@@ -9,7 +9,7 @@ import {
     InstructionReturn,
     ixReturnsToIxs,
 } from '@staratlas/data-source'
-import { Starbase } from '@staratlas/sage'
+import { Game, Starbase } from '@staratlas/sage'
 import BN from 'bn.js'
 
 import { connection } from '../../../../../service/sol'
@@ -25,6 +25,7 @@ import { Player } from '../state/user-account'
 
 export const depositCargo = async (
     player: Player,
+    game: Game,
     starbase: Starbase,
     mint: PublicKey,
     amount: BN,
@@ -54,7 +55,7 @@ export const depositCargo = async (
             .instructions,
     )
 
-    const cargoType = getCargoType(player.cargoTypes, player.game, mint)
+    const cargoType = getCargoType(player.cargoTypes, game, mint)
 
     const allTokenAccounts = await getParsedTokenAccountsByOwner(
         connection,
@@ -81,6 +82,7 @@ export const depositCargo = async (
     instructions.push(
         depositCargoIx(
             player,
+            game,
             starbase,
             starbasePlayer,
             cargoPodTo.key,

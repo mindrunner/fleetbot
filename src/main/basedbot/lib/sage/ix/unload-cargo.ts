@@ -1,6 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
 import { InstructionReturn } from '@staratlas/data-source'
-import { Fleet, Starbase, StarbasePlayer } from '@staratlas/sage'
+import { Fleet, Game, Starbase, StarbasePlayer } from '@staratlas/sage'
 import BN from 'bn.js'
 
 import { StarAtlasPrograms } from '../../programs'
@@ -10,6 +10,7 @@ import { FleetInfo } from '../state/user-fleets'
 export const unloadCargoIx = (
     fleetInfo: FleetInfo,
     player: Player,
+    game: Game,
     starbase: Starbase,
     starbasePlayer: StarbasePlayer,
     cargoPodFrom: PublicKey,
@@ -35,12 +36,12 @@ export const unloadCargoIx = (
         cargoPodFrom,
         cargoPodTo,
         cargoType,
-        player.game.data.cargo.statsDefinition,
+        game.data.cargo.statsDefinition,
         tokenFrom,
         tokenTo,
         tokenMint,
-        player.game.key,
-        player.game.data.gameState,
+        game.key,
+        game.data.gameState,
         {
             amount,
             keyIndex: 0,

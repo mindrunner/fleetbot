@@ -1,3 +1,5 @@
+import { Game } from '@staratlas/sage'
+
 import { now } from '../../../../../dayjs'
 import { logger } from '../../../../../logger'
 import { endMove } from '../act/end-move'
@@ -9,13 +11,14 @@ import { FleetInfo } from './user-fleets'
 export const settleFleet = async (
     fleetInfo: FleetInfo,
     player: Player,
+    game: Game,
 ): Promise<void> => {
     switch (fleetInfo.fleetState.type) {
         case 'MoveWarp': {
             const { warpFinish } = fleetInfo.fleetState.data
 
             if (warpFinish.isBefore(now())) {
-                await endMove(fleetInfo, player)
+                await endMove(fleetInfo, player, game)
             }
             break
         }
@@ -23,7 +26,7 @@ export const settleFleet = async (
             const { arrivalTime } = fleetInfo.fleetState.data
 
             if (arrivalTime.isBefore(now())) {
-                await endMove(fleetInfo, player)
+                await endMove(fleetInfo, player, game)
             }
             break
         }
@@ -31,7 +34,7 @@ export const settleFleet = async (
             const { ETA } = fleetInfo.fleetState.data
 
             if (ETA.isBefore(now())) {
-                await exitRespawn(fleetInfo, player.homeStarbase, player)
+                await exitRespawn(fleetInfo, player.homeStarbase, player, game)
             }
             break
         }

@@ -1,3 +1,5 @@
+import { Game } from '@staratlas/sage'
+
 import { mine } from '../fsm/configs/mine'
 import { createMiningStrategy } from '../fsm/mine'
 import { Strategy } from '../fsm/strategy'
@@ -10,6 +12,7 @@ export const atlasnetFcStrategy =
     (
         map: WorldMap,
         player: Player,
+        game: Game,
         namePrefix: string,
     ): Map<string, Strategy> => {
         const ans: Map<string, Strategy> = new Map<string, Strategy>()
@@ -27,6 +30,7 @@ export const atlasnetFcStrategy =
                         sectors[i % sectors.length].coordinates,
                     ),
                     player,
+                    game,
                 ),
             )
         }

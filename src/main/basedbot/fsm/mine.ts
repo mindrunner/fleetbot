@@ -1,3 +1,4 @@
+import { Game } from '@staratlas/sage'
 import dayjs from 'dayjs'
 
 import { now } from '../../../dayjs'
@@ -21,10 +22,11 @@ import { Strategy } from './strategy'
 const transition = async (
     fleetInfo: FleetInfo,
     player: Player,
+    game: Game,
     config: MineConfig,
 ): Promise<void> => {
     const cargoLoad = player.cargoTypes
-        .filter((ct) => !ct.data.mint.equals(player.game.data.mints.food))
+        .filter((ct) => !ct.data.mint.equals(game.data.mints.food))
         .reduce((acc, cargoType) => {
             const load =
                 fleetInfo.cargoLevels.cargo.get(
@@ -74,25 +76,25 @@ const transition = async (
                         `${fleetName} has ${cargoLoad} ${resourceName}, docking to unload`,
                     )
 
-                    return dock(fleetInfo, location, player)
+                    return dock(fleetInfo, location, player, game)
                 }
                 if (!hasEnoughFood || !hasEnoughFuel || !hasEnoughAmmo) {
                     logger.info(
                         `${fleetName} doesn't have enough resources, docking to resupply`,
                     )
 
-                    return dock(fleetInfo, location, player)
+                    return dock(fleetInfo, location, player, game)
                 }
                 if (isSameBase) {
                     logger.info(`${fleetName} is at home/target base, mining`)
 
-                    return mine(fleetInfo, player, resource)
+                    return mine(fleetInfo, player, game, resource)
                 }
                 logger.info(
                     `${fleetName} is at home base, moving to target base`,
                 )
 
-                return move(fleetInfo, targetBase, player, warpMode)
+                return move(fleetInfo, targetBase, player, game, warpMode)
             }
 
             if (isAtTargetBase && !isSameBase) {
@@ -102,18 +104,18 @@ const transition = async (
                         `${fleetName} has ${cargoLoad} ${resourceName}, returning home`,
                     )
 
-                    return move(fleetInfo, homeBase, player, warpMode)
+                    return move(fleetInfo, homeBase, player, game, warpMode)
                 }
                 if (hasEnoughFood) {
                     logger.info(`${fleetName} has enough food, mining`)
 
-                    return mine(fleetInfo, player, resource)
+                    return mine(fleetInfo, player, game, resource)
                 }
                 logger.info(
                     `${fleetName} doesn't have enough food, returning home`,
                 )
 
-                return move(fleetInfo, homeBase, player, warpMode)
+                return move(fleetInfo, homeBase, player, game, warpMode)
             }
 
             logger.info(`${fleetName} is at ${location}`)
@@ -122,6 +124,7 @@ const transition = async (
                 fleetInfo,
                 hasCargo || !hasEnoughFood ? homeBase : targetBase,
                 player,
+                game,
                 warpMode,
             )
         }
@@ -139,6 +142,7 @@ const transition = async (
                     fleetInfo,
                     fleetInfo.location,
                     player,
+                    game,
                     fleetInfo.fleet.data.cargoHold,
                 )
             }
@@ -149,7 +153,8 @@ const transition = async (
                 return loadCargo(
                     fleetInfo,
                     player,
-                    player.game.data.mints.fuel,
+                    game,
+                    game.data.mints.fuel,
                     fleetInfo.fleet.data.fuelTank,
                     fleetInfo.cargoStats.fuelCapacity - cargoLevelFuel,
                 )
@@ -161,7 +166,8 @@ const transition = async (
                 return loadCargo(
                     fleetInfo,
                     player,
-                    player.game.data.mints.ammo,
+                    game,
+                    game.data.mints.ammo,
                     fleetInfo.fleet.data.ammoBank,
                     fleetInfo.cargoStats.ammoCapacity - cargoLevelAmmo,
                 )
@@ -175,13 +181,14 @@ const transition = async (
                 return loadCargo(
                     fleetInfo,
                     player,
-                    player.game.data.mints.food,
+                    game,
+                    game.data.mints.food,
                     fleetInfo.fleet.data.cargoHold,
                     toLoad,
                 )
             }
 
-            return undock(fleetInfo.fleet, fleetInfo.location, player)
+            return undock(fleetInfo.fleet, fleetInfo.location, player, game)
         }
         case 'MoveWarp': {
             const { fromSector, toSector, warpFinish } =
@@ -222,7 +229,7 @@ const transition = async (
                     `${fleetInfo.fleetName} has finished mining ${getName(mineItem)} for ${amountMined}`,
                 )
 
-                return endMine(fleetInfo, player, config.resource)
+                return endMine(fleetInfo, player, game, config.resource)
             }
 
             const log = endReason === 'FULL' ? logger.info : logger.warn
@@ -257,12 +264,13 @@ const transition = async (
 export const createMiningStrategy = (
     miningConfig: MineConfig,
     p: Player,
+    game: Game,
 ): Strategy => {
     const config = miningConfig
     const player = p
 
     return {
         send: (fleetInfo: FleetInfo): Promise<void> =>
-            transition(fleetInfo, player, config),
+            transition(fleetInfo, player, game, config),
     }
 }

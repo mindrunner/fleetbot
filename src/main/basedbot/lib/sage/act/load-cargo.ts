@@ -8,6 +8,7 @@ import {
     getParsedTokenAccountsByOwner,
     ixReturnsToIxs,
 } from '@staratlas/data-source'
+import { Game } from '@staratlas/sage'
 import BN from 'bn.js'
 
 import { connection } from '../../../../../service/sol'
@@ -26,6 +27,7 @@ import { FleetInfo } from '../state/user-fleets'
 export const loadCargo = async (
     fleetInfo: FleetInfo,
     player: Player,
+    game: Game,
     mint: PublicKey,
     hold: PublicKey,
     amount: number,
@@ -37,7 +39,7 @@ export const loadCargo = async (
         throw new Error(`No starbase found at ${fleetInfo.location}`)
     }
 
-    const cargoType = getCargoType(player.cargoTypes, player.game, mint)
+    const cargoType = getCargoType(player.cargoTypes, game, mint)
     const fleetCargoTokenResult = createAssociatedTokenAccountIdempotent(
         mint,
         hold,
@@ -82,6 +84,7 @@ export const loadCargo = async (
     const ix = loadCargoIx(
         fleetInfo,
         player,
+        game,
         starbase,
         starbasePlayer,
         cargoPodFrom.key,

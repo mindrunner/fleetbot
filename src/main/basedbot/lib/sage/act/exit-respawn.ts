@@ -1,5 +1,5 @@
 import { ixReturnsToIxs } from '@staratlas/data-source'
-import { Starbase } from '@staratlas/sage'
+import { Game, Starbase } from '@staratlas/sage'
 
 import { logger } from '../../../../../logger'
 import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
@@ -13,6 +13,7 @@ export const exitRespawn = async (
     fleetInfo: FleetInfo,
     starbase: Starbase,
     player: Player,
+    game: Game,
 ): Promise<void> => {
     const { fleet } = fleetInfo
 
@@ -27,6 +28,7 @@ export const exitRespawn = async (
     const ix = exitRespawnIx(
         fleetInfo,
         player,
+        game,
         starbase,
         starbasePlayer,
         programs,

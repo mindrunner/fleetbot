@@ -2,6 +2,7 @@ import {
     createAssociatedTokenAccountIdempotent,
     ixReturnsToIxs,
 } from '@staratlas/data-source'
+import { Game } from '@staratlas/sage'
 
 import dayjs from '../../../../../dayjs'
 import { logger } from '../../../../../logger'
@@ -21,6 +22,7 @@ export const move = async (
     fleetInfo: FleetInfo,
     coordinates: Coordinates,
     player: Player,
+    game: Game,
     warpMode: WarpMode = 'auto',
 ): Promise<void> => {
     const { fleet } = fleetInfo
@@ -36,7 +38,7 @@ export const move = async (
             `${fleetInfo.fleetName} is in the loading bay at ${fleet.state.StarbaseLoadingBay.starbase}, undocking...`,
         )
 
-        await undock(fleet, fleetInfo.location, player)
+        await undock(fleet, fleetInfo.location, player, game)
     }
 
     if (fleet.state.MineAsteroid) {
@@ -64,7 +66,7 @@ export const move = async (
     }
 
     const fuelTokenAccount = createAssociatedTokenAccountIdempotent(
-        player.game.data.mints.fuel,
+        game.data.mints.fuel,
         fleet.data.fuelTank,
         true,
     )
@@ -74,6 +76,7 @@ export const move = async (
         coordinates,
         fuelTokenAccount.address,
         player,
+        game,
         programs,
     )
 
