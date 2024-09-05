@@ -10,18 +10,20 @@ export const addShipIx = (
     player: Player,
     starbase: Starbase,
     starbasePlayer: StarbasePlayer,
+    sagePlayerProfile: PublicKey,
     programs: StarAtlasPrograms,
     originTokenAccount: PublicKey,
     ship: PublicKey,
     shipEscrowTokenAccount: PublicKey,
     shipAmount: BN,
+    escrowIndex: number | null,
     // eslint-disable-next-line max-params
 ): InstructionReturn =>
     SagePlayerProfile.addShipEscrow(
         programs.sage,
         player.profile.key,
         player.profileFaction.key,
-        player.profile.key,
+        sagePlayerProfile,
         player.signer,
         originTokenAccount,
         ship,
@@ -32,6 +34,6 @@ export const addShipIx = (
         player.game.data.gameState,
         {
             shipAmount,
-            index: 0,
+            index: escrowIndex,
         },
     )

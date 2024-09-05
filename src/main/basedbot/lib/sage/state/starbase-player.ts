@@ -1,7 +1,13 @@
-import { Keypair } from '@solana/web3.js'
+import { Keypair, PublicKey } from '@solana/web3.js'
 import { CargoPod } from '@staratlas/cargo'
 import { ixReturnsToIxs, readAllFromRPC } from '@staratlas/data-source'
-import { SagePlayerProfile, Starbase, StarbasePlayer } from '@staratlas/sage'
+import {
+    Game,
+    SagePlayerProfile,
+    Ship,
+    Starbase,
+    StarbasePlayer,
+} from '@staratlas/sage'
 
 import { logger } from '../../../../../logger'
 import { connection } from '../../../../../service/sol'
@@ -38,6 +44,43 @@ export const getCargoPodsForStarbasePlayer = async (
     }
 
     return cargoPod.data
+}
+
+export const getShipByMint = async (
+    mint: PublicKey,
+    game: Game,
+    programs: StarAtlasPrograms,
+): Promise<Ship> => {
+    const [ship] = await readAllFromRPC(
+        connection,
+        programs.sage,
+        Ship,
+        'processed',
+        [
+            {
+                memcmp: {
+                    offset: 8 + 1,
+                    bytes: game.key.toString(),
+                },
+            },
+            {
+                memcmp: {
+                    offset: 8 + 1 + 32,
+                    bytes: mint.toString(),
+                },
+            },
+        ],
+    )
+
+    if (!ship) {
+        throw new Error('Error reading ship')
+    }
+
+    if (ship.type === 'error') {
+        throw new Error('Error reading ship account')
+    }
+
+    return ship.data
 }
 
 export const getStarbasePlayer = async (
