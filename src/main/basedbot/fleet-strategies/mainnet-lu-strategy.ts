@@ -1,19 +1,26 @@
 import { Game } from '@staratlas/sage'
 
-import { mineRochinol } from '../fsm/configs/mine-rochinol'
+import { mineRochinol } from '../fsm/configs/mine/mine-rochinol'
+import { createInfoStrategy } from '../fsm/info'
 import { createMiningStrategy } from '../fsm/mine'
-import { Strategy } from '../fsm/strategy'
 import { Player } from '../lib/sage/state/user-account'
 import { WorldMap } from '../lib/sage/state/world-map'
 
+import { nameMapMatcher } from './name-map-matcher'
+import { StrategyConfig } from './strategy-config'
+
 export const mainnetLuStrategy = (
-    map: WorldMap,
+    worldMap: WorldMap,
     player: Player,
     game: Game,
-): Map<string, Strategy> =>
-    new Map([
-        [
-            'Vaquita Fleet',
-            createMiningStrategy(mineRochinol(map), player, game),
-        ],
-    ])
+): StrategyConfig => {
+    return {
+        match: nameMapMatcher(createInfoStrategy()),
+        map: new Map([
+            [
+                'Vaquita Fleet',
+                createMiningStrategy(mineRochinol(worldMap), player, game),
+            ],
+        ]),
+    }
+}

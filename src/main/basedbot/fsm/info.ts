@@ -81,11 +81,6 @@ const transition = async (fleetInfo: FleetInfo): Promise<void> => {
     return Promise.resolve()
 }
 
-export type InfoStrategy = {
-    getConfig: () => false
-    send: (fleetInfo: FleetInfo) => Promise<void>
-}
-
 export const createInfoStrategy = (): Strategy => ({
-    send: (fleetInfo: FleetInfo): Promise<void> => transition(fleetInfo),
+    apply: (fleetInfo: FleetInfo): Promise<void> => transition(fleetInfo),
 })

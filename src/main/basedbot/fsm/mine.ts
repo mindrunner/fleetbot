@@ -15,7 +15,7 @@ import { Player } from '../lib/sage/state/user-account'
 import { FleetInfo } from '../lib/sage/state/user-fleets'
 import { getName } from '../lib/sage/util'
 
-import { MineConfig } from './configs/mine-config'
+import { MineConfig } from './configs/mine/mine-config'
 import { Strategy } from './strategy'
 
 // eslint-disable-next-line complexity
@@ -263,14 +263,13 @@ const transition = async (
 
 export const createMiningStrategy = (
     miningConfig: MineConfig,
-    p: Player,
+    player: Player,
     game: Game,
 ): Strategy => {
     const config = miningConfig
-    const player = p
 
     return {
-        send: (fleetInfo: FleetInfo): Promise<void> =>
+        apply: (fleetInfo: FleetInfo): Promise<void> =>
             transition(fleetInfo, player, game, config),
     }
 }

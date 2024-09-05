@@ -1,11 +1,14 @@
 import { Game } from '@staratlas/sage'
 
-import { mine } from '../fsm/configs/mine'
+import { mine } from '../fsm/configs/mine/mine'
+import { createInfoStrategy } from '../fsm/info'
 import { createMiningStrategy } from '../fsm/mine'
-import { Strategy } from '../fsm/strategy'
 import { Player } from '../lib/sage/state/user-account'
 import { WorldMap } from '../lib/sage/state/world-map'
 import { galaxySectorsData } from '../lib/util/galaxy-sectors-data'
+
+import { nameMapMatcher } from './name-map-matcher'
+import { makeStrategyMap, StrategyConfig, StrategyMap } from './strategy-config'
 
 export const atlasnetFcStrategy =
     (count: number) =>
@@ -14,14 +17,14 @@ export const atlasnetFcStrategy =
         player: Player,
         game: Game,
         namePrefix: string,
-    ): Map<string, Strategy> => {
-        const ans: Map<string, Strategy> = new Map<string, Strategy>()
+    ): StrategyConfig => {
+        const strategyMap: StrategyMap = makeStrategyMap()
         const sectors = galaxySectorsData()
             .filter((sector) => sector.closestFaction === player.faction)
             .sort((a, b) => a.name.localeCompare(b.name))
 
         for (let i = 0; i < count; i++) {
-            ans.set(
+            strategyMap.set(
                 `${namePrefix}-${i}`,
                 createMiningStrategy(
                     mine(
@@ -35,5 +38,8 @@ export const atlasnetFcStrategy =
             )
         }
 
-        return ans
+        return {
+            match: nameMapMatcher(createInfoStrategy()),
+            map: strategyMap,
+        }
     }
