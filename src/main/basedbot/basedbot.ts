@@ -14,8 +14,8 @@ import { connection } from '../../service/sol'
 import { keyPair } from '../../service/wallet'
 
 import { getFleetStrategy } from './fleet-strategies/get-fleet-strategy'
+import { StrategyConfig } from './fleet-strategies/strategy-config'
 import { createInfoStrategy } from './fsm/info'
-import { Strategy } from './fsm/strategy'
 import { programs } from './lib/programs'
 import { createFleet } from './lib/sage/act/create-fleet'
 import { depositCargo } from './lib/sage/act/deposit-cargo'
@@ -44,32 +44,27 @@ export const stop = async (): Promise<void> => {
     logger.info('Stopping basedbot')
 }
 
-type FleetStrategies = Map<string, Strategy>
-
 type BotConfig = {
     player: Player
     map: WorldMap
-    fleetStrategies: FleetStrategies
+    fleetStrategies: StrategyConfig
 }
 
 const applyStrategy = (
     fleetInfo: FleetInfo,
-    fleetStrategies: FleetStrategies,
+    config: StrategyConfig,
 ): Promise<void> => {
-    const strategy = fleetStrategies.get(fleetInfo.fleetName)
+    const strategy = config.match(fleetInfo.fleetName, config.map)
 
     if (!strategy) {
-        logger.info(
-            `No strategy for fleet: ${fleetInfo.fleetName}. Lazily loading Info Strategy...`,
+        logger.warn(
+            `No strategy for fleet: ${fleetInfo.fleetName}. Using Info Strategy...`,
         )
-        const infoStrategy = createInfoStrategy()
 
-        fleetStrategies.set(fleetInfo.fleetName, infoStrategy)
-
-        return infoStrategy.send(fleetInfo)
+        return createInfoStrategy().apply(fleetInfo)
     }
 
-    return strategy.send(fleetInfo)
+    return strategy.apply(fleetInfo)
 }
 
 const importR4 = async (player: Player, game: Game): Promise<void> => {
@@ -124,7 +119,7 @@ const ensureFleets = async (
     count: number,
 ): Promise<void> => {
     const existingFleets = fleets.map(getName)
-    const wantedFleets = Array.from(botConfig.fleetStrategies.keys())
+    const wantedFleets = Array.from(botConfig.fleetStrategies.map.keys())
 
     const neededFleets = wantedFleets.filter((f) => !existingFleets.includes(f))
 
