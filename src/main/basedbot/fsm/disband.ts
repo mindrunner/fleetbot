@@ -64,7 +64,8 @@ const transition = async (
                 logger.info(
                     `${fleetInfo.fleetName} is at home base, disbanding...`,
                 )
-                await disbandFleet(
+
+                return disbandFleet(
                     player,
                     game,
                     player.homeStarbase,
