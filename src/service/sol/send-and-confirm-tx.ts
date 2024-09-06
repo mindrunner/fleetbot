@@ -85,6 +85,7 @@ export const sendAndConfirmTx = async (
 
             return txId
         } catch (e) {
+            logger.warn(`Confirmation failed: ${(e as Error).message}}`)
             await sleep(500)
         }
     }
