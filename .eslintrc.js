@@ -112,7 +112,7 @@ module.exports = {
         ],
         'max-lines': 'off',
         'max-lines-per-function': 'off',
-        'max-params': ['error', { max: 10 }],
+        'max-params': ['error', { max: 15 }],
         'max-statements': 'off',
         'multiline-comment-style': 'off',
         'multiline-ternary': ['error', 'always-multiline'],
