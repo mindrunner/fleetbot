@@ -12,7 +12,7 @@ export const disbandedFleetToEscrowIx = (
     starbase: Starbase,
     starbasePlayer: StarbasePlayer,
     programs: StarAtlasPrograms,
-    shipEscrowIndex: number,
+    shipEscrowIndex: number | null,
     disbandedFleet: PublicKey,
     fleetShips: PublicKey,
     shipKey: PublicKey,
