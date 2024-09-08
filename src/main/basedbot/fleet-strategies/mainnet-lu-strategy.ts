@@ -19,7 +19,14 @@ export const mainnetLuStrategy = (
         map: new Map([
             [
                 'Vaquita Fleet',
-                createMiningStrategy(mineRochinol(worldMap), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineRochinol(worldMap),
+                        player,
+                        game,
+                    ),
+                },
             ],
         ]),
     }

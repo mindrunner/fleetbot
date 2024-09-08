@@ -42,8 +42,8 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.4.5)(utf-8-validate@5.0.10)
       '@staratlas/data-source':
-        specifier: ^0.7.6
-        version: 0.7.7(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.10)
+        specifier: ^0.8.0
+        version: 0.8.0(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.4.5)(utf-8-validate@5.0.10)
       '@staratlas/factory':
         specifier: ^0.7.0
         version: 0.7.0(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.4.5)(utf-8-validate@5.0.10)
@@ -71,6 +71,9 @@ importers:
       bs58:
         specifier: ^5.0.0
         version: 5.0.0
+      chance:
+        specifier: ^1.1.12
+        version: 1.1.12
       cron:
         specifier: ^3.1.7
         version: 3.1.7
@@ -114,6 +117,9 @@ importers:
       '@types/bs58':
         specifier: ^4.0.4
         version: 4.0.4
+      '@types/chance':
+        specifier: ^1.1.6
+        version: 1.1.6
       '@types/pg':
         specifier: ^8.11.6
         version: 8.11.6
@@ -1102,6 +1108,9 @@ packages:
   '@types/bs58@4.0.4':
     resolution: {integrity: sha512-0IEpMFXXQi2zXaXl9GJ3sRwQo0uEkD+yFOv+FnAU5lkPtcu6h61xb7jc2CFPEZ5BUOaiP13ThuGc9HD4R8lR5g==}
 
+  '@types/chance@1.1.6':
+    resolution: {integrity: sha512-V+pm3stv1Mvz8fSKJJod6CglNGVqEQ6OyuqitoDkWywEODM/eJd1eSuIp9xt6DrX8BWZ2eDSIzbw1tPCUTvGbQ==}
+
   '@types/connect@3.4.36':
     resolution: {integrity: sha512-P63Zd/JUGq+PdrM1lv0Wv5SBYeA2+CORvbrXbngriYY0jzLUWfQMQQxOhjONEz/wlHOAxOdY7CY65rgQdTjq2w==}
 
@@ -1612,6 +1621,9 @@ packages:
   chalk@5.3.0:
     resolution: {integrity: sha512-dLitG79d+GV1Nb/VYcCDFivJeK1hiukt9QjRNVOsUtTy1rR1YJsmpGGTZ3qJos+uw7WmWF4wUwBd9jxjocFC2w==}
     engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
+
+  chance@1.1.12:
+    resolution: {integrity: sha512-vVBIGQVnwtUG+SYe0ge+3MvF78cvSpuCOEUJr7sVEk2vSBuMW6OXNJjSzdtzrlxNUEaoqH2GBd5Y/+18BEB01Q==}
 
   char-regex@1.0.2:
     resolution: {integrity: sha512-kWWXztvZ5SBQV+eRgKFeh8q5sLuZY2+8WUIzlxWVTg+oGwY14qylx1KbKzHd8P6ZYkAg0xyIDU9JMHhyJMZ1jw==}
@@ -5571,6 +5583,8 @@ snapshots:
       '@types/node': 20.12.8
       base-x: 3.0.9
 
+  '@types/chance@1.1.6': {}
+
   '@types/connect@3.4.36':
     dependencies:
       '@types/node': 20.12.11
@@ -6170,6 +6184,8 @@ snapshots:
       supports-color: 7.2.0
 
   chalk@5.3.0: {}
+
+  chance@1.1.12: {}
 
   char-regex@1.0.2: {}
 

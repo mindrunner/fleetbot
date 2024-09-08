@@ -3,7 +3,7 @@ import {
     TOKEN_PROGRAM_ID,
 } from '@solana/spl-token'
 import { getParsedTokenAccountsByOwner } from '@staratlas/data-source'
-import { Fleet, Game, Ship } from '@staratlas/sage'
+import { Fleet, Game } from '@staratlas/sage'
 import BN from 'bn.js'
 
 import { Sentry } from '../../sentry'
@@ -16,14 +16,11 @@ import { keyPair } from '../../service/wallet'
 import { getFleetStrategy } from './fleet-strategies/get-fleet-strategy'
 import { StrategyConfig } from './fleet-strategies/strategy-config'
 import { createInfoStrategy } from './fsm/info'
-import { programs } from './lib/programs'
 import { createFleet } from './lib/sage/act/create-fleet'
 import { depositCargo } from './lib/sage/act/deposit-cargo'
 import { ensureShips } from './lib/sage/act/deposit-ship'
-import { Fimbul, ships } from './lib/sage/ships'
 import { sageGame } from './lib/sage/state/game'
 import { settleFleet } from './lib/sage/state/settle-fleet'
-import { getShipByMint } from './lib/sage/state/starbase-player'
 import { getPlayerContext, Player } from './lib/sage/state/user-account'
 import {
     FleetInfo,
@@ -54,7 +51,7 @@ const applyStrategy = (
     fleetInfo: FleetInfo,
     config: StrategyConfig,
 ): Promise<void> => {
-    const strategy = config.match(fleetInfo.fleetName, config.map)
+    const { strategy } = config.match(fleetInfo.fleetName, config.map)
 
     if (!strategy) {
         logger.warn(
@@ -114,12 +111,10 @@ const ensureFleets = async (
     player: Player,
     game: Game,
     fleets: Array<Fleet>,
-    botConfig: BotConfig,
-    ship: Ship,
-    count: number,
+    fleetStrategies: StrategyConfig,
 ): Promise<void> => {
     const existingFleets = fleets.map(getName)
-    const wantedFleets = Array.from(botConfig.fleetStrategies.map.keys())
+    const wantedFleets = Array.from(fleetStrategies.map.keys())
 
     const neededFleets = wantedFleets.filter((f) => !existingFleets.includes(f))
 
@@ -128,23 +123,26 @@ const ensureFleets = async (
     }
 
     await Promise.all(
-        neededFleets.map((fleetName) => {
-            return ensureShips(
+        neededFleets.map(async (fleetName) => {
+            const fleetStrategy = fleetStrategies.map.get(fleetName)!
+
+            if (!fleetStrategy.fleet) {
+                logger.info('Cannot ensure fleet without config.')
+
+                return Promise.resolve()
+            }
+            await ensureShips(
                 player,
                 game,
                 player.homeStarbase,
-                ship,
-                new BN(count),
-            ).then(() =>
-                createFleet(
-                    botConfig.player,
-                    game,
-                    botConfig.player.homeStarbase,
-                    ship,
-                    fleetName,
-                    count,
-                ),
-            )
+                fleetStrategy.fleet,
+            ).then(() => createFleet(
+                player,
+                game,
+                player.homeStarbase,
+                fleetStrategy.fleet!,
+                fleetName,
+            ))
         }),
     )
 }
@@ -162,12 +160,9 @@ const basedbot = async (botConfig: BotConfig) => {
         fleets.map((f) => getFleetInfo(f, player, map)),
     )
 
-    const shipMint = ships[Fimbul.Lowbie].mint
-    const ship = await getShipByMint(shipMint, game, programs)
-
     await Promise.all([
         importR4(player, game),
-        ensureFleets(player, game, fleets, botConfig, ship, 5),
+        ensureFleets(player, game, fleets, botConfig.fleetStrategies),
     ])
 
     await Promise.all(

@@ -16,9 +16,11 @@ import BN from 'bn.js'
 import { connection } from '../../../../../service/sol'
 import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
 import { programs } from '../../programs'
-import { addShipIx } from '../ix/add-ship'
-import { getStarbasePlayer } from '../state/starbase-player'
+import { addShipEscrowIx } from '../ix/add-ship-escrow'
+import { getShipByMint, getStarbasePlayer } from '../state/starbase-player'
 import { Player } from '../state/user-account'
+
+import { FleetShips } from './create-fleet'
 
 export const depositShip = async (
     player: Player,
@@ -66,7 +68,7 @@ export const depositShip = async (
     const index = starbasePlayer.wrappedShipEscrows.findIndex(pred)
 
     instructions.push(
-        addShipIx(
+        addShipEscrowIx(
             player,
             game,
             starbase,
@@ -89,20 +91,23 @@ export const ensureShips = async (
     player: Player,
     game: Game,
     starbase: Starbase,
-    ship: Ship,
-    desiredAmount: BN,
-): Promise<BN> => {
+    fleetShips: FleetShips,
+): Promise<void> => {
     const starbasePlayer = await getStarbasePlayer(player, starbase, programs)
 
-    const pred = (v: WrappedShipEscrow) => v.ship.equals(ship.key)
-    const shipEscrow = starbasePlayer.wrappedShipEscrows.find(pred)
-    const needed = shipEscrow
-        ? desiredAmount.sub(shipEscrow.amount)
-        : desiredAmount
+    for (const fleetShip of fleetShips) {
+        const desiredAmount = new BN(fleetShip.count)
 
-    if (needed.gt(new BN(0))) {
-        await depositShip(player, game, starbase, ship, needed)
+        const ship = await getShipByMint(fleetShip.shipMint, game, programs)
+        const pred = (v: WrappedShipEscrow) => v.ship.equals(ship.key)
+        const shipEscrow = starbasePlayer.wrappedShipEscrows.find(pred)
+        const needed = shipEscrow
+            ? desiredAmount.sub(shipEscrow.amount)
+            : desiredAmount
+
+
+        if (needed.gt(new BN(0))) {
+            await depositShip(player, game, starbase, ship, needed)
+        }
     }
-
-    return needed
 }

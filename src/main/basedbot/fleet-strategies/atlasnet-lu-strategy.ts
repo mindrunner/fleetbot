@@ -30,176 +30,370 @@ export const atlasnetLuStrategy = (
         map: new Map([
             [
                 'Armadillo Fleet',
-                createMiningStrategy(mineBiomass(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineBiomass(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Barnacle Fleet',
-                createMiningStrategy(
-                    mineConfig({
-                        homeBase: Coordinates.fromNumber(-40, 30),
-                        targetBase: Coordinates.fromNumber(-19, 40),
-                        resource: mineableByCoordinates(
-                            map,
-                            Coordinates.fromNumber(-19, 40),
-                        )
-                            .values()
-                            .next().value,
-                    }),
-                    player,
-                    game,
-                ),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineConfig({
+                            homeBase: Coordinates.fromNumber(-40, 30),
+                            targetBase: Coordinates.fromNumber(-19, 40),
+                            resource: mineableByCoordinates(
+                                map,
+                                Coordinates.fromNumber(-19, 40),
+                            )
+                                .values()
+                                .next().value,
+                        }),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Cobra Fleet',
-                createMiningStrategy(
-                    mineConfig({
-                        homeBase: Coordinates.fromNumber(-40, 30),
-                        targetBase: Coordinates.fromNumber(-18, 23),
-                        resource: mineableByCoordinates(
-                            map,
-                            Coordinates.fromNumber(-18, 23),
-                        )
-                            .values()
-                            .next().value,
-                    }),
-                    player,
-                    game,
-                ),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineConfig({
+                            homeBase: Coordinates.fromNumber(-40, 30),
+                            targetBase: Coordinates.fromNumber(-18, 23),
+                            resource: mineableByCoordinates(
+                                map,
+                                Coordinates.fromNumber(-18, 23),
+                            )
+                                .values()
+                                .next().value,
+                        }),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Falcon Fleet',
-                createMiningStrategy(mineCarbon(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineCarbon(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Geoffroys Cat Fleet',
-                createMiningStrategy(mineNitrogen(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineNitrogen(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Gerbils Fleet',
-                createMiningStrategy(mineSilicia(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineSilicia(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Grasshopper Fleet',
-                createMiningStrategy(mineLumanite(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineLumanite(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Guanaco Fleet',
-                createMiningStrategy(mineCopperOre(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineCopperOre(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'King Cobra Fleet',
-                createMiningStrategy(mineIronOre(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineIronOre(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Pacific Sardine Fleet',
-                createMiningStrategy(mineHydrogen(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineHydrogen(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Porpoise Fleet',
-                createMiningStrategy(mineRochinol(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineRochinol(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Rabbit Fleet',
-                createMiningStrategy(mineHydrogen(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineHydrogen(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Smalltooth Sawfish Fleet',
-                createMiningStrategy(mineTitaniumOre(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineTitaniumOre(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Sugar Gliders Fleet',
-                createMiningStrategy(mineIronOre(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineIronOre(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Turkey Fleet',
-                createMiningStrategy(mineHydrogen(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineHydrogen(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
 
             [
                 'Aardwolf Fleet',
-                createMiningStrategy(mineBiomass(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineBiomass(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Antelope Fleet',
-                createMiningStrategy(
-                    mineConfig({
-                        homeBase: Coordinates.fromNumber(-40, 30),
-                        targetBase: Coordinates.fromNumber(-19, 40),
-                        resource: mineableByCoordinates(
-                            map,
-                            Coordinates.fromNumber(-19, 40),
-                        )
-                            .values()
-                            .next().value,
-                    }),
-                    player,
-                    game,
-                ),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineConfig({
+                            homeBase: Coordinates.fromNumber(-40, 30),
+                            targetBase: Coordinates.fromNumber(-19, 40),
+                            resource: mineableByCoordinates(
+                                map,
+                                Coordinates.fromNumber(-19, 40),
+                            )
+                                .values()
+                                .next().value,
+                        }),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Boa Fleet',
-                createMiningStrategy(
-                    mineConfig({
-                        homeBase: Coordinates.fromNumber(-40, 30),
-                        targetBase: Coordinates.fromNumber(-18, 23),
-                        resource: mineableByCoordinates(
-                            map,
-                            Coordinates.fromNumber(-18, 23),
-                        )
-                            .values()
-                            .next().value,
-                    }),
-                    player,
-                    game,
-                ),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineConfig({
+                            homeBase: Coordinates.fromNumber(-40, 30),
+                            targetBase: Coordinates.fromNumber(-18, 23),
+                            resource: mineableByCoordinates(
+                                map,
+                                Coordinates.fromNumber(-18, 23),
+                            )
+                                .values()
+                                .next().value,
+                        }),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Chinchillas Fleet',
-                createMiningStrategy(mineCarbon(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineCarbon(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Fathead Sculpin Fleet',
-                createMiningStrategy(mineNitrogen(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineNitrogen(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Giant Tortoise Fleet',
-                createMiningStrategy(mineSilicia(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineSilicia(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Kultarr Fleet',
-                createMiningStrategy(mineLumanite(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineLumanite(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Leopard Seal Fleet',
-                createMiningStrategy(mineCopperOre(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineCopperOre(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Pangolin Fleet',
-                createMiningStrategy(mineIronOre(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineIronOre(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Rhinoceros Fleet',
-                createMiningStrategy(mineHydrogen(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineHydrogen(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Snow Leopard Fleet',
-                createMiningStrategy(mineRochinol(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineRochinol(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Southern White Faced Owl Fleet',
-                createMiningStrategy(mineHydrogen(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineHydrogen(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Turkeys Fleet',
-                createMiningStrategy(mineTitaniumOre(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineTitaniumOre(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Zebra Fleet',
-                createMiningStrategy(mineIronOre(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineIronOre(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
             [
                 'Guinea Fowl Fleet',
-                createMiningStrategy(mineHydrogen(map), player, game),
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineHydrogen(map),
+                        player,
+                        game,
+                    ),
+                },
             ],
         ]),
     }

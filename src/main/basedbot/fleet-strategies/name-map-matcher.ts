@@ -1,9 +1,14 @@
 import { Strategy } from '../fsm/strategy'
 
-import { StrategyMap } from './strategy-config'
+import { FleetStrategy, StrategyMap } from './strategy-config'
 
 export const nameMapMatcher =
     (fallback: Strategy) =>
-    (key: string, strategyMap: StrategyMap): Strategy => {
-        return strategyMap.get(key) || fallback
+    (key: string, strategyMap: StrategyMap): FleetStrategy => {
+        return (
+            strategyMap.get(key) || {
+                strategy: fallback,
+                fleet: null,
+            }
+        )
     }

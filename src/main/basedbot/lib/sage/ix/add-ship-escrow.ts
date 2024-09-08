@@ -11,7 +11,7 @@ import BN from 'bn.js'
 import { StarAtlasPrograms } from '../../programs'
 import { Player } from '../state/user-account'
 
-export const addShipIx = (
+export const addShipEscrowIx = (
     player: Player,
     game: Game,
     starbase: Starbase,
