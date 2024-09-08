@@ -33,7 +33,6 @@ export const stopSubwarp = async (
         true,
     )
 
-
     await ixReturnsToIxs(
         [
             fuelToken.instructions,
@@ -50,5 +49,4 @@ export const stopSubwarp = async (
         player.signer,
     ).then(sendAndConfirmInstructions)
     await endMove(fleetInfo, player, game)
-
 }

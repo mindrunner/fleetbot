@@ -87,6 +87,7 @@ const transition = async (
                 logger.info(
                     `Wrong direction, stopping fleet ${fleetInfo.fleetName}`,
                 )
+
                 return endMove(fleetInfo, player, game)
             }
 
@@ -109,7 +110,8 @@ const transition = async (
                 logger.info(
                     `Wrong direction, stopping fleet ${fleetInfo.fleetName}`,
                 )
-                return  stopSubwarp(fleetInfo, player, game)
+
+                return stopSubwarp(fleetInfo, player, game)
             }
 
             if (arrivalTime.isBefore(now())) {
