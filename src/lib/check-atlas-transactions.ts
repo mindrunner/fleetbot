@@ -18,13 +18,18 @@ import { keyPair, resource } from '../service/wallet'
 
 import { ensureWallet } from './ensure-wallet'
 
-export const checkAtlasTransactions = async (options?: SignaturesForAddressOptions): Promise<void> => {
+export const checkAtlasTransactions = async (
+    options?: SignaturesForAddressOptions,
+): Promise<void> => {
     const atlasTokenAccount = getAssociatedTokenAddressSync(
         resource.atlas,
         keyPair.publicKey,
-        true
+        true,
     )
-    const signatureList = await connection.getSignaturesForAddress(atlasTokenAccount, options)
+    const signatureList = await connection.getSignaturesForAddress(
+        atlasTokenAccount,
+        options,
+    )
 
     const transactionList: ParsedTransactionWithMeta[] = []
 

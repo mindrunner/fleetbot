@@ -20,7 +20,7 @@ import { keyPair } from '../service/wallet'
 import { ensureWallet } from './ensure-wallet'
 import { getPrice } from './get-price'
 
-type ResourceName = 'food' | 'tool' | 'fuel' | 'ammo';
+type ResourceName = 'food' | 'tool' | 'fuel' | 'ammo'
 
 export const checkR4Transactions = async (
     wallet: Wallet,
