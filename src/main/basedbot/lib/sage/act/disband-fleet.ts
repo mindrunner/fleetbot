@@ -9,6 +9,7 @@ import { disbandedFleetToEscrowIx } from '../ix/disbanded-fleet-to-escrow'
 import { getFleetShips } from '../state/get-fleet-ships'
 import { getStarbasePlayer } from '../state/starbase-player'
 import { Player } from '../state/user-account'
+import { getName } from '../util'
 
 export const disbandFleet = async (
     player: Player,
@@ -46,7 +47,7 @@ export const disbandFleet = async (
                 starbase,
                 starbasePlayer,
                 programs,
-                shipEscrowIndex,
+                shipEscrowIndex === -1 ? null : shipEscrowIndex,
                 disbandedFleetKey[0],
                 fleet.data.fleetShips,
                 fleetShipInfo.ship,
@@ -54,7 +55,6 @@ export const disbandFleet = async (
                 fleetShipInfo.amount,
             ),
         )
-        console.log('Pushed disbanded fleet to escrow instruction')
         i += 1
     }
 
@@ -66,6 +66,7 @@ export const disbandFleet = async (
             fleet.data.fleetShips,
         ),
     )
+    console.log(`Added ${ixs.length} ixs for disbanding fleet ${getName(fleet)}`)
 
     await sendAndConfirmInstructions(await ixReturnsToIxs(ixs, player.signer))
 }
