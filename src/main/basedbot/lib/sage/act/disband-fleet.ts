@@ -32,7 +32,6 @@ export const disbandFleet = async (
     ixs.push(instructions)
 
     const [fleetShips] = await getFleetShips(fleet)
-    let i = 0
 
     for (const fleetShipInfo of fleetShips.fleetShips) {
         const pred = (v: WrappedShipEscrow) => v.ship.equals(fleetShipInfo.ship)
@@ -51,11 +50,9 @@ export const disbandFleet = async (
                 disbandedFleetKey[0],
                 fleet.data.fleetShips,
                 fleetShipInfo.ship,
-                i,
                 fleetShipInfo.amount,
             ),
         )
-        i += 1
     }
 
     ixs.push(

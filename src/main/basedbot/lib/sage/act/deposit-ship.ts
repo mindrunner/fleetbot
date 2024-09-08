@@ -105,7 +105,6 @@ export const ensureShips = async (
             ? desiredAmount.sub(shipEscrow.amount)
             : desiredAmount
 
-
         if (needed.gt(new BN(0))) {
             await depositShip(player, game, starbase, ship, needed)
         }

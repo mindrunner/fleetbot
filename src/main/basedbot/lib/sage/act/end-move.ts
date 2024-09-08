@@ -7,7 +7,7 @@ import { Game } from '@staratlas/sage'
 import { logger } from '../../../../../logger'
 import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
 import { programs } from '../../programs'
-import { stopSubWarpIx } from '../ix/stop-subwarp'
+import { movementSubwarpHandlerIx } from '../ix/movement-subwarp-handler'
 import { stopWarpIx } from '../ix/stop-warp'
 import { Player } from '../state/user-account'
 import { FleetInfo } from '../state/user-fleets'
@@ -30,13 +30,9 @@ export const endMove = async (
         true,
     )
 
-    const ix = (fleet.state.MoveSubwarp ? stopSubWarpIx : stopWarpIx)(
-        fleetInfo,
-        player,
-        game,
-        fuelTokenAccount.address,
-        programs,
-    )
+    const ix = (
+        fleet.state.MoveSubwarp ? movementSubwarpHandlerIx : stopWarpIx
+    )(fleetInfo, player, game, fuelTokenAccount.address, programs)
 
     const instructions = await ixReturnsToIxs(
         [fuelTokenAccount.instructions, ix],

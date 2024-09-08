@@ -136,13 +136,15 @@ const ensureFleets = async (
                 game,
                 player.homeStarbase,
                 fleetStrategy.fleet,
-            ).then(() => createFleet(
-                player,
-                game,
-                player.homeStarbase,
-                fleetStrategy.fleet!,
-                fleetName,
-            ))
+            ).then(() =>
+                createFleet(
+                    player,
+                    game,
+                    player.homeStarbase,
+                    fleetStrategy.fleet!,
+                    fleetName,
+                ),
+            )
         }),
     )
 }

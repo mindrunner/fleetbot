@@ -81,7 +81,7 @@ export const createFleet = async (
                 createFleetReturn.fleetKey[0],
                 ship.key,
                 fleetShip.count,
-                getShipEscrowIndex(starbasePlayer, ship.key)
+                getShipEscrowIndex(starbasePlayer, ship.key),
             ),
         )
     }

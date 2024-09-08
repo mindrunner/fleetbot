@@ -9,6 +9,7 @@ import { dock } from '../lib/sage/act/dock'
 import { endMine } from '../lib/sage/act/end-mine'
 import { endMove } from '../lib/sage/act/end-move'
 import { move } from '../lib/sage/act/move'
+import { stopSubwarp } from '../lib/sage/act/stop-subwarp'
 import { undock } from '../lib/sage/act/undock'
 import { starbaseByCoordinates } from '../lib/sage/state/starbase-by-coordinates'
 import { Player } from '../lib/sage/state/user-account'
@@ -86,7 +87,7 @@ const transition = async (
                 logger.info(
                     `Wrong direction, stopping fleet ${fleetInfo.fleetName}`,
                 )
-                await endMove(fleetInfo, player, game)
+                return endMove(fleetInfo, player, game)
             }
 
             if (warpFinish.isBefore(now())) {
@@ -108,7 +109,7 @@ const transition = async (
                 logger.info(
                     `Wrong direction, stopping fleet ${fleetInfo.fleetName}`,
                 )
-                await endMove(fleetInfo, player, game)
+                return  stopSubwarp(fleetInfo, player, game)
             }
 
             if (arrivalTime.isBefore(now())) {

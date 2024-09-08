@@ -16,7 +16,6 @@ export const disbandedFleetToEscrowIx = (
     disbandedFleet: PublicKey,
     fleetShips: PublicKey,
     shipKey: PublicKey,
-    shipIndex: number,
     shipAmount: BN,
 ): InstructionReturn =>
     DisbandedFleet.disbandedFleetToEscrow(
@@ -32,7 +31,7 @@ export const disbandedFleetToEscrowIx = (
         game.key,
         game.data.gameState,
         {
-            fleetShipInfoIndex: shipIndex,
+            fleetShipInfoIndex: 0,
             keyIndex: 0,
             shipAmount: shipAmount.toNumber(),
             shipEscrowIndex,
