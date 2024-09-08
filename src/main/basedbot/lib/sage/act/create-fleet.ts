@@ -21,7 +21,7 @@ export type FleetShip = {
     count: number
 }
 
-const getShipExscrowIndex = (
+const getShipEscrowIndex = (
     starbasePlayer: StarbasePlayer,
     shipKey: PublicKey,
 ) => {
@@ -63,7 +63,7 @@ export const createFleet = async (
         cargoStatsDefinition[0].key,
         head.count,
         name,
-        getShipExscrowIndex(starbasePlayer, headShip.key),
+        getShipEscrowIndex(starbasePlayer, headShip.key),
     )
 
     instructions.push(createFleetReturn.instructions)
@@ -81,7 +81,7 @@ export const createFleet = async (
                 createFleetReturn.fleetKey[0],
                 ship.key,
                 fleetShip.count,
-                getShipExscrowIndex(starbasePlayer, ship.key),
+                getShipEscrowIndex(starbasePlayer, ship.key)
             ),
         )
     }

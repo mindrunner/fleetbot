@@ -31,6 +31,6 @@ export const addShipToFleetIx = (
             shipAmount,
             shipEscrowIndex,
             keyIndex: 0,
-            fleetShipInfoIndex: null,
+            fleetShipInfoIndex: 0,
         },
     )
