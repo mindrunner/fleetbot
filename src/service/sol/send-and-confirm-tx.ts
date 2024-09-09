@@ -84,7 +84,7 @@ export const sendAndConfirmTx = async (
             await confirmTx(txId)
 
             return txId
-        } catch (e) {
+        } catch (_e) {
             await sleep(500)
         }
     }

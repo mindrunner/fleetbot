@@ -4,6 +4,11 @@ import BN from 'bn.js'
 import { RawStarbaseLoadingBayData } from '../types'
 
 export const isStarbaseLoadingBayData = (
-    data: any,
+    data: unknown,
 ): data is RawStarbaseLoadingBayData =>
-    data && data.starbase instanceof PublicKey && data.lastUpdate instanceof BN
+    data !== undefined &&
+    data instanceof Object &&
+    'starbase' in data &&
+    'lastUpdate' in data &&
+    data.starbase instanceof PublicKey &&
+    data.lastUpdate instanceof BN

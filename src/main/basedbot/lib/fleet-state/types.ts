@@ -5,8 +5,7 @@ import BN from 'bn.js'
 import dayjs from '../../../../dayjs'
 import { Coordinates } from '../util/coordinates'
 
-import { EndReason } from './fleet-state'
-
+export type EndReason = 'FULL' | 'AMMO' | 'FOOD'
 type BaseData = {
     sector: Coordinates
     warpCooldownExpiry: dayjs.Dayjs

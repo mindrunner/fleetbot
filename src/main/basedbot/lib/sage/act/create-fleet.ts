@@ -47,11 +47,12 @@ export const createFleet = async (
 
     const [head, ...tail] = fleetShips
 
-    const [starbasePlayer, headShip, cargoStatsDefinition] = await Promise.all([
-        getStarbasePlayer(player, starbase, programs),
-        getShipByMint(head.shipMint, game, programs),
-        getCargoStatsDefinition(),
-    ])
+    const [starbasePlayer, headShip, [cargoStatsDefinition]] =
+        await Promise.all([
+            getStarbasePlayer(player, starbase, programs),
+            getShipByMint(head.shipMint, game, programs),
+            getCargoStatsDefinition(),
+        ])
 
     const createFleetReturn = createFleetIx(
         player,
@@ -60,7 +61,7 @@ export const createFleet = async (
         starbasePlayer,
         programs,
         headShip.key,
-        cargoStatsDefinition[0].key,
+        cargoStatsDefinition.key,
         head.count,
         name,
         getShipEscrowIndex(starbasePlayer, headShip.key),

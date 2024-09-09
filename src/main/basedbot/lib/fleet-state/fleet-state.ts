@@ -17,7 +17,12 @@ import { isMoveSubWarpData } from './type-guard/move-sub-warp'
 import { isMoveWarpData } from './type-guard/move-warp'
 import { isRespawnData } from './type-guard/respawn'
 import { isStarbaseLoadingBayData } from './type-guard/starbase-loading-bay'
-import { FleetState, FleetStateType, RawMineAsteroidData } from './types'
+import {
+    EndReason,
+    FleetState,
+    FleetStateType,
+    RawMineAsteroidData,
+} from './types'
 
 const toBig = (bn: BN): Big => new Big(bn.toString())
 const toBN = (bigInt: Big): BN => new BN(bigInt.toString())
@@ -47,8 +52,6 @@ const calculateCurrentPosition = (
 
     return Coordinates.fromBN(toBN(xt.round(0, 1)), toBN(yt.round(0, 1)))
 }
-
-export type EndReason = 'FULL' | 'AMMO' | 'FOOD'
 
 type MiningStats = {
     startTime: BN

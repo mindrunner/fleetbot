@@ -13,7 +13,7 @@ import { Faction, galaxySectorsData } from '../lib/util/galaxy-sectors-data'
 import { nameMapMatcher } from './name-map-matcher'
 import { makeStrategyMap, StrategyConfig, StrategyMap } from './strategy-config'
 
-export const randomIntFromInterval = (min: number, max: number) => {
+export const randomIntFromInterval = (min: number, max: number): number => {
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
@@ -67,7 +67,7 @@ export const atlasnetFcStrategy =
             .sort((a, b) => a.name.localeCompare(b.name))
 
         for (let i = 0; i < count; i++) {
-            strategyMap.set(`${chance.animal()} Fleet`, {
+            strategyMap.set(`${chance.animal()} Fleet [${i}]`, {
                 fleet: getRandomFleetForFaction(player.faction),
                 strategy: createMiningStrategy(
                     mine(

@@ -3,8 +3,11 @@ import BN from 'bn.js'
 import { RawMoveSubwarpData } from '../types'
 
 // TODO: Add all the fields that are required to be present in the data
-export const isMoveSubWarpData = (data: any): data is RawMoveSubwarpData =>
-    data &&
+export const isMoveSubWarpData = (data: unknown): data is RawMoveSubwarpData =>
+    data !== undefined &&
+    data instanceof Object &&
+    'fromSector' in data &&
+    'toSector' in data &&
     Array.isArray(data.fromSector) &&
     data.fromSector.length === 2 &&
     data.fromSector[0] instanceof BN &&
