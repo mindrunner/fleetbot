@@ -20,8 +20,8 @@ export const getFleetStrategy = (
         case 'AePY3wEoUFcFuXeUU9X26YK6tNKQMZovBgvY54LK2B8N':
             return mainnetLuStrategy(map, player, game)
         case 'CgHvzwGbwWv3CwLTvEgeqSKeD8EwMdTfiiCG3dFrKVVC':
-            return atlasnetFcStrategy(150)(map, player, game, 'mud')
-        // return disbandAllStrategy(map, player, game)
+            // return atlasnetFcStrategy(150)(map, player, game, 'mud')
+            return disbandAllStrategy(map, player, game)
         case '9KBrgWVjsmdZ3YEjcsa3wrbbJREgZgS7vDbgoz2aHaNm':
             return atlasnetFcStrategy(150)(map, player, game, 'ustur')
         // return disbandAllStrategy(map, player, game)
