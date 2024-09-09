@@ -74,7 +74,6 @@ export const loadCargo = async (
         cargoTokenAccount.delegatedAmount.toString(),
     )
 
-
     if (fuelAmountAtOrigin.lt(new BN(amount))) {
         throw new Error('Not enough cargo available at origin Starbase')
     }

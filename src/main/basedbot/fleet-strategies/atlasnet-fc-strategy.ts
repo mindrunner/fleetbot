@@ -53,21 +53,26 @@ const getRandomFleetForFaction = (faction: Faction): FleetShips => {
                 },
             ]
         default:
-            throw new Error('Unknwon Faction')
+            throw new Error('Unknown Faction')
     }
 }
 
 export const atlasnetFcStrategy =
     (count: number) =>
-    (map: WorldMap, player: Player, game: Game): StrategyConfig => {
+    (
+        map: WorldMap,
+        player: Player,
+        game: Game,
+        seed: string = 'basedbot',
+    ): StrategyConfig => {
         const strategyMap: StrategyMap = makeStrategyMap()
-        const chance = new Chance()
+        const chance = new Chance(seed)
         const sectors = galaxySectorsData()
             .filter((sector) => sector.closestFaction === player.faction)
             .sort((a, b) => a.name.localeCompare(b.name))
 
         for (let i = 0; i < count; i++) {
-            strategyMap.set(`${chance.animal()} Fleet [${i}]`, {
+            strategyMap.set(`${chance.animal()} Fleet`, {
                 fleet: getRandomFleetForFaction(player.faction),
                 strategy: createMiningStrategy(
                     mine(

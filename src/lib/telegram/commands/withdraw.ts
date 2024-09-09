@@ -40,22 +40,27 @@ export const withdraw = (bot: Telegraf<ContextMessageUpdate>): void => {
             await ctx.reply(
                 `Sending ${withdrawAmount} ATLAS to ${ctx.user.publicKey}`,
             )
-            const signature = await sendAtlas(
+            const signatures = await sendAtlas(
                 new PublicKey(ctx.user.publicKey),
                 withdrawAmount.toNumber(),
             )
 
-            await ctx.reply(`https://solscan.io/tx/${signature}`)
             const amount = -withdrawAmount
 
-            await Transaction.create({
-                wallet,
-                amount,
-                signature,
-                time: dayjs().toDate(),
-                originalAmount: amount,
-                resource: 'ATLAS',
-            }).save()
+            await Promise.all(
+                signatures.map(async (signature) => {
+                    await ctx.reply(`https://solscan.io/tx/${signature}`)
+
+                    return Transaction.create({
+                        wallet,
+                        amount,
+                        signature,
+                        time: dayjs().toDate(),
+                        originalAmount: amount,
+                        resource: 'ATLAS',
+                    }).save()
+                }),
+            )
         })
     })
 }

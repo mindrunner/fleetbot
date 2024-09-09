@@ -1,4 +1,5 @@
 import {
+    PublicKey,
     TransactionInstruction,
     TransactionMessage,
     VersionedTransaction,
@@ -10,6 +11,11 @@ import { keyPair } from '../wallet'
 import { connection } from './const'
 import { createComputeUnitInstruction } from './priority-fee/compute-unit-instruction'
 import { createPriorityFeeInstruction } from './priority-fee/priority-fee-instruction'
+
+// Constants for Solana transaction size limits
+const MAX_TRANSACTION_SIZE = 1232 // Maximum size of a transaction in bytes
+const TRANSACTION_HEADER_SIZE = 100 // Approximate size of transaction header, adjust if needed
+const SIGNATURE_SIZE = 64 // Size of a signature in bytes
 
 const sleep = (ms: number) =>
     // eslint-disable-next-line promise/avoid-new
@@ -109,44 +115,105 @@ const createAndSignTransaction = (
     return transaction
 }
 
-export const sendAndConfirmInstructions = async (
+const getInstructionSize = (instructions: TransactionInstruction[]): number => {
+    const messageV0 = new TransactionMessage({
+        payerKey: keyPair.publicKey,
+        recentBlockhash: PublicKey.default.toBase58(),
+        instructions,
+    }).compileToV0Message()
+
+    // Serialize the message and return its length
+    return new VersionedTransaction(messageV0).serialize().byteLength
+    // return messageV0.serialize().length
+}
+const getOptimalInstructionChunk = (
     instructions: TransactionInstruction[],
-): Promise<string> => {
-    const maxRetries = 10
+    maxSize: number,
+): TransactionInstruction[] => {
+    for (let i = 0; i < instructions.length; ++i) {
+        const instructionSize = getInstructionSize(instructions.slice(0, i + 1))
 
-    /* eslint-disable no-await-in-loop */
-    for (let i = 0; i < maxRetries; ++i) {
-        const [
-            latestBlockHash,
-            priorityFeeInstruction,
-            computeUnitsInstruction,
-        ] = await Promise.all([
-            connection.getLatestBlockhash(),
-            createPriorityFeeInstruction(),
-            createComputeUnitInstruction(instructions),
-        ])
-
-        const txInstructions = [
-            computeUnitsInstruction,
-            priorityFeeInstruction,
-            ...instructions,
-        ]
-
-        const transaction = createAndSignTransaction(
-            txInstructions,
-            latestBlockHash.blockhash,
+        logger.info(
+            `Transaction with ${i + 1} instructions has size ${instructionSize}`,
         )
 
-        try {
-            return await sendAndConfirmTx(transaction, latestBlockHash)
-        } catch (e) {
-            const message = (e as any).message as string
-
-            logger.error(
-                `Transaction failed: ${message}, retrying... (${i + 1}/${maxRetries})`,
-            )
+        if (instructionSize > maxSize) {
+            return instructions.slice(0, i)
         }
     }
-    /* eslint-enable no-await-in-loop */
-    throw new Error(`Transaction failed after ${maxRetries} attempts`)
+
+    return instructions
+}
+
+export const sendAndConfirmInstructions = async (
+    instructionArray: TransactionInstruction[],
+): Promise<string[]> => {
+    const maxRetries = 10
+    let instructions = instructionArray
+    const results: string[] = []
+
+    while (instructions.length > 0) {
+        const availableSize =
+            MAX_TRANSACTION_SIZE - TRANSACTION_HEADER_SIZE - SIGNATURE_SIZE
+
+        const chunk = getOptimalInstructionChunk(instructions, availableSize)
+
+        /* eslint-disable no-await-in-loop */
+        for (let i = 0; i < maxRetries; ++i) {
+            const [
+                latestBlockHash,
+                priorityFeeInstruction,
+                computeUnitsInstruction,
+            ] = await Promise.all([
+                connection.getLatestBlockhash(),
+                createPriorityFeeInstruction(),
+                createComputeUnitInstruction(chunk),
+            ])
+
+            const txInstructions = [
+                computeUnitsInstruction,
+                priorityFeeInstruction,
+                ...chunk,
+            ]
+
+            const transaction = createAndSignTransaction(
+                txInstructions,
+                latestBlockHash.blockhash,
+            )
+
+            const rawTransaction = transaction.serialize()
+
+            if (rawTransaction.length > MAX_TRANSACTION_SIZE) {
+                throw new Error(
+                    `Transaction too large: ${rawTransaction.length} bytes`,
+                )
+            }
+
+            try {
+                const result = await sendAndConfirmTx(
+                    transaction,
+                    latestBlockHash,
+                )
+
+                results.push(result)
+                instructions = instructions.slice(chunk.length)
+                break // Exit retry loop if successful
+            } catch (e) {
+                const message = (e as any).message as string
+
+                logger.error(
+                    `Transaction failed: ${message}, retrying... (${i + 1}/${maxRetries})`,
+                )
+
+                if (i === maxRetries - 1) {
+                    throw new Error(
+                        `Transaction failed after ${maxRetries} attempts`,
+                    )
+                }
+            }
+        }
+        /* eslint-enable no-await-in-loop */
+    }
+
+    return results
 }

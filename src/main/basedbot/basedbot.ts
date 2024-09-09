@@ -3,8 +3,17 @@ import {
     TOKEN_PROGRAM_ID,
 } from '@solana/spl-token'
 import { PublicKey } from '@solana/web3.js'
-import { getParsedTokenAccountsByOwner } from '@staratlas/data-source'
-import { Fleet, Game } from '@staratlas/sage'
+import {
+    getParsedTokenAccountsByOwner,
+    ixReturnsToIxs,
+} from '@staratlas/data-source'
+import {
+    Fleet,
+    Game,
+    getCleanPodsByStarbasePlayerAccounts,
+    getPodCleanupInstructions,
+    Starbase,
+} from '@staratlas/sage'
 import BN from 'bn.js'
 
 import { Sentry } from '../../sentry'
@@ -12,16 +21,20 @@ import { Sentry } from '../../sentry'
 import { logger } from '../../logger'
 import { sleep } from '../../service/sleep'
 import { connection } from '../../service/sol'
+import { sendAndConfirmInstructions } from '../../service/sol/send-and-confirm-tx'
 import { keyPair } from '../../service/wallet'
 
 import { getFleetStrategy } from './fleet-strategies/get-fleet-strategy'
 import { StrategyConfig } from './fleet-strategies/strategy-config'
 import { createInfoStrategy } from './fsm/info'
+import { programs } from './lib/programs'
 import { createFleet, FleetShip } from './lib/sage/act/create-fleet'
 import { depositCargo } from './lib/sage/act/deposit-cargo'
 import { ensureShips } from './lib/sage/act/deposit-ship'
+import { getCargoStatsDefinition } from './lib/sage/state/cargo-stats-definition'
 import { sageGame } from './lib/sage/state/game'
 import { settleFleet } from './lib/sage/state/settle-fleet'
+import { getStarbasePlayer } from './lib/sage/state/starbase-player'
 import { getPlayerContext, Player } from './lib/sage/state/user-account'
 import {
     FleetInfo,
@@ -29,8 +42,8 @@ import {
     getUserFleets,
 } from './lib/sage/state/user-fleets'
 import { getMapContext, WorldMap } from './lib/sage/state/world-map'
-import { getName } from './lib/sage/util'
 // eslint-disable-next-line import/max-dependencies
+import { getName } from './lib/sage/util'
 
 // eslint-disable-next-line require-await
 export const create = async (): Promise<void> => {
@@ -170,6 +183,39 @@ const ensureFleets = async (
     )
 }
 
+const cleanupPods = async (player: Player, game: Game, starbase: Starbase) => {
+    const starbasePlayer = await getStarbasePlayer(player, starbase, programs)
+    const podCleanup = await getCleanPodsByStarbasePlayerAccounts(
+        connection,
+        programs.cargo,
+        starbasePlayer.key,
+    )
+    const [cargoStatsDefinition] = await getCargoStatsDefinition()
+
+    if (!podCleanup) {
+        logger.info('Nothing to Clean up')
+
+        return
+    }
+
+    const ixs = getPodCleanupInstructions(
+        podCleanup,
+        programs.sage,
+        programs.cargo,
+        starbasePlayer.key,
+        starbase.key,
+        player.profile.key,
+        player.profileFaction.key,
+        cargoStatsDefinition.key,
+        game.key,
+        game.data.gameState,
+        player.signer,
+        0,
+    )
+
+    await sendAndConfirmInstructions(await ixReturnsToIxs(ixs, player.signer))
+}
+
 const basedbot = async (botConfig: BotConfig) => {
     logger.info(
         '-------------------------------------------------------------------------------------',
@@ -182,6 +228,8 @@ const basedbot = async (botConfig: BotConfig) => {
     const fleetInfos = await Promise.all(
         fleets.map((f) => getFleetInfo(f, player, map)),
     )
+
+    await cleanupPods(player, game, player.homeStarbase)
 
     await Promise.all([
         importR4(player, game),

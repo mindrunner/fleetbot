@@ -17,7 +17,7 @@ export const refillFleet = async (
     player: PublicKey,
     fleetUnit: ShipStakingInfo,
     amounts: Amounts,
-): Promise<string> => {
+): Promise<string[]> => {
     const [foodAccount, fuelAccount, ammoAccount, toolAccount] =
         await Promise.all([
             getAccount(keyPair.publicKey, resource.food),
@@ -93,5 +93,5 @@ export const refillFleet = async (
         )
     }
 
-    return await sendAndConfirmInstructions(instructions)
+    return sendAndConfirmInstructions(instructions)
 }

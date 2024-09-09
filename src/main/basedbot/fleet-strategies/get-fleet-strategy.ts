@@ -20,16 +20,16 @@ export const getFleetStrategy = (
         case 'AePY3wEoUFcFuXeUU9X26YK6tNKQMZovBgvY54LK2B8N':
             return mainnetLuStrategy(map, player, game)
         case 'CgHvzwGbwWv3CwLTvEgeqSKeD8EwMdTfiiCG3dFrKVVC':
-            // return atlasnetFcStrategy(5)(map, player, game)
-            return disbandAllStrategy(map, player, game)
+            return atlasnetFcStrategy(10)(map, player, game, 'mud')
+        // return disbandAllStrategy(map, player, game)
         case '9KBrgWVjsmdZ3YEjcsa3wrbbJREgZgS7vDbgoz2aHaNm':
-            // return atlasnetFcStrategy(5)(map, player, game)
-            return disbandAllStrategy(map, player, game)
+            return atlasnetFcStrategy(10)(map, player, game, 'ustur')
+        // return disbandAllStrategy(map, player, game)
         case 'FUwHSqujzcPD44SDZYJXuk73NbkEyYQwcLMioHhpjbx2':
-            // return atlasnetFcStrategy(5)(map, player, game)
-            return disbandAllStrategy(map, player, game)
+            return atlasnetFcStrategy(10)(map, player, game, 'oni')
+        // return disbandAllStrategy(map, player, game)
         case '34ghznSJCYEMrS1aC55UYZZUuxfuurA9441aKnigmYyz':
-            // return atlasnetFcStrategy(5)(map, player, game)
+            // return atlasnetFcStrategy(10)(map, player, game, 'le.local')
             return disbandAllStrategy(map, player, game)
         default:
             throw new Error('Unknown strategy')

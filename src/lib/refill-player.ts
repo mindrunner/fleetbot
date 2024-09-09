@@ -82,19 +82,25 @@ export const refillPlayer = async (
                         refill.amount,
                     )
 
-                    return Refill.create({
-                        signature: tx,
-                        walletPublicKey: wallet.publicKey,
-                        fleet: shipName,
-                        preBalance: playerBalance.toNumber(),
-                        postBalance: playerBalance.sub(refill.price).toNumber(),
-                        tip: wallet.tip,
-                        price: refill.price.toNumber(),
-                        food: refill.amount.food.toNumber(),
-                        tool: refill.amount.tool.toNumber(),
-                        fuel: refill.amount.fuel.toNumber(),
-                        ammo: refill.amount.ammo.toNumber(),
-                    }).save()
+                    return Promise.all(
+                        tx.map((signature) => {
+                            return Refill.create({
+                                signature,
+                                walletPublicKey: wallet.publicKey,
+                                fleet: shipName,
+                                preBalance: playerBalance.toNumber(),
+                                postBalance: playerBalance
+                                    .sub(refill.price)
+                                    .toNumber(),
+                                tip: wallet.tip,
+                                price: refill.price.toNumber(),
+                                food: refill.amount.food.toNumber(),
+                                tool: refill.amount.tool.toNumber(),
+                                fuel: refill.amount.fuel.toNumber(),
+                                ammo: refill.amount.ammo.toNumber(),
+                            }).save()
+                        }),
+                    )
                 } catch (e) {
                     Sentry.captureException(e)
                     logger.error(
@@ -132,5 +138,5 @@ export const refillPlayer = async (
 
     await Wallet.update({ publicKey: wallet.publicKey }, { nextRefill })
 
-    return fleetRefills.filter((f): f is Refill => f !== null)
+    return fleetRefills.filter((f): f is Refill[] => f !== null).flat()
 }

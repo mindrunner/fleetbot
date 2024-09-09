@@ -1,14 +1,10 @@
 import {
     createTransferCheckedInstruction,
+    getAssociatedTokenAddressSync,
     getOrCreateAssociatedTokenAccount,
 } from '@solana/spl-token'
 import { Keypair, PublicKey } from '@solana/web3.js'
-import {
-    GmClientService,
-    GmOrderbookService,
-    Order,
-    getAssociatedTokenAddress,
-} from '@staratlas/factory'
+import { GmClientService, GmOrderbookService, Order } from '@staratlas/factory'
 import Big from 'big.js'
 
 import { Sentry } from '../../sentry'
@@ -62,15 +58,19 @@ export const getBalanceAtlas = async (pubKey: PublicKey): Promise<Big> => {
     }
 }
 
-export const sendAtlas = async (
+export const sendAtlas = (
     receiver: PublicKey,
     amount: number,
-): Promise<string> => {
+): Promise<string[]> => {
     const instructions = [
         createTransferCheckedInstruction(
-            await getAssociatedTokenAddress(keyPair.publicKey, resource.atlas),
+            getAssociatedTokenAddressSync(
+                resource.atlas,
+                keyPair.publicKey,
+                true,
+            ),
             resource.atlas,
-            await getAssociatedTokenAddress(receiver, resource.atlas),
+            getAssociatedTokenAddressSync(resource.atlas, receiver, true),
             keyPair.publicKey,
             Big(amount).mul(100000000).toNumber(),
             8,
@@ -78,7 +78,7 @@ export const sendAtlas = async (
         ),
     ]
 
-    return await sendAndConfirmInstructions(instructions)
+    return sendAndConfirmInstructions(instructions)
 }
 
 export const getBalanceMarket = async (
@@ -115,7 +115,7 @@ export const initOrderBook = async (): Promise<void> => {
 export const buyResource = async (
     res: PublicKey,
     amount: Big,
-): Promise<string> => {
+): Promise<string[]> => {
     const orders = gmOrderbookService
         .getSellOrdersByCurrencyAndItem(
             resource.atlas.toString(),
@@ -135,23 +135,25 @@ export const buyResource = async (
 
     logger.info(`Buying ${amount.toFixed(0)} ${res} for ${order.uiPrice} each`)
 
-    return await sendAndConfirmInstructions(exchangeTx.transaction.instructions)
+    return sendAndConfirmInstructions(exchangeTx.transaction.instructions)
 }
 export const buyResources = async (amount: Amounts): Promise<string[]> => {
-    const res = await Promise.all([
-        amount.food.gt(0)
-            ? buyResource(resource.food, amount.food)
-            : Promise.resolve(''),
-        amount.ammo.gt(0)
-            ? buyResource(resource.ammo, amount.ammo)
-            : Promise.resolve(''),
-        amount.fuel.gt(0)
-            ? buyResource(resource.fuel, amount.fuel)
-            : Promise.resolve(''),
-        amount.tool.gt(0)
-            ? buyResource(resource.tool, amount.tool)
-            : Promise.resolve(''),
-    ])
+    const res = (
+        await Promise.all([
+            amount.food.gt(0)
+                ? buyResource(resource.food, amount.food)
+                : Promise.resolve(''),
+            amount.ammo.gt(0)
+                ? buyResource(resource.ammo, amount.ammo)
+                : Promise.resolve(''),
+            amount.fuel.gt(0)
+                ? buyResource(resource.fuel, amount.fuel)
+                : Promise.resolve(''),
+            amount.tool.gt(0)
+                ? buyResource(resource.tool, amount.tool)
+                : Promise.resolve(''),
+        ])
+    ).flat()
 
     return res.filter((r) => r !== '')
 }
