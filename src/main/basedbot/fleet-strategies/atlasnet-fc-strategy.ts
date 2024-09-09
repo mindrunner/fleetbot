@@ -27,7 +27,7 @@ const getRandomFleetForFaction = (faction: Faction): FleetShips => {
                 },
                 {
                     shipMint: ships[Pearce.D9].mint,
-                    count: randomIntFromInterval(2, 4),
+                    count: randomIntFromInterval(2, 3),
                 },
             ]
         case Faction.ONI:
