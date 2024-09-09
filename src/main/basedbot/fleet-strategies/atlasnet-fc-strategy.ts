@@ -57,6 +57,18 @@ const getRandomFleetForFaction = (faction: Faction): FleetShips => {
     }
 }
 
+const getRandomFleetName = (chance: Chance.Chance, maxLen: number): string => {
+    const getName = () => `${chance.animal()} Fleet`
+
+    let name = getName()
+
+    while (name.length > maxLen) {
+        name = getName()
+    }
+
+    return name
+}
+
 export const atlasnetFcStrategy =
     (count: number) =>
     (
@@ -72,7 +84,7 @@ export const atlasnetFcStrategy =
             .sort((a, b) => a.name.localeCompare(b.name))
 
         for (let i = 0; i < count; i++) {
-            strategyMap.set(`${chance.animal()} Fleet`, {
+            strategyMap.set(getRandomFleetName(chance, 32), {
                 fleet: getRandomFleetForFaction(player.faction),
                 strategy: createMiningStrategy(
                     mine(
