@@ -2,11 +2,13 @@ import { PublicKey } from '@solana/web3.js'
 import { InstructionReturn, ixReturnsToIxs } from '@staratlas/data-source'
 import {
     Game,
+    Ship,
     Starbase,
     StarbasePlayer,
     WrappedShipEscrow,
 } from '@staratlas/sage'
 
+import { logger } from '../../../../../logger'
 import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
 import { programs } from '../../programs'
 import { addShipToFleetIx } from '../ix/add-ship-to-fleet'
@@ -36,6 +38,11 @@ const getShipEscrowIndex = (
     return index
 }
 
+type ShipMintMap = {
+    mint: PublicKey
+    ship: Ship
+}
+
 export const createFleet = async (
     player: Player,
     game: Game,
@@ -45,14 +52,48 @@ export const createFleet = async (
 ): Promise<void> => {
     const instructions: InstructionReturn[] = []
 
-    const [head, ...tail] = fleetShips
+    const shipMints = (
+        await Promise.all(
+            fleetShips.map(async (fleetShip) => {
+                return {
+                    mint: fleetShip.shipMint,
+                    ship: await getShipByMint(
+                        fleetShip.shipMint,
+                        game,
+                        programs,
+                    ),
+                } as ShipMintMap
+            }),
+        )
+    ).reduce(
+        (acc, curr) => acc.set(curr.mint.toBase58(), curr.ship),
+        new Map<string, Ship>(),
+    )
 
-    const [starbasePlayer, headShip, [cargoStatsDefinition]] =
-        await Promise.all([
-            getStarbasePlayer(player, starbase, programs),
-            getShipByMint(head.shipMint, game, programs),
-            getCargoStatsDefinition(),
-        ])
+    const [starbasePlayer, [cargoStatsDefinition]] = await Promise.all([
+        getStarbasePlayer(player, starbase, programs),
+        getCargoStatsDefinition(),
+    ])
+
+    const [head, ...tail] = fleetShips.sort(
+        (a, b) =>
+            getShipEscrowIndex(
+                starbasePlayer,
+                shipMints.get(a.shipMint.toBase58())!.key,
+            ) -
+            getShipEscrowIndex(
+                starbasePlayer,
+                shipMints.get(b.shipMint.toBase58())!.key,
+            ),
+    )
+
+    const shipKey = shipMints.get(head.shipMint.toBase58())?.key
+
+    if (!shipKey) throw new Error('No ship found')
+
+    const escrowIndex = getShipEscrowIndex(starbasePlayer, shipKey)
+
+    logger.info(`Escrow index ${escrowIndex} for ${head.shipMint.toBase58()}`)
 
     const createFleetReturn = createFleetIx(
         player,
@@ -60,17 +101,25 @@ export const createFleet = async (
         starbase,
         starbasePlayer,
         programs,
-        headShip.key,
+        shipKey,
         cargoStatsDefinition.key,
         head.count,
         name,
-        getShipEscrowIndex(starbasePlayer, headShip.key),
+        escrowIndex,
     )
 
     instructions.push(createFleetReturn.instructions)
 
     for (const fleetShip of tail) {
-        const ship = await getShipByMint(fleetShip.shipMint, game, programs)
+        const shipKey2 = shipMints.get(fleetShip.shipMint.toBase58())?.key
+
+        if (!shipKey2) throw new Error('No ship found')
+
+        const escrowIndex2 = getShipEscrowIndex(starbasePlayer, shipKey2)
+
+        logger.info(
+            `Escrow index ${escrowIndex2} for ${fleetShip.shipMint.toBase58()}`,
+        )
 
         instructions.push(
             addShipToFleetIx(
@@ -80,9 +129,9 @@ export const createFleet = async (
                 starbasePlayer,
                 programs,
                 createFleetReturn.fleetKey[0],
-                ship.key,
+                shipKey2,
                 fleetShip.count,
-                getShipEscrowIndex(starbasePlayer, ship.key),
+                escrowIndex2,
             ),
         )
     }

@@ -2,6 +2,7 @@ import {
     getAssociatedTokenAddressSync,
     TOKEN_PROGRAM_ID,
 } from '@solana/spl-token'
+import { PublicKey } from '@solana/web3.js'
 import { getParsedTokenAccountsByOwner } from '@staratlas/data-source'
 import { Fleet, Game } from '@staratlas/sage'
 import BN from 'bn.js'
@@ -16,7 +17,7 @@ import { keyPair } from '../../service/wallet'
 import { getFleetStrategy } from './fleet-strategies/get-fleet-strategy'
 import { StrategyConfig } from './fleet-strategies/strategy-config'
 import { createInfoStrategy } from './fsm/info'
-import { createFleet } from './lib/sage/act/create-fleet'
+import { createFleet, FleetShip } from './lib/sage/act/create-fleet'
 import { depositCargo } from './lib/sage/act/deposit-cargo'
 import { ensureShips } from './lib/sage/act/deposit-ship'
 import { sageGame } from './lib/sage/state/game'
@@ -122,8 +123,34 @@ const ensureFleets = async (
         logger.info('Creating fleets:', neededFleets)
     }
 
+    const neededShips = new Map<string, number>()
+
+    neededFleets.forEach((fleetName) => {
+        const fleetStrategy = fleetStrategies.map.get(fleetName)!
+
+        fleetStrategy.fleet?.forEach((fleetShip) => {
+            const curr = neededShips.get(fleetShip.shipMint.toBase58()) ?? 0
+
+            neededShips.set(
+                fleetShip.shipMint.toBase58(),
+                curr + fleetShip.count,
+            )
+        })
+    })
+
+    const shipMints = Array.from(neededShips.keys())
+        .map((mint) => [
+            {
+                count: neededShips.get(mint) ?? 0,
+                shipMint: new PublicKey(mint),
+            } as FleetShip,
+        ])
+        .flat()
+
+    await ensureShips(player, game, player.homeStarbase, shipMints)
+
     await Promise.all(
-        neededFleets.map(async (fleetName) => {
+        neededFleets.map((fleetName) => {
             const fleetStrategy = fleetStrategies.map.get(fleetName)!
 
             if (!fleetStrategy.fleet) {
@@ -131,19 +158,13 @@ const ensureFleets = async (
 
                 return Promise.resolve()
             }
-            await ensureShips(
+
+            return createFleet(
                 player,
                 game,
                 player.homeStarbase,
-                fleetStrategy.fleet,
-            ).then(() =>
-                createFleet(
-                    player,
-                    game,
-                    player.homeStarbase,
-                    fleetStrategy.fleet!,
-                    fleetName,
-                ),
+                fleetStrategy.fleet!,
+                fleetName,
             )
         }),
     )
