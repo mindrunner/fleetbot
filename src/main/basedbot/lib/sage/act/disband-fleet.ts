@@ -1,6 +1,8 @@
 import { InstructionReturn, ixReturnsToIxs } from '@staratlas/data-source'
-import { Fleet, Game, Starbase, WrappedShipEscrow } from '@staratlas/sage'
+import { Game, Starbase, WrappedShipEscrow } from '@staratlas/sage'
 
+import dayjs from '../../../../../dayjs'
+import { logger } from '../../../../../logger'
 import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
 import { programs } from '../../programs'
 import { closeDisbandedFleetIx } from '../ix/close-disbanded-fleet'
@@ -9,16 +11,30 @@ import { disbandedFleetToEscrowIx } from '../ix/disbanded-fleet-to-escrow'
 import { getFleetShips } from '../state/get-fleet-ships'
 import { getStarbasePlayer } from '../state/starbase-player'
 import { Player } from '../state/user-account'
+import { FleetInfo } from '../state/user-fleets'
 import { getName } from '../util'
 
 export const disbandFleet = async (
     player: Player,
     game: Game,
     starbase: Starbase,
-    fleet: Fleet,
+    fleetInfo: FleetInfo,
 ): Promise<void> => {
     const ixs: InstructionReturn[] = []
     const starbasePlayer = await getStarbasePlayer(player, starbase, programs)
+    const { fleet } = fleetInfo
+
+    if (fleetInfo.fleetState.data.warpCooldown) {
+        const timeLeft = dayjs.duration(
+            dayjs().diff(fleetInfo.fleetState.data.warpCooldownExpiry),
+        )
+
+        logger.warn(
+            `Fleet is on warp cooldown, cannot warp. Retry in: ${timeLeft.humanize()}`,
+        )
+
+        return
+    }
 
     const { disbandedFleetKey, instructions } = disbandFleetIx(
         player,

@@ -70,7 +70,7 @@ const transition = async (
                     player,
                     game,
                     player.homeStarbase,
-                    fleetInfo.fleet,
+                    fleetInfo,
                 )
             }
             logger.info(
