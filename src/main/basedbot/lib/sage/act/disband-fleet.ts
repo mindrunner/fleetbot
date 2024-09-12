@@ -30,7 +30,7 @@ export const disbandFleet = async (
         )
 
         logger.warn(
-            `Fleet is on warp cooldown, cannot warp. Retry in: ${timeLeft.humanize()}`,
+            `Fleet is on warp cooldown, cannot disband. Retry in: ${timeLeft.humanize()}`,
         )
 
         return
