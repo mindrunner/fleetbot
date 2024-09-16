@@ -59,7 +59,7 @@ const transition = async (
     const isSameBase = homeBase.equals(targetBase)
 
     logger.info(
-        `${fleetName} is transporting ${config.resources.size} resources from ${config.homeBase} to ${config.targetBase}`,
+        `${fleetName} is transporting ${config.resources.size} resources from ${config.homeBase} to ${config.targetBase} (mode ${mode})`,
     )
 
     switch (fleetInfo.fleetState.type) {
@@ -109,6 +109,7 @@ const transition = async (
 
             if (isAtTargetBase && !isSameBase) {
                 logger.info(`${fleetName} is at target base`)
+
                 if (hasCargo && mode === MODE.FORTH) {
                     logger.info(
                         `${fleetName} has ${cargoLoad} cargo, docking to unload.`,
