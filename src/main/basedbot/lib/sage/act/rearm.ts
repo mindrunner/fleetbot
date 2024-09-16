@@ -62,6 +62,8 @@ export const rearm = async (
         `Current Ammo: ${currentAmmo}, Max Ammo: ${maxAmmo}, Ammo Needed: ${ammoNeeded}`,
     )
 
+    // TODO: Check if starbase has enough ammo balance
+
     const ix = loadCargoIx(
         fleetInfo,
         player,

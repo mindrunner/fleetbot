@@ -11,7 +11,7 @@ import { logger } from '../../../../../logger'
 import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
 import { getTokenBalance } from '../../../basedbot'
 import { programs } from '../../programs'
-import { loadCargoIx } from '../ix/load-cargo'
+import { unloadCargoIx } from '../ix/unload-cargo'
 import { getCargoType } from '../state/cargo-types'
 import { starbaseByCoordinates } from '../state/starbase-by-coordinates'
 import {
@@ -36,75 +36,73 @@ export const getHold = (
     }
 }
 
-export const loadCargo = async (
+export const unloadCargo = async (
     fleetInfo: FleetInfo,
     player: Player,
     game: Game,
     mint: PublicKey,
     amount: number,
-    // eslint-disable-next-line max-params
 ): Promise<void> => {
     const starbase = await starbaseByCoordinates(fleetInfo.location)
-
-    const hold = getHold(mint, game, fleetInfo)
 
     if (!starbase) {
         throw new Error(`No starbase found at ${fleetInfo.location}`)
     }
 
     const cargoType = getCargoType(player.cargoTypes, game, mint)
-    const fleetCargoTokenResult = createAssociatedTokenAccountIdempotent(
-        mint,
-        hold,
-        true,
-    )
+    const fleetCargoPod = getHold(mint, game, fleetInfo)
 
     const starbasePlayer = await getStarbasePlayer(player, starbase, programs)
-    const cargoPodFrom = await getCargoPodsForStarbasePlayer(
+    const cargoPodTo = await getCargoPodsForStarbasePlayer(
         starbasePlayer,
         programs,
     )
 
-    const cargoTokenAccountAddress = getAssociatedTokenAddressSync(
+    const cargoPodTokenAccountAddress = getAssociatedTokenAddressSync(
         mint,
-        cargoPodFrom.key,
+        cargoPodTo.key,
+        true,
+    )
+    const cargoFleetTokenAccountAddress = getAssociatedTokenAddressSync(
+        mint,
+        fleetCargoPod,
+        true,
+    )
+    const cargoPodTokenResult = createAssociatedTokenAccountIdempotent(
+        mint,
+        cargoPodTo.key,
         true,
     )
 
-    const cargoAmountAtOrigin = await getTokenBalance(cargoPodFrom.key, mint)
-    const toLoad = cargoAmountAtOrigin.lt(new BN(amount))
-        ? cargoAmountAtOrigin
-        : new BN(amount)
+    const fuelAmountAtOrigin = await getTokenBalance(fleetCargoPod, mint)
 
-    if (toLoad.eq(new BN(0))) {
-        logger.warn('No cargo available at origin Starbase...')
-
-        return
-    }
-    if (cargoAmountAtOrigin.lt(new BN(amount))) {
+    if (fuelAmountAtOrigin.lt(new BN(amount))) {
         logger.warn(
-            `Not enough cargo available at origin Starbase, loading ${cargoAmountAtOrigin} instead of ${amount}`,
+            `Requested ${amount} cargo to unload. can only unload ${fuelAmountAtOrigin.toNumber()}`,
         )
     }
+    const toUnload = fuelAmountAtOrigin.lt(new BN(amount))
+        ? fuelAmountAtOrigin
+        : new BN(amount)
 
-    const ix = loadCargoIx(
+    const ix = unloadCargoIx(
         fleetInfo,
         player,
         game,
         starbase,
         starbasePlayer,
-        cargoPodFrom.key,
-        hold,
-        cargoTokenAccountAddress,
-        fleetCargoTokenResult.address,
+        fleetCargoPod,
+        cargoPodTo.key,
+        cargoFleetTokenAccountAddress,
+        cargoPodTokenAccountAddress,
         mint,
         cargoType.key,
         programs,
-        toLoad,
+        toUnload,
     )
 
     const instructions = await ixReturnsToIxs(
-        [fleetCargoTokenResult.instructions, ix],
+        [cargoPodTokenResult.instructions, ix],
         player.signer,
     )
 

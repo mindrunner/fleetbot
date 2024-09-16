@@ -39,6 +39,7 @@ export type RawMineAsteroidData = {
 export type MineAsteroidData = {
     asteroid: PublicKey
     mineItem: MineItem
+    resource: PublicKey
     start: dayjs.Dayjs
     end: dayjs.Dayjs
     amountMined: BN

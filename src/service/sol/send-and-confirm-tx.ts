@@ -133,7 +133,7 @@ const getOptimalInstructionChunk = (
     for (let i = 0; i < instructions.length; ++i) {
         const instructionSize = getInstructionSize(instructions.slice(0, i + 1))
 
-        logger.info(
+        logger.debug(
             `Transaction with ${i + 1} instructions has size ${instructionSize}`,
         )
 

@@ -3,6 +3,7 @@ import { Game } from '@staratlas/sage'
 import { Player } from '../lib/sage/state/user-account'
 import { WorldMap } from '../lib/sage/state/world-map'
 
+import { atlasnetFcStrategy } from './atlasnet-fc-strategy'
 import { atlasnetLuStrategy } from './atlasnet-lu-strategy'
 import { disbandAllStrategy } from './disband-all-strategy'
 import { mainnetLuStrategy } from './mainnet-lu-strategy'
@@ -22,13 +23,13 @@ export const getFleetStrategy = (
             // return atlasnetFcStrategy(150)(map, player, game, 'mud')
             return disbandAllStrategy(map, player, game)
         case '9KBrgWVjsmdZ3YEjcsa3wrbbJREgZgS7vDbgoz2aHaNm':
-            // return atlasnetFcStrategy(150)(map, player, game, 'ustur')
-            return disbandAllStrategy(map, player, game)
+            return atlasnetFcStrategy(15)(map, player, game, 'ustur')
+        // return disbandAllStrategy(map, player, game)
         case 'FUwHSqujzcPD44SDZYJXuk73NbkEyYQwcLMioHhpjbx2':
-            // return atlasnetFcStrategy(150)(map, player, game, 'oni')
-            return disbandAllStrategy(map, player, game)
+            return atlasnetFcStrategy(2)(map, player, game, 'oni')
+        // return disbandAllStrategy(map, player, game)
         case '34ghznSJCYEMrS1aC55UYZZUuxfuurA9441aKnigmYyz':
-            // return atlasnetFcStrategy(10)(map, player, game, 'le.local')
+            // return atlasnetFcStrategy(3)(map, player, game, 'le.local')
             return disbandAllStrategy(map, player, game)
         default:
             throw new Error('Unknown strategy')

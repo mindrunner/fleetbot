@@ -212,6 +212,7 @@ export const getFleetState = async (
                         amountMined: new BN(miningStats.amountMined),
                         asteroid: data.asteroid,
                         end: transformTime(miningStats.endTime),
+                        resource: data.resource,
                         mineItem: map.mineItems.get(data.resource.toBase58())!,
                         start: transformTime(data.start),
                         endReason: miningStats.endReason,

@@ -1,4 +1,3 @@
-import { PublicKey } from '@solana/web3.js'
 import {
     createAssociatedTokenAccountIdempotent,
     getParsedTokenAccountsByOwner,
@@ -27,10 +26,10 @@ export const unloadAllCargo = async (
     coordinates: Coordinates,
     player: Player,
     game: Game,
-    hold: PublicKey,
-    // eslint-disable-next-line max-params
 ): Promise<void> => {
     const starbase = await starbaseByCoordinates(coordinates)
+
+    const hold = fleetInfo.fleet.data.cargoHold
 
     if (!starbase) {
         throw new Error(`No starbase found at ${coordinates}`)

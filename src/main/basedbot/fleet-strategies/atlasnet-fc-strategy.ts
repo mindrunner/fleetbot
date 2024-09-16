@@ -4,11 +4,16 @@ import { Chance } from 'chance'
 import { mine } from '../fsm/configs/mine/mine'
 import { createInfoStrategy } from '../fsm/info'
 import { createMiningStrategy } from '../fsm/mine'
+import { createTransportStrategy, transport } from '../fsm/transport'
 import { FleetShips } from '../lib/sage/act/create-fleet'
 import { Calico, Ogrika, Pearce, ships } from '../lib/sage/ships'
 import { Player } from '../lib/sage/state/user-account'
 import { WorldMap } from '../lib/sage/state/world-map'
-import { Faction, galaxySectorsData } from '../lib/util/galaxy-sectors-data'
+import {
+    Faction,
+    galaxySectorsData,
+    SectorInfo,
+} from '../lib/util/galaxy-sectors-data'
 
 import { nameMapMatcher } from './name-map-matcher'
 import { makeStrategyMap, StrategyConfig, StrategyMap } from './strategy-config'
@@ -69,6 +74,9 @@ const getRandomFleetName = (chance: Chance.Chance, maxLen: number): string => {
     return name
 }
 
+const randomSector = (chance: Chance.Chance, sectors: Array<SectorInfo>) =>
+    sectors[chance.integer({ min: 0, max: sectors.length - 1 })].coordinates
+
 export const atlasnetFcStrategy =
     (count: number) =>
     (
@@ -84,13 +92,30 @@ export const atlasnetFcStrategy =
             .sort((a, b) => a.name.localeCompare(b.name))
 
         for (let i = 0; i < count; i++) {
+            const home = randomSector(chance, sectors)
+            const target = randomSector(chance, sectors)
+
             strategyMap.set(getRandomFleetName(chance, 32), {
                 fleet: getRandomFleetForFaction(player.faction),
                 strategy: createMiningStrategy(
-                    mine(
+                    mine(map, home, target),
+                    player,
+                    game,
+                ),
+            })
+            strategyMap.set(getRandomFleetName(chance, 32), {
+                fleet: getRandomFleetForFaction(player.faction),
+                strategy: createTransportStrategy(
+                    transport(
                         map,
                         player.homeCoordinates,
-                        sectors[i % sectors.length].coordinates,
+                        home,
+                        new Set([
+                            game.data.mints.fuel,
+                            game.data.mints.ammo,
+                            game.data.mints.food,
+                            game.data.mints.repairKit,
+                        ]),
                     ),
                     player,
                     game,

@@ -3,27 +3,33 @@ import dayjs from 'dayjs'
 
 import { now } from '../../../dayjs'
 import { logger } from '../../../logger'
+import { Resource } from '../../../service/wallet'
 import { dock } from '../lib/sage/act/dock'
-import { endMine } from '../lib/sage/act/end-mine'
 import { loadCargo } from '../lib/sage/act/load-cargo'
-import { mine } from '../lib/sage/act/mine'
-import { move } from '../lib/sage/act/move'
+import { move, WarpMode } from '../lib/sage/act/move'
 import { undock } from '../lib/sage/act/undock'
-import { unloadAllCargo } from '../lib/sage/act/unload-all-cargo'
+import { unloadCargo } from '../lib/sage/act/unload-cargo'
 import { starbaseByCoordinates } from '../lib/sage/state/starbase-by-coordinates'
 import { Player } from '../lib/sage/state/user-account'
 import { FleetInfo } from '../lib/sage/state/user-fleets'
+import { WorldMap } from '../lib/sage/state/world-map'
 import { getName } from '../lib/sage/util'
+import { Coordinates } from '../lib/util/coordinates'
 
-import { MineConfig } from './configs/mine/mine-config'
 import { Strategy } from './strategy'
+
+enum MODE {
+    BACK,
+    FORTH,
+}
+let mode: MODE = MODE.FORTH
 
 // eslint-disable-next-line complexity
 const transition = async (
     fleetInfo: FleetInfo,
     player: Player,
     game: Game,
-    config: MineConfig,
+    config: TransportConfig,
 ): Promise<void> => {
     const cargoLoad = player.cargoTypes
         .filter((ct) => !ct.data.mint.equals(game.data.mints.food))
@@ -37,27 +43,19 @@ const transition = async (
         }, 0)
 
     const { cargoCapacity } = fleetInfo.cargoStats
-    const cargoLevelFood = fleetInfo.cargoLevels.food
-    const cargoLevelAmmo = fleetInfo.cargoLevels.ammo
     const cargoLevelFuel = fleetInfo.cargoLevels.fuel
-    const desiredFood = cargoCapacity / 10
-    const toLoad = desiredFood - cargoLevelFood
-    const hasEnoughFood = toLoad <= 10
-    const hasEnoughAmmo =
-        cargoLevelAmmo >= fleetInfo.cargoStats.ammoCapacity - 100
     const hasEnoughFuel =
         cargoLevelFuel >= fleetInfo.cargoStats.fuelCapacity - 100
     const hasCargo = cargoLoad > 0
     const currentStarbase = await starbaseByCoordinates(fleetInfo.location)
     const { fleetName, location } = fleetInfo
-    const { homeBase, targetBase, resource, warpMode } = config
-    const resourceName = getName(resource.mineItem)
+    const { homeBase, targetBase, resources, warpMode } = config
     const isAtHomeBase = homeBase.equals(location)
     const isAtTargetBase = targetBase.equals(location)
     const isSameBase = homeBase.equals(targetBase)
 
     logger.info(
-        `${fleetName} is mining ${getName(config.resource.mineItem)} resources from ${config.targetBase} to ${config.homeBase}`,
+        `${fleetName} is transporting ${config.resources.size} resources from ${config.homeBase} to ${config.targetBase}`,
     )
 
     switch (fleetInfo.fleetState.type) {
@@ -75,117 +73,130 @@ const transition = async (
             }
             if (isAtHomeBase) {
                 logger.info(`${fleetName} is at home base`)
-                if (hasCargo) {
+                if (hasCargo && mode === MODE.BACK) {
                     logger.info(
-                        `${fleetName} has ${cargoLoad} ${resourceName}, docking to unload`,
+                        `${fleetName} has ${cargoLoad} cargo, docking to unload`,
                     )
 
                     return dock(fleetInfo, location, player, game)
                 }
-                if (!hasEnoughFood || !hasEnoughFuel || !hasEnoughAmmo) {
+                if (!hasEnoughFuel) {
                     logger.info(
-                        `${fleetName} doesn't have enough resources, docking to resupply`,
+                        `${fleetName} doesn't have enough fuel, docking to resupply`,
                     )
 
                     return dock(fleetInfo, location, player, game)
                 }
                 if (isSameBase) {
-                    logger.info(`${fleetName} is at home/target base, mining`)
+                    logger.warn(
+                        `${fleetName} is configured as transport fleet with home and target being the same. Noop.`,
+                    )
 
-                    return mine(fleetInfo, player, game, resource)
+                    return Promise.resolve()
                 }
                 logger.info(
                     `${fleetName} is at home base, moving to target base`,
                 )
+
+                mode = MODE.FORTH
 
                 return move(fleetInfo, targetBase, player, game, warpMode)
             }
 
             if (isAtTargetBase && !isSameBase) {
                 logger.info(`${fleetName} is at target base`)
-                if (hasCargo) {
+                if (hasCargo && mode === MODE.FORTH) {
                     logger.info(
-                        `${fleetName} has ${cargoLoad} ${resourceName}, returning home`,
+                        `${fleetName} has ${cargoLoad} cargo, docking to unload.`,
                     )
 
-                    return move(fleetInfo, homeBase, player, game, warpMode)
+                    return dock(fleetInfo, location, player, game)
                 }
-                if (hasEnoughFood) {
-                    logger.info(`${fleetName} has enough food, mining`)
 
-                    return mine(fleetInfo, player, game, resource)
-                }
                 logger.info(
-                    `${fleetName} doesn't have enough food, returning home`,
+                    `${fleetName} has nothing to unload, returning home`,
                 )
+
+                mode = MODE.BACK
 
                 return move(fleetInfo, homeBase, player, game, warpMode)
             }
 
-            logger.info(`${fleetName} is at ${location}`)
+            logger.info(`${fleetName} is at ${location} going home`)
 
-            return move(
-                fleetInfo,
-                hasCargo || !hasEnoughFood ? homeBase : targetBase,
-                player,
-                game,
-                warpMode,
-            )
+            mode = MODE.BACK
+
+            return move(fleetInfo, homeBase, player, game, warpMode)
         }
         case 'StarbaseLoadingBay': {
             logger.info(
                 `${fleetInfo.fleetName} is in the loading bay at ${getName(fleetInfo.fleetState.data.starbase)}`,
             )
 
-            if (hasCargo) {
-                logger.info(
-                    `${fleetInfo.fleetName} has ${cargoLoad} cargo, unloading`,
-                )
+            if (isAtHomeBase) {
+                if (!hasEnoughFuel) {
+                    logger.info(`${fleetInfo.fleetName} is refueling`)
 
-                return unloadAllCargo(
-                    fleetInfo,
-                    fleetInfo.location,
-                    player,
-                    game,
-                )
+                    return loadCargo(
+                        fleetInfo,
+                        player,
+                        game,
+                        game.data.mints.fuel,
+                        fleetInfo.cargoStats.fuelCapacity - cargoLevelFuel,
+                    )
+                }
+
+                if (!hasCargo) {
+                    logger.info(`Loading ${Array.from(resources).length} cargo`)
+
+                    await Promise.all(
+                        Array.from(resources).map((resource) => {
+                            const count = Math.floor(
+                                cargoCapacity / Array.from(resources).length,
+                            )
+
+                            logger.info(
+                                `Loading ${count} ${resource.toBase58()}`,
+                            )
+
+                            return loadCargo(
+                                fleetInfo,
+                                player,
+                                game,
+                                resource,
+                                count,
+                            )
+                        }),
+                    )
+                }
             }
 
-            if (!hasEnoughFuel) {
-                logger.info(`${fleetInfo.fleetName} is refueling`)
+            if (!isAtHomeBase) {
+                if (hasCargo) {
+                    logger.info(
+                        `Unloading ${Array.from(resources).length} cargo`,
+                    )
 
-                return loadCargo(
-                    fleetInfo,
-                    player,
-                    game,
-                    game.data.mints.fuel,
-                    fleetInfo.cargoStats.fuelCapacity - cargoLevelFuel,
-                )
-            }
+                    await Promise.all(
+                        Array.from(resources).map((resource) => {
+                            const amount = Math.floor(
+                                cargoCapacity / Array.from(resources).length,
+                            )
 
-            if (!hasEnoughAmmo) {
-                logger.info(`${fleetInfo.fleetName} is rearming`)
+                            logger.info(
+                                `Unloading ${amount} ${resource.toBase58()}`,
+                            )
 
-                return loadCargo(
-                    fleetInfo,
-                    player,
-                    game,
-                    game.data.mints.ammo,
-                    fleetInfo.cargoStats.ammoCapacity - cargoLevelAmmo,
-                )
-            }
-
-            if (!hasEnoughFood) {
-                logger.info(
-                    `${fleetInfo.fleetName} is loading ${desiredFood - cargoLevelFood} food`,
-                )
-
-                return loadCargo(
-                    fleetInfo,
-                    player,
-                    game,
-                    game.data.mints.food,
-                    toLoad,
-                )
+                            return unloadCargo(
+                                fleetInfo,
+                                player,
+                                game,
+                                resource,
+                                amount,
+                            )
+                        }),
+                    )
+                }
             }
 
             return undock(fleetInfo.fleet, fleetInfo.location, player, game)
@@ -221,24 +232,13 @@ const transition = async (
             break
         }
         case 'MineAsteroid': {
-            const { mineItem, end, amountMined, endReason } =
-                fleetInfo.fleetState.data
-
-            if (end.isBefore(now())) {
-                logger.info(
-                    `${fleetInfo.fleetName} has finished mining ${getName(mineItem)} for ${amountMined}`,
-                )
-
-                return endMine(fleetInfo, player, game, config.resource)
-            }
-
-            const log = endReason === 'FULL' ? logger.info : logger.warn
-
-            log(
-                `${fleetInfo.fleetName} mining ${getName(mineItem)} for ${amountMined}. Time remaining: ${dayjs.duration(end.diff(now())).humanize(false)} until ${endReason}`,
+            //TODO: Gather 'Mineable' in order to call `endMine`
+            // return endMine(fleetInfo, player, game, config.resource)
+            logger.warn(
+                `${fleetInfo.fleetName} is currently mining, need to end mine manually.`,
             )
 
-            break
+            return Promise.resolve()
         }
         case 'Respawn': {
             const { destructionTime, ETA } = fleetInfo.fleetState.data
@@ -261,13 +261,47 @@ const transition = async (
     }
 }
 
-export const createMiningStrategy = (
-    miningConfig: MineConfig,
+export type TransportConfig = {
+    map: WorldMap
+    homeBase: Coordinates
+    targetBase: Coordinates
+    resources: Set<Resource>
+    warpMode: WarpMode
+}
+
+export const transportConfig = (
+    config: Partial<TransportConfig> & {
+        map: WorldMap
+        homeBase: Coordinates
+        targetBase: Coordinates
+        resources: Set<Resource>
+    },
+): TransportConfig => ({
+    map: config.map,
+    homeBase: config.homeBase,
+    targetBase: config.targetBase,
+    resources: config.resources,
+    warpMode: config.warpMode || 'auto',
+})
+
+export const transport = (
+    map: WorldMap,
+    homeBase: Coordinates,
+    targetBase: Coordinates,
+    resources: Set<Resource>,
+): TransportConfig =>
+    transportConfig({
+        map,
+        homeBase,
+        targetBase,
+        resources,
+    })
+
+export const createTransportStrategy = (
+    config: TransportConfig,
     player: Player,
     game: Game,
 ): Strategy => {
-    const config = miningConfig
-
     return {
         apply: (fleetInfo: FleetInfo): Promise<void> =>
             transition(fleetInfo, player, game, config),

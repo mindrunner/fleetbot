@@ -7,7 +7,7 @@ import {
     setGlobalDispatcher,
 } from 'undici'
 
-setGlobalDispatcher(new Agent({ connections: 100 }))
+setGlobalDispatcher(new Agent({ connections: 100, connectTimeout: 30000 }))
 
 export const fetchWithRetries = async (
     input: URL | RequestInfo,

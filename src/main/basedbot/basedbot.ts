@@ -78,6 +78,32 @@ const applyStrategy = (
     return strategy.apply(fleetInfo)
 }
 
+export const getTokenBalance = async (
+    account: PublicKey,
+    mint: PublicKey,
+): Promise<BN> => {
+    const allTokenAccounts = await getParsedTokenAccountsByOwner(
+        connection,
+        account,
+        TOKEN_PROGRAM_ID,
+    )
+
+    const sourceTokenAccount = getAssociatedTokenAddressSync(
+        mint,
+        account,
+        true,
+    )
+    const [mintTokenAccount] = allTokenAccounts.filter((it) =>
+        it.address.equals(sourceTokenAccount),
+    )
+
+    if (!mintTokenAccount) {
+        logger.warn('Token account not found, assuming empty balance.')
+    }
+
+    return new BN(mintTokenAccount ? mintTokenAccount.amount.toString() : 0)
+}
+
 const importR4 = async (player: Player, game: Game): Promise<void> => {
     await Promise.all(
         [
@@ -86,23 +112,10 @@ const importR4 = async (player: Player, game: Game): Promise<void> => {
             game.data.mints.fuel,
             game.data.mints.repairKit,
         ].map(async (mint) => {
-            //TODO: Make it easier to get the amount of a token
-            //      This is being used in multiple places
-            const allTokenAccounts = await getParsedTokenAccountsByOwner(
-                connection,
+            const amountAtOrigin = await getTokenBalance(
                 player.signer.publicKey(),
-                TOKEN_PROGRAM_ID,
-            )
-
-            const sourceTokenAccount = getAssociatedTokenAddressSync(
                 mint,
-                player.signer.publicKey(),
-                true,
             )
-            const [mintTokenAccount] = allTokenAccounts.filter((it) =>
-                it.address.equals(sourceTokenAccount),
-            )
-            const amountAtOrigin = new BN(mintTokenAccount.amount.toString())
 
             if (amountAtOrigin.gtn(0)) {
                 logger.info(
