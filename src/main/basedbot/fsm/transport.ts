@@ -19,12 +19,6 @@ import { Coordinates } from '../lib/util/coordinates'
 
 import { Strategy } from './strategy'
 
-enum MODE {
-    BACK,
-    FORTH,
-}
-const mode: MODE = MODE.FORTH
-
 // eslint-disable-next-line complexity
 const transition = async (
     fleetInfo: FleetInfo,
