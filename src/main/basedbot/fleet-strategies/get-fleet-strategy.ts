@@ -29,7 +29,7 @@ export const getFleetStrategy = (
             return atlasnetFcStrategy(2)(map, player, game, 'oni')
         // return disbandAllStrategy(map, player, game)
         case '34ghznSJCYEMrS1aC55UYZZUuxfuurA9441aKnigmYyz':
-            return atlasnetFcStrategy(1)(map, player, game, 'le.local')
+            return atlasnetFcStrategy(2)(map, player, game, 'le.local')
         // return disbandAllStrategy(map, player, game)
         default:
             throw new Error('Unknown strategy')

@@ -103,24 +103,27 @@ export const atlasnetFcStrategy =
                     game,
                 ),
             })
-            strategyMap.set(getRandomFleetName(chance, 32), {
-                fleet: getRandomFleetForFaction(player.faction),
-                strategy: createTransportStrategy(
-                    transport(
-                        map,
-                        player.homeCoordinates,
-                        home,
-                        new Set([
-                            game.data.mints.fuel,
-                            game.data.mints.ammo,
-                            game.data.mints.food,
-                            game.data.mints.repairKit,
-                        ]),
+            // No transport fleet needed if mining fleet uses CSS as home base.
+            if (!home.equals(player.homeCoordinates)) {
+                strategyMap.set(getRandomFleetName(chance, 32), {
+                    fleet: getRandomFleetForFaction(player.faction),
+                    strategy: createTransportStrategy(
+                        transport(
+                            map,
+                            player.homeCoordinates,
+                            home,
+                            new Set([
+                                game.data.mints.fuel,
+                                game.data.mints.ammo,
+                                game.data.mints.food,
+                                game.data.mints.repairKit,
+                            ]),
+                        ),
+                        player,
+                        game,
                     ),
-                    player,
-                    game,
-                ),
-            })
+                })
+            }
         }
 
         return {
