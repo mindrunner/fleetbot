@@ -20,6 +20,7 @@ import {
 } from '../state/starbase-player'
 import { Player } from '../state/user-account'
 import { FleetInfo } from '../state/user-fleets'
+import { getName } from '../util'
 
 export const getHold = (
     mint: PublicKey,
@@ -77,7 +78,7 @@ export const loadCargo = async (
         : new BN(amount)
 
     if (toLoad.eq(new BN(0))) {
-        logger.warn('No cargo available at origin Starbase...')
+        logger.warn(`No ${mint} available at ${getName(starbase)}...`)
 
         return
     }
