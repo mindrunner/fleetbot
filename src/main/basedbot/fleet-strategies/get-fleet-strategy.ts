@@ -12,7 +12,7 @@ import { StrategyConfig } from './strategy-config'
 export const getFleetStrategy = (
     map: WorldMap,
     player: Player,
-    game: Game
+    game: Game,
 ): StrategyConfig => {
     switch (player.publicKey.toString()) {
         case 'k49Y5xwN7Nyi19TqDR4zbCFuAt8kgy6qMaJ6Kj1wHrn':
