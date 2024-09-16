@@ -27,11 +27,11 @@ const getRandomFleetForFaction = (faction: Faction): FleetShips => {
         case Faction.MUD:
             return [
                 {
-                    shipMint: ships[Pearce.F4].mint,
+                    shipMint: ships[Pearce.D9].mint,
                     count: randomIntFromInterval(1, 2),
                 },
                 {
-                    shipMint: ships[Pearce.D9].mint,
+                    shipMint: ships[Pearce.F4].mint,
                     count: randomIntFromInterval(2, 3),
                 },
             ]
