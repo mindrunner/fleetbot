@@ -341,6 +341,7 @@ export const transport = (
         homeBase,
         targetBase,
         resources,
+        warpMode: 'subwarp',
     })
 
 export const createTransportStrategy = (
