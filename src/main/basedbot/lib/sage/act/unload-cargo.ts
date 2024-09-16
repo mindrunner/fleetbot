@@ -41,7 +41,7 @@ export const unloadCargo = async (
     player: Player,
     game: Game,
     mint: PublicKey,
-    amount: number,
+    amount: BN,
 ): Promise<void> => {
     const starbase = await starbaseByCoordinates(fleetInfo.location)
 
@@ -76,14 +76,12 @@ export const unloadCargo = async (
 
     const fuelAmountAtOrigin = await getTokenBalance(fleetCargoPod, mint)
 
-    if (fuelAmountAtOrigin.lt(new BN(amount))) {
+    if (fuelAmountAtOrigin.lt(amount)) {
         logger.warn(
-            `Requested ${amount} cargo to unload. can only unload ${fuelAmountAtOrigin.toNumber()}`,
+            `Requested ${amount.toNumber()} cargo to unload. can only unload ${fuelAmountAtOrigin.toNumber()}`,
         )
     }
-    const toUnload = fuelAmountAtOrigin.lt(new BN(amount))
-        ? fuelAmountAtOrigin
-        : new BN(amount)
+    const toUnload = fuelAmountAtOrigin.lt(amount) ? fuelAmountAtOrigin : amount
 
     const ix = unloadCargoIx(
         fleetInfo,

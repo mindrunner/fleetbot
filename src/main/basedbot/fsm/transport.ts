@@ -4,11 +4,12 @@ import dayjs from 'dayjs'
 import { now } from '../../../dayjs'
 import { logger } from '../../../logger'
 import { Resource } from '../../../service/wallet'
+import { getTokenBalance } from '../basedbot'
 import { dock } from '../lib/sage/act/dock'
 import { loadCargo } from '../lib/sage/act/load-cargo'
 import { move, WarpMode } from '../lib/sage/act/move'
 import { undock } from '../lib/sage/act/undock'
-import { unloadCargo } from '../lib/sage/act/unload-cargo'
+import { getHold, unloadCargo } from '../lib/sage/act/unload-cargo'
 import { starbaseByCoordinates } from '../lib/sage/state/starbase-by-coordinates'
 import { Player } from '../lib/sage/state/user-account'
 import { FleetInfo } from '../lib/sage/state/user-fleets'
@@ -178,9 +179,15 @@ const transition = async (
                     )
 
                     await Promise.all(
-                        Array.from(resources).map((resource) => {
-                            const amount = Math.floor(
-                                cargoCapacity / Array.from(resources).length,
+                        Array.from(resources).map(async (resource) => {
+                            const fleetCargoPod = getHold(
+                                resource,
+                                game,
+                                fleetInfo,
+                            )
+                            const amount = await getTokenBalance(
+                                fleetCargoPod,
+                                resource,
                             )
 
                             logger.info(
