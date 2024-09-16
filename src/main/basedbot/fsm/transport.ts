@@ -45,8 +45,11 @@ const transition = async (
 
     const { cargoCapacity } = fleetInfo.cargoStats
     const cargoLevelFuel = fleetInfo.cargoLevels.fuel
+    const cargoLevelAmmo = fleetInfo.cargoLevels.ammo
     const hasEnoughFuel =
         cargoLevelFuel >= fleetInfo.cargoStats.fuelCapacity / 10
+    const hasEnoughAmmo =
+        cargoLevelAmmo >= fleetInfo.cargoStats.ammoCapacity - 100
     const hasCargo = cargoLoad > 0
     const currentStarbase = await starbaseByCoordinates(fleetInfo.location)
     const { fleetName, location } = fleetInfo
@@ -154,14 +157,31 @@ const transition = async (
                         fleetInfo.cargoStats.fuelCapacity - cargoLevelFuel,
                     )
                 }
+                if (!hasEnoughAmmo) {
+                    logger.info(`${fleetInfo.fleetName} is rearming`)
+
+                    return loadCargo(
+                        fleetInfo,
+                        player,
+                        game,
+                        game.data.mints.ammo,
+                        fleetInfo.cargoStats.ammoCapacity - cargoLevelAmmo,
+                    )
+                }
 
                 if (!hasCargo) {
                     logger.info(`Loading ${Array.from(resources).length} cargo`)
+                    const cargoResources = Array.from(resources).filter(
+                        (resource) =>
+                            !resource.equals(game.data.mints.ammo) &&
+                            !resource.equals(game.data.mints.fuel),
+                    )
 
                     await Promise.all(
-                        Array.from(resources).map((resource) => {
+                        cargoResources.map((resource) => {
                             const count = Math.floor(
-                                cargoCapacity / Array.from(resources).length,
+                                cargoCapacity /
+                                    Array.from(cargoResources).length,
                             )
 
                             logger.info(
