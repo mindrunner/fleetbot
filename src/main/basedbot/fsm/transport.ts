@@ -83,7 +83,7 @@ const transition = async (
                 if (hasEnoughAmmo && hasEnoughFuel && hasCargo) {
                     logger.info('Ready to go! Moving to target base')
 
-                    return move(fleetInfo, homeBase, player, game, warpMode)
+                    return move(fleetInfo, targetBase, player, game, warpMode)
                 }
                 logger.info(`${fleetName} is docking to resupply`)
 
@@ -170,7 +170,9 @@ const transition = async (
                     )
                 }
 
-                return Promise.resolve()
+                logger.info(`${fleetName} is undocking...`)
+
+                return undock(fleetInfo.fleet, fleetInfo.location, player, game)
             }
 
             if (isAtTargetBase) {
