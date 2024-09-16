@@ -23,7 +23,7 @@ enum MODE {
     BACK,
     FORTH,
 }
-let mode: MODE = MODE.FORTH
+const mode: MODE = MODE.FORTH
 
 // eslint-disable-next-line complexity
 const transition = async (
@@ -32,24 +32,20 @@ const transition = async (
     game: Game,
     config: TransportConfig,
 ): Promise<void> => {
-    const cargoLoad = player.cargoTypes
-        .filter((ct) => !ct.data.mint.equals(game.data.mints.food))
-        .reduce((acc, cargoType) => {
-            const load =
-                fleetInfo.cargoLevels.cargo.get(
-                    cargoType.data.mint.toBase58(),
-                ) ?? 0
+    const cargoLoad = player.cargoTypes.reduce((acc, cargoType) => {
+        const load =
+            fleetInfo.cargoLevels.cargo.get(cargoType.data.mint.toBase58()) ?? 0
 
-            return acc + load
-        }, 0)
+        return acc + load
+    }, 0)
 
     const { cargoCapacity } = fleetInfo.cargoStats
     const cargoLevelFuel = fleetInfo.cargoLevels.fuel
     const cargoLevelAmmo = fleetInfo.cargoLevels.ammo
-    const hasEnoughFuel =
-        cargoLevelFuel >= fleetInfo.cargoStats.fuelCapacity / 10
-    const hasEnoughAmmo =
-        cargoLevelAmmo >= fleetInfo.cargoStats.ammoCapacity - 100
+    const fuelReserve = fleetInfo.cargoStats.fuelCapacity / 10
+    const ammoReserve = 0
+    const hasEnoughFuel = cargoLevelFuel >= fuelReserve
+    const hasEnoughAmmo = cargoLevelAmmo >= ammoReserve
     const hasCargo = cargoLoad > 0
     const currentStarbase = await starbaseByCoordinates(fleetInfo.location)
     const { fleetName, location } = fleetInfo
@@ -59,7 +55,7 @@ const transition = async (
     const isSameBase = homeBase.equals(targetBase)
 
     logger.info(
-        `${fleetName} is transporting ${config.resources.size} resources from ${config.homeBase} to ${config.targetBase} (mode ${mode})`,
+        `${fleetName} is transporting ${config.resources.size} resources from ${config.homeBase} to ${config.targetBase}`,
     )
 
     switch (fleetInfo.fleetState.type) {
@@ -75,72 +71,46 @@ const transition = async (
 
                 return Promise.resolve()
             }
+            if (isSameBase) {
+                logger.warn(
+                    `${fleetName} is configured as transport fleet with home and target being the same. Idling....`,
+                )
+
+                return Promise.resolve()
+            }
             if (isAtHomeBase) {
                 logger.info(`${fleetName} is at home base`)
-                if (hasCargo && mode === MODE.BACK) {
-                    logger.info(
-                        `${fleetName} has ${cargoLoad} cargo, docking to unload`,
-                    )
+                if (hasEnoughAmmo && hasEnoughFuel && hasCargo) {
+                    logger.info('Ready to go! Moving to target base')
 
-                    return dock(fleetInfo, location, player, game)
+                    return move(fleetInfo, homeBase, player, game, warpMode)
                 }
-                if (!hasEnoughFuel) {
-                    logger.info(
-                        `${fleetName} doesn't have enough fuel, docking to resupply`,
-                    )
+                logger.info(`${fleetName} is docking to resupply`)
 
-                    return dock(fleetInfo, location, player, game)
-                }
-                if (isSameBase) {
-                    logger.warn(
-                        `${fleetName} is configured as transport fleet with home and target being the same. Noop.`,
-                    )
-
-                    return Promise.resolve()
-                }
-                logger.info(
-                    `${fleetName} is at home base, moving to target base`,
-                )
-
-                mode = MODE.FORTH
-
-                return move(fleetInfo, targetBase, player, game, warpMode)
+                return dock(fleetInfo, location, player, game)
             }
 
-            if (isAtTargetBase && !isSameBase) {
+            if (isAtTargetBase) {
                 logger.info(`${fleetName} is at target base`)
 
-                if (hasCargo && mode === MODE.FORTH) {
-                    logger.info(
-                        `${fleetName} has ${cargoLoad} cargo, docking to unload.`,
-                    )
+                if (hasEnoughAmmo && hasEnoughFuel && !hasCargo) {
+                    logger.info('Ready to go! Moving to home base')
 
-                    return dock(fleetInfo, location, player, game)
-                }
-
-                if (!hasEnoughFuel) {
-                    logger.info(
-                        `${fleetName} doesn't have enough fuel, docking to resupply`,
-                    )
-
-                    return dock(fleetInfo, location, player, game)
+                    return move(fleetInfo, homeBase, player, game, warpMode)
                 }
 
                 logger.info(
-                    `${fleetName} has nothing to unload, returning home`,
+                    `${fleetName} has ${cargoLoad} cargo, docking to unload.`,
                 )
 
-                mode = MODE.BACK
-
-                return move(fleetInfo, homeBase, player, game, warpMode)
+                return dock(fleetInfo, location, player, game)
             }
 
-            logger.info(`${fleetName} is at ${location} going home`)
+            logger.warn(`${fleetName} doesn't know what to do`)
 
-            mode = MODE.BACK
-
-            return move(fleetInfo, homeBase, player, game, warpMode)
+            return Promise.resolve()
         }
+
         case 'StarbaseLoadingBay': {
             logger.info(
                 `${fleetInfo.fleetName} is in the loading bay at ${getName(fleetInfo.fleetState.data.starbase)}`,
@@ -150,7 +120,7 @@ const transition = async (
                 if (!hasEnoughFuel) {
                     logger.info(`${fleetInfo.fleetName} is refueling`)
 
-                    return loadCargo(
+                    await loadCargo(
                         fleetInfo,
                         player,
                         game,
@@ -161,7 +131,7 @@ const transition = async (
                 if (!hasEnoughAmmo) {
                     logger.info(`${fleetInfo.fleetName} is rearming`)
 
-                    return loadCargo(
+                    await loadCargo(
                         fleetInfo,
                         player,
                         game,
@@ -199,20 +169,11 @@ const transition = async (
                         }),
                     )
                 }
+
+                return Promise.resolve()
             }
 
-            if (!isAtHomeBase) {
-                if (!hasEnoughFuel) {
-                    logger.info(`${fleetInfo.fleetName} is refueling`)
-
-                    return loadCargo(
-                        fleetInfo,
-                        player,
-                        game,
-                        game.data.mints.fuel,
-                        fleetInfo.cargoStats.fuelCapacity / 10,
-                    )
-                }
+            if (isAtTargetBase) {
                 if (hasCargo) {
                     logger.info(
                         `Unloading ${Array.from(resources).length} cargo`,
@@ -244,7 +205,21 @@ const transition = async (
                         }),
                     )
                 }
+
+                if (!hasEnoughFuel) {
+                    logger.info(`${fleetInfo.fleetName} is refueling`)
+
+                    await loadCargo(
+                        fleetInfo,
+                        player,
+                        game,
+                        game.data.mints.fuel,
+                        fuelReserve - cargoLevelFuel,
+                    )
+                }
             }
+
+            logger.info(`${fleetName} is undocking for take off`)
 
             return undock(fleetInfo.fleet, fleetInfo.location, player, game)
         }
@@ -342,7 +317,7 @@ export const transport = (
         homeBase,
         targetBase,
         resources,
-        warpMode: 'subwarp',
+        warpMode: 'warp',
     })
 
 export const createTransportStrategy = (

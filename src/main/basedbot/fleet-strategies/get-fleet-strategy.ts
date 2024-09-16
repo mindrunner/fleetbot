@@ -5,6 +5,7 @@ import { WorldMap } from '../lib/sage/state/world-map'
 
 import { atlasnetFcStrategy } from './atlasnet-fc-strategy'
 import { atlasnetLuStrategy } from './atlasnet-lu-strategy'
+import { atlasnetQtStrategy } from './atlasnet-qt-strategy'
 import { disbandAllStrategy } from './disband-all-strategy'
 import { mainnetLuStrategy } from './mainnet-lu-strategy'
 import { StrategyConfig } from './strategy-config'
@@ -29,8 +30,8 @@ export const getFleetStrategy = (
             return atlasnetFcStrategy(2)(map, player, game, 'oni')
         // return disbandAllStrategy(map, player, game)
         case '34ghznSJCYEMrS1aC55UYZZUuxfuurA9441aKnigmYyz':
-            // return atlasnetFcStrategy(10)(map, player, game, 'le.local')
-            return disbandAllStrategy(map, player, game)
+            return atlasnetQtStrategy(1)(map, player, game, 'le.local')
+        // return disbandAllStrategy(map, player, game)
         default:
             throw new Error('Unknown strategy')
     }
