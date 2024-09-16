@@ -46,7 +46,7 @@ const transition = async (
     const { cargoCapacity } = fleetInfo.cargoStats
     const cargoLevelFuel = fleetInfo.cargoLevels.fuel
     const hasEnoughFuel =
-        cargoLevelFuel >= fleetInfo.cargoStats.fuelCapacity - 100
+        cargoLevelFuel >= fleetInfo.cargoStats.fuelCapacity / 10
     const hasCargo = cargoLoad > 0
     const currentStarbase = await starbaseByCoordinates(fleetInfo.location)
     const { fleetName, location } = fleetInfo
@@ -114,6 +114,14 @@ const transition = async (
                     return dock(fleetInfo, location, player, game)
                 }
 
+                if (!hasEnoughFuel) {
+                    logger.info(
+                        `${fleetName} doesn't have enough fuel, docking to resupply`,
+                    )
+
+                    return dock(fleetInfo, location, player, game)
+                }
+
                 logger.info(
                     `${fleetName} has nothing to unload, returning home`,
                 )
@@ -173,6 +181,17 @@ const transition = async (
             }
 
             if (!isAtHomeBase) {
+                if (!hasEnoughFuel) {
+                    logger.info(`${fleetInfo.fleetName} is refueling`)
+
+                    return loadCargo(
+                        fleetInfo,
+                        player,
+                        game,
+                        game.data.mints.fuel,
+                        fleetInfo.cargoStats.fuelCapacity / 10,
+                    )
+                }
                 if (hasCargo) {
                     logger.info(
                         `Unloading ${Array.from(resources).length} cargo`,
