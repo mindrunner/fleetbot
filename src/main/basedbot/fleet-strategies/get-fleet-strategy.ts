@@ -5,7 +5,6 @@ import { WorldMap } from '../lib/sage/state/world-map'
 
 import { atlasnetLuStrategy } from './atlasnet-lu-strategy'
 import { destructAllStrategy } from './destruct-all-strategy'
-import { disbandAllStrategy } from './disband-all-strategy'
 import { mainnetLuStrategy } from './mainnet-lu-strategy'
 import { StrategyConfig } from './strategy-config'
 
