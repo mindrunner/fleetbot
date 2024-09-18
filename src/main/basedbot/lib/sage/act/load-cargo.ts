@@ -22,7 +22,7 @@ import { Player } from '../state/user-account'
 import { FleetInfo } from '../state/user-fleets'
 import { getName } from '../util'
 
-export const getHold = (
+export const getFleetCargoHold = (
     mint: PublicKey,
     game: Game,
     fleetInfo: FleetInfo,
@@ -47,7 +47,7 @@ export const loadCargo = async (
 ): Promise<void> => {
     const starbase = await starbaseByCoordinates(fleetInfo.location)
 
-    const hold = getHold(mint, game, fleetInfo)
+    const hold = getFleetCargoHold(mint, game, fleetInfo)
 
     if (!starbase) {
         throw new Error(`No starbase found at ${fleetInfo.location}`)

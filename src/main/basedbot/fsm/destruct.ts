@@ -1,4 +1,3 @@
-// eslint-disable-next-line filenames/match-regex
 import { Game } from '@staratlas/sage'
 import dayjs from 'dayjs'
 
@@ -8,14 +7,13 @@ import { disbandFleet } from '../lib/sage/act/disband-fleet'
 import { dock } from '../lib/sage/act/dock'
 import { endMine } from '../lib/sage/act/end-mine'
 import { endMove } from '../lib/sage/act/end-move'
-import { move } from '../lib/sage/act/move'
 import { selfDestruct } from '../lib/sage/act/self-destruct'
 import { stopSubwarp } from '../lib/sage/act/stop-subwarp'
 import { undock } from '../lib/sage/act/undock'
 import { starbaseByCoordinates } from '../lib/sage/state/starbase-by-coordinates'
 import { Player } from '../lib/sage/state/user-account'
 import { FleetInfo } from '../lib/sage/state/user-fleets'
-import { mineableByCoordinates } from '../lib/sage/state/world-map'
+import { mineableByCoordinates, WorldMap } from '../lib/sage/state/world-map'
 import { getName } from '../lib/sage/util'
 
 import { DisbandConfig } from './configs/disband-config'
@@ -26,12 +24,11 @@ const transition = async (
     fleetInfo: FleetInfo,
     player: Player,
     game: Game,
-    config: DisbandConfig,
+    config: DestructConfig,
 ): Promise<void> => {
-    const cargoLevelFuel = fleetInfo.cargoLevels.fuel
     const currentStarbase = await starbaseByCoordinates(fleetInfo.location)
     const { fleetName, location } = fleetInfo
-    const { homeBase, warpMode } = config
+    const homeBase = player.homeCoordinates
     const isAtHomeBase = homeBase.equals(location)
 
     switch (fleetInfo.fleetState.type) {
@@ -40,22 +37,13 @@ const transition = async (
                 `${fleetName} is idle at ${fleetInfo.fleetState.data.sector} [Starbase: ${currentStarbase ? getName(currentStarbase) : 'N/A'}]`,
             )
 
-            if (!currentStarbase && cargoLevelFuel < 1) {
-                logger.warn(
-                    `${fleetName} is out of fuel and not at a starbase, need self destruction`,
-                )
-
-                return selfDestruct(fleetInfo, player, game)
-            }
             if (isAtHomeBase) {
                 logger.info(`${fleetName} is at home base, docking to disband`)
 
                 return dock(fleetInfo, location, player, game)
             }
 
-            logger.info(`${fleetName} is at ${location} warping home`)
-
-            return move(fleetInfo, homeBase, player, game, warpMode)
+            return selfDestruct(fleetInfo, player, game)
         }
         case 'StarbaseLoadingBay': {
             logger.info(
@@ -85,9 +73,7 @@ const transition = async (
                 fleetInfo.fleetState.data
 
             if (!homeBase.equals(toSector)) {
-                logger.info(
-                    `Wrong direction, stopping fleet ${fleetInfo.fleetName}`,
-                )
+                logger.info(`Stopping fleet ${fleetInfo.fleetName}`)
 
                 return endMove(fleetInfo, player, game)
             }
@@ -108,9 +94,7 @@ const transition = async (
                 fleetInfo.fleetState.data
 
             if (!homeBase.equals(toSector)) {
-                logger.info(
-                    `Wrong direction, stopping fleet ${fleetInfo.fleetName}`,
-                )
+                logger.info(`Stopping fleet ${fleetInfo.fleetName}`)
 
                 return stopSubwarp(fleetInfo, player, game)
             }
@@ -168,8 +152,20 @@ const transition = async (
     }
 }
 
-export const createDisbandStrategy = (
-    config: DisbandConfig,
+export type DestructConfig = {
+    worldMap: WorldMap
+}
+
+export const destructConfig = (
+    config: Partial<DisbandConfig> & {
+        worldMap: WorldMap
+    },
+): DestructConfig => ({
+    worldMap: config.worldMap,
+})
+
+export const createDestructStrategy = (
+    config: DestructConfig,
     player: Player,
     game: Game,
 ): Strategy => {

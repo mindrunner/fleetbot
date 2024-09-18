@@ -8,6 +8,7 @@ import { getTokenBalance } from '../basedbot'
 import { dock } from '../lib/sage/act/dock'
 import { loadCargo } from '../lib/sage/act/load-cargo'
 import { move, WarpMode } from '../lib/sage/act/move'
+import { selfDestruct } from '../lib/sage/act/self-destruct'
 import { undock } from '../lib/sage/act/undock'
 import { getHold, unloadCargo } from '../lib/sage/act/unload-cargo'
 import { starbaseByCoordinates } from '../lib/sage/state/starbase-by-coordinates'
@@ -63,7 +64,7 @@ const transition = async (
                     `${fleetName} is out of fuel and not at a starbase, need self destruction`,
                 )
 
-                return Promise.resolve()
+                return selfDestruct(fleetInfo, player, game)
             }
             if (isSameBase) {
                 logger.warn(

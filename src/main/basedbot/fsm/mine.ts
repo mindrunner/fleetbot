@@ -8,6 +8,7 @@ import { endMine } from '../lib/sage/act/end-mine'
 import { loadCargo } from '../lib/sage/act/load-cargo'
 import { mine } from '../lib/sage/act/mine'
 import { move } from '../lib/sage/act/move'
+import { selfDestruct } from '../lib/sage/act/self-destruct'
 import { undock } from '../lib/sage/act/undock'
 import { unloadAllCargo } from '../lib/sage/act/unload-all-cargo'
 import { starbaseByCoordinates } from '../lib/sage/state/starbase-by-coordinates'
@@ -71,7 +72,7 @@ const transition = async (
                     `${fleetName} is out of fuel and not at a starbase, need self destruction`,
                 )
 
-                return Promise.resolve()
+                return selfDestruct(fleetInfo, player, game)
             }
             if (isAtHomeBase) {
                 logger.info(`${fleetName} is at home base`)
