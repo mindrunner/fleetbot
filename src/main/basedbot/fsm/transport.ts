@@ -88,7 +88,7 @@ const transition = async (
             if (isAtTargetBase) {
                 logger.info(`${fleetName} is at target base`)
 
-                if (hasEnoughAmmo && hasEnoughFuel && !hasCargo) {
+                if (!hasCargo) {
                     logger.info('Ready to go! Moving to home base')
 
                     return move(fleetInfo, homeBase, player, game, warpMode)
