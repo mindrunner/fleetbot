@@ -18,7 +18,7 @@ export const mainnetLuStrategy = (
         match: nameMapMatcher(createInfoStrategy()),
         map: new Map([
             [
-                'Vaquita Fleet',
+                'Grison Fleet',
                 {
                     fleet: null,
                     strategy: createMiningStrategy(
