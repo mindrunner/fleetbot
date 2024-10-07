@@ -1,6 +1,6 @@
 import { Game } from '@staratlas/sage'
 
-import { mineRochinol } from '../fsm/configs/mine/mine-rochinol'
+import { mineHydrogen } from '../fsm/configs/mine/mine-hydrogen'
 import { createInfoStrategy } from '../fsm/info'
 import { createMiningStrategy } from '../fsm/mine'
 import { Player } from '../lib/sage/state/user-account'
@@ -22,7 +22,7 @@ export const mainnetLuStrategy = (
                 {
                     fleet: null,
                     strategy: createMiningStrategy(
-                        mineRochinol(worldMap),
+                        mineHydrogen(worldMap),
                         player,
                         game,
                     ),

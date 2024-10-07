@@ -41,7 +41,7 @@ const transition = async (
     const cargoLevelFood = fleetInfo.cargoLevels.food
     const cargoLevelAmmo = fleetInfo.cargoLevels.ammo
     const cargoLevelFuel = fleetInfo.cargoLevels.fuel
-    const desiredFood = cargoCapacity / 10
+    const desiredFood = cargoCapacity / 20
     const toLoad = desiredFood - cargoLevelFood
     const hasEnoughFood = toLoad <= 10
     const hasEnoughAmmo =
