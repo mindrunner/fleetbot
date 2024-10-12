@@ -17,7 +17,6 @@ export const depositCargoIx = (
     cargoType: PublicKey,
     programs: StarAtlasPrograms,
     amount: BN,
-    // eslint-disable-next-line max-params
 ): InstructionReturn =>
     StarbasePlayer.depositCargoToGame(
         programs.sage,

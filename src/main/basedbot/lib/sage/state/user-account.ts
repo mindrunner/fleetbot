@@ -68,7 +68,6 @@ const getXpAccount = (
     }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getKeyIndex = (_: PlayerProfile): number => 0
 
 export const getPlayerContext = async (

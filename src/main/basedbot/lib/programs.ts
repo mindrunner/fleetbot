@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/named
 import { Idl } from '@coral-xyz/anchor'
 import { PublicKey } from '@solana/web3.js'
 import { CargoProgram } from '@staratlas/cargo'
@@ -18,7 +17,6 @@ import { Sage } from '@staratlas/sage/dist/src/idl/sage'
 import { config } from '../../../config'
 import { anchorProvider } from '../../../service/sol/anchor'
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 export type StarAtlasProgram<T extends Idl> = ProgramMethods<T>
 

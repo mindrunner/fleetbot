@@ -17,7 +17,6 @@ export const disbandFleetIx = (
     starbasePlayer: StarbasePlayer,
     programs: StarAtlasPrograms,
     fleet: Fleet,
-    // eslint-disable-next-line max-params
 ): DisbandFleetReturn =>
     Fleet.disbandFleet(
         programs.sage,

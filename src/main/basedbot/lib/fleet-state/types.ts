@@ -98,7 +98,7 @@ export type FleetStateType =
     | 'Respawn'
     | 'StarbaseUpgrade'
     | 'StarbaseRepair'
-/* eslint-disable @typescript-eslint/naming-convention */
+
 export type FleetStateDataMap = {
     StarbaseLoadingBay: StarbaseLoadingBayData
     Idle: IdleData
@@ -109,7 +109,6 @@ export type FleetStateDataMap = {
     StarbaseUpgrade: StarbaseUpgradeData
     StarbaseRepair: StarbaseRepairData
 }
-/* eslint-enable @typescript-eslint/naming-convention */
 
 export type FleetState = {
     [K in FleetStateType]: {

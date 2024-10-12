@@ -69,7 +69,6 @@ export const checkTransactions = async (): Promise<void> => {
     const wallets = await Wallet.findBy({ enabled: true })
 
     for (const wallet of wallets) {
-        // eslint-disable-next-line no-await-in-loop
         await checkR4Transactions(
             wallet,
             'tool',
@@ -77,7 +76,7 @@ export const checkTransactions = async (): Promise<void> => {
             prices,
             getSigOptions,
         )
-        // eslint-disable-next-line no-await-in-loop
+
         await checkR4Transactions(
             wallet,
             'ammo',
@@ -85,7 +84,7 @@ export const checkTransactions = async (): Promise<void> => {
             prices,
             getSigOptions,
         )
-        // eslint-disable-next-line no-await-in-loop
+
         await checkR4Transactions(
             wallet,
             'food',
@@ -93,7 +92,7 @@ export const checkTransactions = async (): Promise<void> => {
             prices,
             getSigOptions,
         )
-        // eslint-disable-next-line no-await-in-loop
+
         await checkR4Transactions(
             wallet,
             'fuel',

@@ -19,7 +19,6 @@ import { getName } from '../lib/sage/util'
 import { MineConfig } from './configs/mine/mine-config'
 import { Strategy } from './strategy'
 
-// eslint-disable-next-line complexity
 const transition = async (
     fleetInfo: FleetInfo,
     player: Player,

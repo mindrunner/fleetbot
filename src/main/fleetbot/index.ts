@@ -32,7 +32,6 @@ const start = async () => {
     }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 process.on(
     'unhandledRejection',
     async (reason: any | null | undefined, _promise: Promise<any>) => {

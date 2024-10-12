@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable no-underscore-dangle */
-
 import BN from 'bn.js'
 import bs58 from 'bs58'
 
@@ -67,6 +64,3 @@ export class Coordinates {
 
     public toArray = (): [BN, BN] => [this._x, this._y]
 }
-
-/* eslint-enable @typescript-eslint/naming-convention */
-/* eslint-enable no-underscore-dangle */

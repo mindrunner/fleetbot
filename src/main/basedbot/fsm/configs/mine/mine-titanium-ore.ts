@@ -10,7 +10,7 @@ export const mineTitaniumOre = (map: WorldMap): MineConfig =>
     mineConfig({
         homeBase: Coordinates.fromNumber(-40, 30),
         targetBase: Coordinates.fromNumber(-8, 35),
-        resource: mineableByCoordinates(map, Coordinates.fromNumber(-8, 35))
-            .values()
-            .next().value,
+        resource: Array.from(
+            mineableByCoordinates(map, Coordinates.fromNumber(-8, 35)).values(),
+        )[0],
     })

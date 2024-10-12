@@ -24,7 +24,6 @@ export const createFleetIx = (
     shipAmount: number,
     name: string,
     shipEscrowIndex: number,
-    // eslint-disable-next-line max-params
 ): CreateFleetReturn =>
     Fleet.createFleet(
         programs.sage,

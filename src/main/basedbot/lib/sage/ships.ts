@@ -1,6 +1,5 @@
 import { PublicKey } from '@solana/web3.js'
 
-/* eslint-disable @typescript-eslint/naming-convention */
 export enum VZUS {
     Opod = 'VZUSOP',
     Ambwe = 'VZUSAM',
@@ -351,4 +350,3 @@ export const ships: ShipMap = {
         mint: new PublicKey('1MP3RpP21TVoEWVnvNuG1piq32AnWtsxzd2fykS8yJe'),
     },
 }
-/* eslint-enable @typescript-eslint/naming-convention */

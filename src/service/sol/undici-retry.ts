@@ -20,13 +20,11 @@ export const fetchWithRetries = async (
 
     while (attempt < retryAttempts) {
         try {
-            // eslint-disable-next-line no-await-in-loop
             const response = await fetch(input, init)
 
             if (response.status === 502) {
                 console.log('Retrying due to 502')
                 attempt++
-                // eslint-disable-next-line no-await-in-loop,promise/avoid-new,no-loop-func
                 await new Promise<void>((resolve) => {
                     setTimeout(resolve, 100 * attempt)
                 })

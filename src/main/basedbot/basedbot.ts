@@ -42,15 +42,12 @@ import {
     getUserFleets,
 } from './lib/sage/state/user-fleets'
 import { getMapContext, WorldMap } from './lib/sage/state/world-map'
-// eslint-disable-next-line import/max-dependencies
 import { getName } from './lib/sage/util'
 
-// eslint-disable-next-line require-await
 export const create = async (): Promise<void> => {
     logger.info('Starting basedbot...')
 }
 
-// eslint-disable-next-line require-await
 export const stop = async (): Promise<void> => {
     logger.info('Stopping basedbot')
 }
@@ -268,7 +265,6 @@ export const start = async (): Promise<void> => {
     const map = await getMapContext(game)
     const fleetStrategies = getFleetStrategy(map, player, game)
 
-    // eslint-disable-next-line no-constant-condition
     while (true) {
         try {
             await basedbot({

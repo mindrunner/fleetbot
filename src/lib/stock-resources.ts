@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/named
 import { AnchorProvider, Idl, Program } from '@coral-xyz/anchor'
 import { Connection, PublicKey } from '@solana/web3.js'
 import {
@@ -46,7 +45,6 @@ const getAllFleetsForUserPublicKey = async (
     const playerShipStakingAccounts = []
 
     for (const ship of shipsRegistered) {
-        // eslint-disable-next-line no-await-in-loop
         const [playerShipStakingAccount] = await getShipStakingAccount(
             programId,
             ship.account.shipMint as PublicKey,
@@ -60,7 +58,6 @@ const getAllFleetsForUserPublicKey = async (
 
     for (const acc of playerShipStakingAccounts) {
         try {
-            // eslint-disable-next-line no-await-in-loop
             const fleet = await program.account.shipStaking.fetchNullable(acc)
 
             if (fleet) {

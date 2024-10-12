@@ -18,7 +18,6 @@ export const miningHandlerIx = (
     resourceTokenTo: PublicKey,
     programs: StarAtlasPrograms,
     game: Game,
-    // eslint-disable-next-line max-params
 ): InstructionReturn =>
     Fleet.asteroidMiningHandler(
         programs.sage,

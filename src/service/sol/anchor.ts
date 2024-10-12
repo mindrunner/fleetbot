@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/named
 import { AnchorProvider, Wallet } from '@coral-xyz/anchor'
 
 import { keyPair } from '../wallet'

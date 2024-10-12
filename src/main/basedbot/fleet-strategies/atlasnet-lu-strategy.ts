@@ -47,12 +47,12 @@ export const atlasnetLuStrategy = (
                         mineConfig({
                             homeBase: Coordinates.fromNumber(-40, 30),
                             targetBase: Coordinates.fromNumber(-19, 40),
-                            resource: mineableByCoordinates(
-                                map,
-                                Coordinates.fromNumber(-19, 40),
-                            )
-                                .values()
-                                .next().value,
+                            resource: Array.from(
+                                mineableByCoordinates(
+                                    map,
+                                    Coordinates.fromNumber(-19, 40),
+                                ),
+                            )[0],
                         }),
                         player,
                         game,
@@ -67,12 +67,12 @@ export const atlasnetLuStrategy = (
                         mineConfig({
                             homeBase: Coordinates.fromNumber(-40, 30),
                             targetBase: Coordinates.fromNumber(-18, 23),
-                            resource: mineableByCoordinates(
-                                map,
-                                Coordinates.fromNumber(-18, 23),
-                            )
-                                .values()
-                                .next().value,
+                            resource: Array.from(
+                                mineableByCoordinates(
+                                    map,
+                                    Coordinates.fromNumber(-18, 23),
+                                ),
+                            )[0],
                         }),
                         player,
                         game,
@@ -231,12 +231,12 @@ export const atlasnetLuStrategy = (
                         mineConfig({
                             homeBase: Coordinates.fromNumber(-40, 30),
                             targetBase: Coordinates.fromNumber(-19, 40),
-                            resource: mineableByCoordinates(
-                                map,
-                                Coordinates.fromNumber(-19, 40),
-                            )
-                                .values()
-                                .next().value,
+                            resource: Array.from(
+                                mineableByCoordinates(
+                                    map,
+                                    Coordinates.fromNumber(-19, 40),
+                                ),
+                            )[0],
                         }),
                         player,
                         game,
@@ -251,12 +251,12 @@ export const atlasnetLuStrategy = (
                         mineConfig({
                             homeBase: Coordinates.fromNumber(-40, 30),
                             targetBase: Coordinates.fromNumber(-18, 23),
-                            resource: mineableByCoordinates(
-                                map,
-                                Coordinates.fromNumber(-18, 23),
-                            )
-                                .values()
-                                .next().value,
+                            resource: Array.from(
+                                mineableByCoordinates(
+                                    map,
+                                    Coordinates.fromNumber(-18, 23),
+                                ),
+                            )[0],
                         }),
                         player,
                         game,

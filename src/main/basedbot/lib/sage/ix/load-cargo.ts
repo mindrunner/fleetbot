@@ -21,7 +21,6 @@ export const loadCargoIx = (
     cargoType: PublicKey,
     programs: StarAtlasPrograms,
     amount: BN,
-    // eslint-disable-next-line max-params
 ): InstructionReturn =>
     Fleet.depositCargoToFleet(
         programs.sage,

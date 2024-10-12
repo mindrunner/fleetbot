@@ -18,7 +18,6 @@ const TRANSACTION_HEADER_SIZE = 100 // Approximate size of transaction header, a
 const SIGNATURE_SIZE = 64 // Size of a signature in bytes
 
 const sleep = (ms: number) =>
-    // eslint-disable-next-line promise/avoid-new
     new Promise((resolve) => {
         setTimeout(resolve, ms)
     })
@@ -62,7 +61,6 @@ export const sendAndConfirmTx = async (
 
     let txId: string | undefined
 
-    /* eslint-disable no-await-in-loop */
     while (blockheight <= blockHash.lastValidBlockHeight) {
         try {
             txId = await connection.sendRawTransaction(
@@ -94,7 +92,6 @@ export const sendAndConfirmTx = async (
             await sleep(500)
         }
     }
-    /* eslint-enable no-await-in-loop */
 
     throw new Error(`Transaction ${txId} failed to confirm`)
 }
@@ -158,7 +155,6 @@ export const sendAndConfirmInstructions = async (
 
         const chunk = getOptimalInstructionChunk(instructions, availableSize)
 
-        /* eslint-disable no-await-in-loop */
         for (let i = 0; i < maxRetries; ++i) {
             const [
                 latestBlockHash,
@@ -212,7 +208,6 @@ export const sendAndConfirmInstructions = async (
                 }
             }
         }
-        /* eslint-enable no-await-in-loop */
     }
 
     return results

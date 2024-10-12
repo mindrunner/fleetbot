@@ -15,7 +15,6 @@ export const startMiningIx = (
     starbasePlayer: StarbasePlayer,
     fuelTokenAccount: PublicKey,
     programs: StarAtlasPrograms,
-    // eslint-disable-next-line max-params
 ): InstructionReturn =>
     Fleet.startMiningAsteroid(
         programs.sage,
