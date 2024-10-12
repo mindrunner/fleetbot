@@ -1,12 +1,7 @@
-// eslint-disable-next-line import/named
 import { getAssociatedTokenAddressSync } from '@solana/spl-token'
-// eslint-disable-next-line import/named
 import {
-    // eslint-disable-next-line import/named
     ParsedInstruction,
-    // eslint-disable-next-line import/named
     ParsedTransactionWithMeta,
-    // eslint-disable-next-line import/named
     SignaturesForAddressOptions,
 } from '@solana/web3.js'
 
@@ -35,11 +30,12 @@ export const checkAtlasTransactions = async (
 
     for (const signature of signatureList) {
         // https://docs.solana.com/developing/versioned-transactions#max-supported-transaction-version
-        const parsedSignature =
-            // eslint-disable-next-line no-await-in-loop
-            await connection.getParsedTransaction(signature.signature, {
+        const parsedSignature = await connection.getParsedTransaction(
+            signature.signature,
+            {
                 maxSupportedTransactionVersion: 0,
-            })
+            },
+        )
 
         if (parsedSignature) {
             transactionList.push(parsedSignature)

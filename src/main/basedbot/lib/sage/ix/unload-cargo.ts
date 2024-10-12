@@ -21,7 +21,6 @@ export const unloadCargoIx = (
     cargoType: PublicKey,
     programs: StarAtlasPrograms,
     amount: BN,
-    // eslint-disable-next-line max-params
 ): InstructionReturn =>
     Fleet.withdrawCargoFromFleet(
         programs.sage,

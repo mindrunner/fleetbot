@@ -43,7 +43,6 @@ export const loadCargo = async (
     game: Game,
     mint: PublicKey,
     amount: number,
-    // eslint-disable-next-line max-params
 ): Promise<void> => {
     const starbase = await starbaseByCoordinates(fleetInfo.location)
 

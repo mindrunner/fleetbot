@@ -20,7 +20,6 @@ import { Coordinates } from '../lib/util/coordinates'
 
 import { Strategy } from './strategy'
 
-// eslint-disable-next-line complexity
 const transition = async (
     fleetInfo: FleetInfo,
     player: Player,

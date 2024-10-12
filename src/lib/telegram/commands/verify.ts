@@ -50,10 +50,10 @@ export const verify = (bot: Telegraf<ContextMessageUpdate>): void => {
             )
             wallet.telegramId = ctx.from.id
             wallet.authExpire = dayjs().add(1, 'hour').toDate()
-            wallet.authTxAmount = faker.datatype.number({
+            wallet.authTxAmount = faker.number.float({
                 min: 0.1,
                 max: 0.999,
-                precision: 0.001,
+                fractionDigits: 3,
             })
             await wallet.save()
             await authPending(ctx, wallet)

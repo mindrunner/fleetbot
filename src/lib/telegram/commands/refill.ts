@@ -48,7 +48,6 @@ export const refill = (bot: Telegraf<ContextMessageUpdate>): void => {
             )
 
             for (const userRefill of userRefills) {
-                // eslint-disable-next-line no-await-in-loop
                 await ctx.replyWithHTML(`
 <b>Signature:</b>  <a href="https://solscan.io/tx/${userRefill.signature}">click</a>
 <b>Time:</b> ${userRefill.time.toLocaleDateString()} ${userRefill.time.toLocaleTimeString()}

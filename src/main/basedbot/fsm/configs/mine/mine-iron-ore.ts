@@ -10,7 +10,10 @@ export const mineIronOre = (map: WorldMap): MineConfig =>
     mineConfig({
         homeBase: Coordinates.fromNumber(-40, 30),
         targetBase: Coordinates.fromNumber(-38, 25),
-        resource: mineableByCoordinates(map, Coordinates.fromNumber(-38, 25))
-            .values()
-            .next().value,
+        resource: Array.from(
+            mineableByCoordinates(
+                map,
+                Coordinates.fromNumber(-38, 25),
+            ).values(),
+        )[0],
     })

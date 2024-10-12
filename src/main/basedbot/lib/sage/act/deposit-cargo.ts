@@ -25,7 +25,6 @@ export const depositCargo = async (
     starbase: Starbase,
     mint: PublicKey,
     amount: BN,
-    // eslint-disable-next-line max-params
 ): Promise<void> => {
     const instructions: InstructionReturn[] = []
 

@@ -14,5 +14,5 @@ export const mine = (
     mineConfig({
         homeBase,
         targetBase,
-        resource: mineableByCoordinates(map, targetBase).values().next().value,
+        resource: Array.from(mineableByCoordinates(map, targetBase))[0],
     })

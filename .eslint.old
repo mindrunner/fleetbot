@@ -165,10 +165,6 @@ module.exports = {
         // https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin#supported-rules
         '@typescript-eslint/explicit-function-return-type': 'off',
         '@typescript-eslint/explicit-module-boundary-types': 'warn',
-        '@typescript-eslint/member-delimiter-style': [
-            'error',
-            { multiline: { delimiter: 'none' } },
-        ],
         '@typescript-eslint/naming-convention': ['error', ...namingConventions],
         '@typescript-eslint/no-shadow': 'error',
         '@typescript-eslint/no-unused-vars': [

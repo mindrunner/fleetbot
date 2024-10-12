@@ -32,7 +32,6 @@ export const transactions = (bot: Telegraf<ContextMessageUpdate>): void => {
             })
 
             for (const transaction of userTransactions) {
-                // eslint-disable-next-line no-await-in-loop
                 await ctx.replyWithHTML(`
 <b>Signature:</b>  <a href="https://solscan.io/tx/${transaction.signature}">click</a>
 <b>Time:</b> ${transaction.time.toLocaleDateString()} ${transaction.time.toLocaleTimeString()}

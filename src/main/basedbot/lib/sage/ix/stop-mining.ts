@@ -14,7 +14,6 @@ export const stopMiningIx = (
     mineable: Mineable,
     fuelTokenAccount: PublicKey,
     programs: StarAtlasPrograms,
-    // eslint-disable-next-line max-params
 ): InstructionReturn =>
     Fleet.stopMiningAsteroid(
         programs.sage,

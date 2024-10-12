@@ -23,7 +23,6 @@ export const addShipEscrowIx = (
     shipEscrowTokenAccount: PublicKey,
     shipAmount: BN,
     escrowIndex: number | null,
-    // eslint-disable-next-line max-params
 ): InstructionReturn =>
     SagePlayerProfile.addShipEscrow(
         programs.sage,

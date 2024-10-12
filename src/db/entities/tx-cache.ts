@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/named
 import { ParsedTransactionWithMeta } from '@solana/web3.js'
 import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm'
 

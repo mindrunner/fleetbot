@@ -28,7 +28,6 @@ export const depositShip = async (
     starbase: Starbase,
     ship: Ship,
     amount: BN,
-    // eslint-disable-next-line max-params,require-await
 ): Promise<void> => {
     const instructions: InstructionReturn[] = []
 

@@ -41,7 +41,6 @@ export const stop = async (): Promise<void> => {
 export const start = async (): Promise<void> => {
     await initOrderBook()
     // https://github.com/telegraf/telegraf/issues/1749
-    // eslint-disable-next-line promise/prefer-await-to-then
     telegramBot.launch().catch((e) => logger.error(e))
 
     if (config.app.quickstart) {

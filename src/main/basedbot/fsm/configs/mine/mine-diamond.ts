@@ -10,7 +10,7 @@ export const mineDiamond = (map: WorldMap): MineConfig =>
     mineConfig({
         homeBase: Coordinates.fromNumber(-40, 30),
         targetBase: Coordinates.fromNumber(-16, 0),
-        resource: mineableByCoordinates(map, Coordinates.fromNumber(-16, 0))
-            .values()
-            .next().value,
+        resource: Array.from(
+            mineableByCoordinates(map, Coordinates.fromNumber(-16, 0)).values(),
+        )[0],
     })

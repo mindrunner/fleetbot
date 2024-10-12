@@ -16,7 +16,6 @@ import { getDailyBurnRate } from './stock-resources'
 export const refill = async (): Promise<void> => {
     const players = await Wallet.findBy({ enabled: true })
 
-    /* eslint-disable no-await-in-loop */
     for (const player of players) {
         if (dayjs().isAfter(player.nextRefill)) {
             await refillPlayer(
@@ -57,5 +56,4 @@ export const refill = async (): Promise<void> => {
         logger.info(`Total Tipped: ${(await player.totalTipped()).toFixed(AD)}`)
         logger.info('-----------------------------------------------------')
     }
-    /* eslint-enable no-await-in-loop */
 }

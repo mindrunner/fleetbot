@@ -1,10 +1,7 @@
 import { getAssociatedTokenAddressSync } from '@solana/spl-token'
-// eslint-disable-next-line import/named
 import {
-    // eslint-disable-next-line import/named
     ParsedInstruction,
     PublicKey,
-    // eslint-disable-next-line import/named
     SignaturesForAddressOptions,
 } from '@solana/web3.js'
 import Big from 'big.js'
@@ -49,7 +46,6 @@ export const checkR4Transactions = async (
         `${signatureList.length} transactions found for ${resourceName} on ${wallet.publicKey}`,
     )
 
-    /* eslint-disable no-await-in-loop */
     for (const signatureInfo of signatureList) {
         const { signature } = signatureInfo
 
@@ -106,10 +102,8 @@ export const checkR4Transactions = async (
 
                     amounts[resourceName] = Big(originalAmount)
 
-                    // eslint-disable-next-line no-await-in-loop
                     const price = getPrice(amounts, prices)
 
-                    // eslint-disable-next-line max-depth
                     if (sender === keyPair.publicKey.toString()) {
                         const receiver = tx.meta?.postTokenBalances?.filter(
                             (tb) =>
@@ -121,7 +115,6 @@ export const checkR4Transactions = async (
                             `${receiver} -${originalAmount} ${resourceName.toUpperCase()} worth ${price.toFixed(AD)} ATLAS ${dayjs.duration(dayjs().diff(time)).humanize(false)} ago`,
                         )
 
-                        // eslint-disable-next-line max-depth
                         if (!transaction) {
                             await Transaction.create({
                                 wallet: await ensureWallet(receiver),
@@ -139,7 +132,6 @@ export const checkR4Transactions = async (
                             `${sender} +${originalAmount} ${resourceName.toUpperCase()} worth ${price.toFixed(AD)} ATLAS ${dayjs.duration(dayjs().diff(time)).humanize(false)} ago`,
                         )
 
-                        // eslint-disable-next-line max-depth
                         if (!transaction) {
                             await Transaction.create({
                                 wallet: await ensureWallet(sender),
@@ -155,5 +147,4 @@ export const checkR4Transactions = async (
             }
         }
     }
-    /* eslint-enable no-await-in-loop */
 }
