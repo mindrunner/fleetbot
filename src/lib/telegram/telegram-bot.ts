@@ -7,7 +7,10 @@ import { ContextMessageUpdate } from './context-message-update'
 import { auth } from './middleware'
 import { params } from './middleware/params'
 
-const telegramBot: Telegraf<ContextMessageUpdate> = new Telegraf(config.bot.telegramToken, { handlerTimeout: 360_000 })
+const telegramBot: Telegraf<ContextMessageUpdate> = new Telegraf(
+    config.bot.telegramToken,
+    { handlerTimeout: 360_000 },
+)
 
 telegramBot.use(auth)
 telegramBot.use(params)

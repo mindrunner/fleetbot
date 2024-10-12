@@ -42,6 +42,8 @@ export class Refill extends BaseEntity {
     @RelationIdColumn()
     walletPublicKey: Wallet['publicKey']
 
-    @ManyToOne(() => Wallet, wallet => wallet.refills, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Wallet, (wallet) => wallet.refills, {
+        onDelete: 'CASCADE',
+    })
     wallet: Wallet
 }

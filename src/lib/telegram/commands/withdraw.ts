@@ -26,21 +26,41 @@ export const withdraw = (bot: Telegraf<ContextMessageUpdate>): void => {
 
             const wallet = ctx.user
             const userBalance = await wallet.getBalance()
-            const withdrawAmount = ctx.params[0] === 'all' ? userBalance : Big(ctx.params[0]).abs()
+            const withdrawAmount =
+                ctx.params[0] === 'all' ? userBalance : Big(ctx.params[0]).abs()
 
             if (withdrawAmount.gt(userBalance)) {
-                await ctx.reply(`Amount ${withdrawAmount.toFixed(AD)} exceeds user balance ${userBalance.toFixed(AD)}`)
+                await ctx.reply(
+                    `Amount ${withdrawAmount.toFixed(AD)} exceeds user balance ${userBalance.toFixed(AD)}`,
+                )
 
                 return
             }
 
-            await ctx.reply(`Sending ${withdrawAmount} ATLAS to ${ctx.user.publicKey}`)
-            const signature = await sendAtlas(new PublicKey(ctx.user.publicKey), withdrawAmount.toNumber())
+            await ctx.reply(
+                `Sending ${withdrawAmount} ATLAS to ${ctx.user.publicKey}`,
+            )
+            const signatures = await sendAtlas(
+                new PublicKey(ctx.user.publicKey),
+                withdrawAmount.toNumber(),
+            )
 
-            await ctx.reply(`https://solscan.io/tx/${signature}`)
             const amount = -withdrawAmount
 
-            await Transaction.create({ wallet, amount, signature, time: dayjs().toDate(), originalAmount: amount, resource: 'ATLAS' }).save()
+            await Promise.all(
+                signatures.map(async (signature) => {
+                    await ctx.reply(`https://solscan.io/tx/${signature}`)
+
+                    return Transaction.create({
+                        wallet,
+                        amount,
+                        signature,
+                        time: dayjs().toDate(),
+                        originalAmount: amount,
+                        resource: 'ATLAS',
+                    }).save()
+                }),
+            )
         })
     })
 }

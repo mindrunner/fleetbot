@@ -47,6 +47,7 @@
 </details>
 
 <!-- ABOUT -->
+
 ## About The Project
 
 fleetbot is an automatic fleet refill service bot for <a href='https://play.staratlas.com/fleet/'>Star Atlas SCORE</a>,
@@ -54,21 +55,25 @@ an early stage mini-game in the Star Atlas universe.
 `fleetbot` contains of four core components:
 
 ### resource manager
+
 The resource manager makes sure that `fleetbot` always has enough `R4`. (FOOD, TOOL, FUEL and AMMO). Basically it
 calculates how much is needed for a given time period based on users and their burn. As soon as `fleetbot` runs low on a
 particular resource, it uses the official Star Atlas marketplace to restock them.
 
 ### bookkeeper
+
 The bookkeeper manages user's accounts, handles deposits and withdrawals and keeps track of individual balances. Since
 all user's funds are kept in one wallet, this needs to be baked by a persistence layer to store additional information
 which can not efficiently be read from the blockchain itself.
 
 ### refill service
+
 The most crucial part for `fleetbot` users. Checks your fleets and refills them as soon as they run out of resources.
 Ships aren't getting full refills by default, but only what is really needed. This leaves the option for the user to
 manually add resources as well.
 
 ### telegram bot
+
 To interact with `fleetbot`, telegram can be used. See telegram section further down for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -80,6 +85,7 @@ To interact with `fleetbot`, telegram can be used. See telegram section further 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE -->
+
 ## Usage
 
 `fleetbot` can be used in several ways, depending on user's preference. To be fully aware of what the bot is actually doing
@@ -90,24 +96,27 @@ everyone, there are more convenient solutions available as well.
 
 To compile and run the source code, the following prerequisites are needed:
 
-* node environment
-* empty postgres database
-* telegram bot
-* unused solana wallet
+-   node environment
+-   empty postgres database
+-   telegram bot
+-   unused solana wallet
 
 See `.env.example` for required information. Create a copy (`.env.`) and configure the environment.
 
 1. clone repo
-   ```sh
-   git clone https://github.com/mindrunner/fleetbot.git
-   ```
+
+    ```sh
+    git clone https://github.com/mindrunner/fleetbot.git
+    ```
 
 2. install dependencies
+
     ```sh
     npm install
     ```
 
 3. run database migrations
+
     ```sh
     npm run typeorm migration:run
     ```
@@ -123,6 +132,7 @@ An official docker image is available and automatically build from `main` branch
 to use `docker-compose`.
 
 Example compose file:
+
 ```
 version: '3.5'
 
@@ -155,7 +165,9 @@ For convenience, there is an officially hosted `fleetbot` available at `https://
 See the following section on how to interact with the bot on telegram.
 
 <!-- TELEGRAM -->
+
 ## Telegram
+
 Interaction with `fleetbot` is possible with telegram. The bot has a `/help` command which explains all important
 commands. Usage should be pretty straight forward as follows:
 
@@ -209,18 +221,18 @@ Commands for verified users:
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
 <!-- ROADMAP -->
+
 ## Roadmap
 
-- [] Migrate to SPL-Token 0.3.x interface
+-   [] Migrate to SPL-Token 0.3.x interface
 
 See the [open issues](https://github.com/mindrunner/fleetbot/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
 <!-- CONTRIBUTING -->
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
@@ -237,34 +249,40 @@ Don't forget to give the project a star! Thanks again!
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- DISCLAIMER -->
+
 ## Disclaimer
 
 Before using this service or code, do your own research about crypto-world, metaverses, wallets and all the potential
 danger in this universe.
 
-- `fleetbot` is not responsible for any loss of funds
-- `fleetbot` will never DM you
-- `fleetbot` will never ask you for seed phrases or private keys
+-   `fleetbot` is not responsible for any loss of funds
+-   `fleetbot` will never DM you
+-   `fleetbot` will never ask you for seed phrases or private keys
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- LICENSE -->
+
 ## License
+
 Distributed under the MIT License. See `LICENSE` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- DONATIONS -->
+
 ## Donations
+
 `fleetbot` accepts donations in `SOL`, `POLIS` or `USDC` at the same addresses it operates:
-* fleetbot.sol
-* ANDqa82T21G1RXwxpbf9v7jZXXfFSeezaUf7MJGTH6BZ
+
+-   fleetbot.sol
+-   ANDqa82T21G1RXwxpbf9v7jZXXfFSeezaUf7MJGTH6BZ
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
 [contributors-shield]: https://img.shields.io/github/contributors/mindrunner/fleetbot.svg?style=for-the-badge
 [contributors-url]: https://github.com/mindrunner/fleetbot/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/mindrunner/fleetbot.svg?style=for-the-badge
@@ -275,7 +293,5 @@ Distributed under the MIT License. See `LICENSE` for more information.
 [issues-url]: https://github.com/mindrunner/fleetbot/issues
 [license-shield]: https://img.shields.io/github/license/mindrunner/fleetbot.svg?style=for-the-badge
 [license-url]: https://github.com/mindrunner/fleetbot/blob/master/LICENSE
-
 [node.js]: https://img.shields.io/badge/node.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Node-url]: https://nodejs.org
-
