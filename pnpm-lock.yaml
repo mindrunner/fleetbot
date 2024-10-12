@@ -45,8 +45,8 @@ importers:
         specifier: ^0.8.0
         version: 0.8.0(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.4.5)(utf-8-validate@5.0.10)
       '@staratlas/factory':
-        specifier: ^0.7.0
-        version: 0.7.0(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.4.5)(utf-8-validate@5.0.10)
+        specifier: ^0.7.1
+        version: 0.7.1(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.4.5)(utf-8-validate@5.0.10)
       '@staratlas/player-profile':
         specifier: ^0.9.1
         version: 0.9.1(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(utf-8-validate@5.0.10)
@@ -1036,8 +1036,8 @@ packages:
   '@staratlas/data-source@0.8.0':
     resolution: {integrity: sha512-fUwoQDwGcBPXN+s4foGT2XItK4XJh2C4UCBN7HlQM1pO3NQfOxGW7tLrvP67ZMyE4ltrwN3bA+GoUub9vj33vA==}
 
-  '@staratlas/factory@0.7.0':
-    resolution: {integrity: sha512-lhEqin/QWLiBmmBRNt02raKkn5Q0ZM/ynz4h4M56jjucfGdokZaYJ/8yJhUUdHJ2cIFTY7bdBy+8vRmV7zw+NA==}
+  '@staratlas/factory@0.7.1':
+    resolution: {integrity: sha512-agUbdiD6DsmMHOFA33mZp6rAvcjpFGeYWXHimi04++cVZK7N9cQ0S3YJsQOA0zCfgMbIoB6K5a6bcIl51gVVOA==}
 
   '@staratlas/player-profile@0.11.0':
     resolution: {integrity: sha512-SQYysx0s0lD6J9Ln4vJQDa9TS/1rSy/FeKCexwzNiKm+S0fUFv6LKOKIPsGDQDQ2MIVfVqilVtIB2Nf3DuaXgg==}
@@ -2034,6 +2034,7 @@ packages:
   eslint@8.57.0:
     resolution: {integrity: sha512-dZ6+mexnaTIbSBZWgou51U6OmzIhYM2VcNdtiTtI7qPNZm35Akpr0f6vtw3w1Kmn5PYo+tZVfh13WrhpS6oLqQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
 
   espree@9.6.1:
@@ -5396,7 +5397,7 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@staratlas/factory@0.7.0(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.4.5)(utf-8-validate@5.0.10)':
+  '@staratlas/factory@0.7.1(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.4.5)(utf-8-validate@5.0.10)':
     dependencies:
       '@coral-xyz/anchor': 0.29.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@solana/spl-token': 0.4.8(@solana/web3.js@1.95.3(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.4.5)(utf-8-validate@5.0.10)

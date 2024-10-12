@@ -37,7 +37,7 @@
         "@staratlas/claim-stake": "^0.11.6",
         "@staratlas/crafting": "^1.1.0",
         "@staratlas/data-source": "^0.8.0",
-        "@staratlas/factory": "^0.7.0",
+        "@staratlas/factory": "^0.7.1",
         "@staratlas/player-profile": "^0.9.1",
         "@staratlas/points": "^1.0.5",
         "@staratlas/profile-faction": "^0.4.1",
