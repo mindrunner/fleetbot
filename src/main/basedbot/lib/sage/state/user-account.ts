@@ -18,6 +18,7 @@ import { Faction, galaxySectorsData } from '../../util/galaxy-sectors-data'
 import { getCargoType, getCargoTypes } from './cargo-types'
 import { sageGame } from './game'
 import { starbaseByCoordinates } from './starbase-by-coordinates'
+import { logger } from '../../../../../logger'
 
 export type XpAccounts = {
     councilRank: XpAccount
@@ -100,6 +101,8 @@ export const getPlayerContext = async (
     if (profile.type === 'error') {
         throw new Error('Error reading account')
     }
+
+    logger.info(`Player profile: ${profile.key}`)
 
     const keyIndex = getKeyIndex(profile.data)
 
