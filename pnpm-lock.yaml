@@ -42,8 +42,8 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@staratlas/data-source':
-        specifier: ^0.8.1
-        version: 0.8.1(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
+        specifier: ^0.8.3
+        version: 0.8.3(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@staratlas/factory':
         specifier: ^0.7.1
         version: 0.7.1(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
@@ -1089,8 +1089,8 @@ packages:
   '@staratlas/data-source@0.7.7':
     resolution: {integrity: sha512-DQfR/a9MXr1Gds/YTR9RylQZlx5gbCe4NjynQ/45je3rnnblNfhma0WoHrSHz/r/lWwJwN7yRwSJkfaDW8QhuQ==}
 
-  '@staratlas/data-source@0.8.1':
-    resolution: {integrity: sha512-hrgDFSv15lgxNPNG9nuqRUPYjv7OCy9eJbXN7opOLE/nFV5aXZWTLGYjrbOmyy/irBjP3khIwXnS1peqzJpu+A==}
+  '@staratlas/data-source@0.8.3':
+    resolution: {integrity: sha512-iM7EYTKUKLYUD90Xai2FufPdL/4raOizdfbJy1RWfZlzR77Jp0BRTi1Z92iSF1WMEXqRqWR2ZqU6hK0/8N3jyg==}
 
   '@staratlas/factory@0.7.1':
     resolution: {integrity: sha512-agUbdiD6DsmMHOFA33mZp6rAvcjpFGeYWXHimi04++cVZK7N9cQ0S3YJsQOA0zCfgMbIoB6K5a6bcIl51gVVOA==}
@@ -2939,8 +2939,8 @@ packages:
   neverthrow@6.2.2:
     resolution: {integrity: sha512-POR1FACqdK9jH0S2kRPzaZEvzT11wsOxLW520PQV/+vKi9dQe+hXq19EiOvYx7lSRaF5VB9lYGsPInynrnN05w==}
 
-  neverthrow@7.2.0:
-    resolution: {integrity: sha512-iGBUfFB7yPczHHtA8dksKTJ9E8TESNTAx1UQWW6TzMF280vo9jdPYpLUXrMN1BCkPdHFdNG3fxOt2CUad8KhAw==}
+  neverthrow@8.0.0:
+    resolution: {integrity: sha512-SX2Z50+U27I+CF3NwHE9J8MB6+bYRRub3U+1nAKxnL6c+2vW2l/WsYEC0e3Wqg8DwiJvrquqE0YhxlVTzGJGsg==}
     engines: {node: '>=18'}
 
   no-case@3.0.4:
@@ -5352,7 +5352,7 @@ snapshots:
       '@solana/spl-token': 0.4.8(@solana/web3.js@1.95.3(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/web3.js': 1.95.3(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@staratlas/anchor': 0.25.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      '@staratlas/data-source': 0.8.1(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@staratlas/data-source': 0.8.3(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@staratlas/player-profile': 0.11.0(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - bufferutil
@@ -5366,7 +5366,7 @@ snapshots:
       '@solana/spl-token': 0.4.8(@solana/web3.js@1.95.3(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/web3.js': 1.95.3(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@staratlas/anchor': 0.25.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      '@staratlas/data-source': 0.8.1(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@staratlas/data-source': 0.8.3(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - bufferutil
       - encoding
@@ -5379,7 +5379,7 @@ snapshots:
       '@solana/spl-token': 0.4.8(@solana/web3.js@1.95.3(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/web3.js': 1.95.3(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@staratlas/anchor': 0.25.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      '@staratlas/data-source': 0.8.1(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@staratlas/data-source': 0.8.3(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@staratlas/player-profile': 0.11.0(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@types/lodash': 4.17.10
       lodash: 4.17.21
@@ -5402,7 +5402,7 @@ snapshots:
       '@solana/spl-token': 0.4.8(@solana/web3.js@1.95.3(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/web3.js': 1.95.3(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@staratlas/anchor': 0.25.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      '@staratlas/data-source': 0.8.1(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@staratlas/data-source': 0.8.3(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@staratlas/player-profile': 0.11.0(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@staratlas/profile-faction': 0.6.0(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
@@ -5430,7 +5430,7 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@staratlas/data-source@0.8.1(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)':
+  '@staratlas/data-source@0.8.3(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)':
     dependencies:
       '@noble/curves': 1.6.0
       '@solana/spl-token': 0.4.8(@solana/web3.js@1.95.3(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
@@ -5439,7 +5439,7 @@ snapshots:
       bs58: 6.0.0
       camelcase: 8.0.0
       lodash: 4.17.21
-      neverthrow: 7.2.0
+      neverthrow: 8.0.0
     transitivePeerDependencies:
       - bufferutil
       - encoding
@@ -5467,7 +5467,7 @@ snapshots:
     dependencies:
       '@solana/web3.js': 1.95.3(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@staratlas/anchor': 0.25.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      '@staratlas/data-source': 0.8.1(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@staratlas/data-source': 0.8.3(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - bufferutil
       - encoding
@@ -5492,7 +5492,7 @@ snapshots:
       '@solana/spl-token': 0.4.8(@solana/web3.js@1.95.3(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/web3.js': 1.95.3(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@staratlas/anchor': 0.25.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      '@staratlas/data-source': 0.8.1(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@staratlas/data-source': 0.8.3(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@staratlas/player-profile': 0.11.0(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@staratlas/points': 1.1.0(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@staratlas/profile-faction': 0.6.0(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
@@ -5508,7 +5508,7 @@ snapshots:
       '@solana/spl-token': 0.4.8(@solana/web3.js@1.95.3(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/web3.js': 1.95.3(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@staratlas/anchor': 0.25.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      '@staratlas/data-source': 0.8.1(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@staratlas/data-source': 0.8.3(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@staratlas/player-profile': 0.11.0(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - bufferutil
@@ -5522,7 +5522,7 @@ snapshots:
       '@solana/spl-token': 0.4.8(@solana/web3.js@1.95.3(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@solana/web3.js': 1.95.3(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@staratlas/anchor': 0.25.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      '@staratlas/data-source': 0.8.1(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@staratlas/data-source': 0.8.3(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@staratlas/player-profile': 0.11.0(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - bufferutil
@@ -5558,7 +5558,7 @@ snapshots:
       '@staratlas/cargo': 1.1.0(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@staratlas/crafting': 1.1.0(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@staratlas/crew': 0.7.0(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
-      '@staratlas/data-source': 0.8.1(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
+      '@staratlas/data-source': 0.8.3(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@staratlas/player-profile': 0.11.0(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@staratlas/points': 1.1.0(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
       '@staratlas/points-store': 1.1.0(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.6.3)(utf-8-validate@5.0.10)
@@ -7757,7 +7757,7 @@ snapshots:
 
   neverthrow@6.2.2: {}
 
-  neverthrow@7.2.0: {}
+  neverthrow@8.0.0: {}
 
   no-case@3.0.4:
     dependencies:
