@@ -6,6 +6,7 @@ import { WorldMap } from '../lib/sage/state/world-map'
 import { atlasnetFcStrategy } from './atlasnet-fc-strategy'
 import { atlasnetLuStrategy } from './atlasnet-lu-strategy'
 import { atlasnetQtStrategy } from './atlasnet-qt-strategy'
+import { mainnetGellsnStrategy } from './mainnet-gellsn-strategy'
 import { mainnetLuStrategy } from './mainnet-lu-strategy'
 import { StrategyConfig } from './strategy-config'
 
@@ -15,6 +16,8 @@ export const getFleetStrategy = (
     game: Game,
 ): StrategyConfig => {
     switch (player.publicKey.toString()) {
+        case '4GZeR3hQdQXgoaEG22Gj4egAPX3db7So41rsHtBhHBk8':
+            return mainnetGellsnStrategy(map, player, game)
         case 'k49Y5xwN7Nyi19TqDR4zbCFuAt8kgy6qMaJ6Kj1wHrn':
             return atlasnetLuStrategy(map, player, game)
         case 'AePY3wEoUFcFuXeUU9X26YK6tNKQMZovBgvY54LK2B8N':
