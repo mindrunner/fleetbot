@@ -11,7 +11,7 @@ import BN from 'bn.js'
 import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
 import { getTokenBalance } from '../../../basedbot'
 import { programs } from '../../programs'
-import { depositCargoIx } from '../ix/deposit-cargo'
+import { withdrawCargoIx } from '../ix/withdraw-cargo'
 import { getCargoType } from '../state/cargo-types'
 import {
     getCargoPodsForStarbasePlayer,
@@ -19,7 +19,7 @@ import {
 } from '../state/starbase-player'
 import { Player } from '../state/user-account'
 
-export const depositCargo = async (
+export const withdrawCargo = async (
     player: Player,
     game: Game,
     starbase: Starbase,
@@ -30,47 +30,48 @@ export const depositCargo = async (
 
     const starbasePlayer = await getStarbasePlayer(player, starbase, programs)
 
-    const sourceTokenAccount = getAssociatedTokenAddressSync(
+    const destinationTokenAccount = getAssociatedTokenAddressSync(
         mint,
         player.signer.publicKey(),
     )
 
-    const cargoPodTo = await getCargoPodsForStarbasePlayer(
+    const cargoPodFrom = await getCargoPodsForStarbasePlayer(
         starbasePlayer,
         programs,
     )
-    const destinationTokenAccount = getAssociatedTokenAddressSync(
+    const sourceTokenAccount = getAssociatedTokenAddressSync(
         mint,
-        cargoPodTo.key,
+        cargoPodFrom.key,
         true,
     )
 
     instructions.push(
-        createAssociatedTokenAccountIdempotent(mint, cargoPodTo.key, true)
-            .instructions,
+        createAssociatedTokenAccountIdempotent(
+            mint,
+            destinationTokenAccount,
+            true,
+        ).instructions,
     )
 
     const cargoType = getCargoType(player.cargoTypes, game, mint)
 
-    const amountAtOrigin = await getTokenBalance(
-        player.signer.publicKey(),
-        mint,
-    )
+    const amountAtOrigin = await getTokenBalance(cargoPodFrom.key, mint)
 
     if (amountAtOrigin.lt(new BN(amount))) {
         throw new Error('Not enough cargo available at origin')
     }
 
     instructions.push(
-        depositCargoIx(
+        withdrawCargoIx(
             player,
             game,
             starbase,
             starbasePlayer,
-            cargoPodTo.key,
+            cargoPodFrom.key,
             sourceTokenAccount,
             destinationTokenAccount,
             cargoType.key,
+            mint,
             programs,
             amount,
         ),
