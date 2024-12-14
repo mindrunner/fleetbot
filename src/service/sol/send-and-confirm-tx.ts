@@ -57,11 +57,15 @@ export const sendAndConfirmTx = async (
     latestBlockHash?: BlockhashWithExpiryBlockHeight,
 ): Promise<string> => {
     const blockHash = latestBlockHash ?? (await connection.getLatestBlockhash())
-    const blockheight = await connection.getBlockHeight()
+    let blockheight = await connection.getBlockHeight()
 
     let txId: string | undefined
 
     while (blockheight <= blockHash.lastValidBlockHeight) {
+        blockheight = await connection.getBlockHeight()
+        // logger.info(
+        //     `${blockHash.lastValidBlockHeight} - ${blockheight} = ${blockHash.lastValidBlockHeight - blockheight}`,
+        // )
         try {
             txId = await connection.sendRawTransaction(
                 transaction.serialize(),
