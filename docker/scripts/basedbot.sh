@@ -1,3 +1,3 @@
 #!/bin/bash
 
-node main/basedbot
+node -r ./setup-aliases.js main/basedbot

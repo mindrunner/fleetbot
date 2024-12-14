@@ -2,4 +2,4 @@
 
 migrate-db.sh
 
-node main/fleetbot
+node -r ./setup-aliases.js main/fleetbot
