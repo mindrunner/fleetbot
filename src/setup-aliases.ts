@@ -1,2 +1,3 @@
-const moduleAlias = require('module-alias');
-moduleAlias.addAlias('punycode', 'punycode/');
+import moduleAlias from 'module-alias'
+
+moduleAlias.addAlias('punycode', 'punycode/')
