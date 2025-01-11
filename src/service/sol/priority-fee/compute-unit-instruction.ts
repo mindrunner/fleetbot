@@ -49,6 +49,6 @@ export const createComputeUnitInstruction = async (
     logger.debug(`Esitmated Compute Units: ${units}`)
 
     return ComputeBudgetProgram.setComputeUnitLimit({
-        units: units ? units + 500 : 200_000,
+        units: units ? units * 1.1 : 200_000,
     })
 }
