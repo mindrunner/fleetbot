@@ -166,7 +166,7 @@ export const sendAndConfirmInstructions = async (
                 computeUnitsInstruction,
             ] = await Promise.all([
                 connection.getLatestBlockhash(),
-                createPriorityFeeInstruction(),
+                createPriorityFeeInstruction(chunk),
                 createComputeUnitInstruction(chunk),
             ])
 
