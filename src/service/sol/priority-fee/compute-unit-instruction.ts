@@ -44,7 +44,9 @@ const getSimulationUnits = async (
 export const createComputeUnitInstruction = async (
     instructions: TransactionInstruction[],
 ): Promise<TransactionInstruction> => {
-    const units = (await getSimulationUnits(instructions, keyPair.publicKey, []) ?? 200_000) * 1.1
+    const units =
+        ((await getSimulationUnits(instructions, keyPair.publicKey, [])) ??
+            200_000) * 1.1
 
     logger.debug(`Esitmated Compute Units: ${units}`)
 
