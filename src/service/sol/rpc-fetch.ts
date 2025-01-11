@@ -1,10 +1,10 @@
 import { config } from '../../config'
 
 export type RPCResult<T> = {
-    ok: boolean;
-    code: number;
-    result: T;
-};
+    ok: boolean
+    code: number
+    result: T
+}
 
 export type RpcRequestBody = any
 
@@ -17,10 +17,10 @@ export const rpcFetch = async <T>(
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(body),
-    });
+    })
     return {
         ok: res.ok,
         code: res.status,
         result: await res.json(),
-    };
-};
+    }
+}
