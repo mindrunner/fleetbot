@@ -58,7 +58,5 @@ export const createPriorityFeeInstruction = async (
 
     logger.debug(`Priority fee estimates: ${microLamports}`)
 
-    return ComputeBudgetProgram.setComputeUnitPrice({
-        microLamports: (result as any).result.recommendation,
-    })
+    return ComputeBudgetProgram.setComputeUnitPrice({ microLamports })
 }
