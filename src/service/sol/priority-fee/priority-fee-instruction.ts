@@ -43,11 +43,20 @@ export const createPriorityFeeInstruction = async (
         params: {
             transaction: base58.encode(transaction.serialize()),
             percentiles: [50, 75, 95, 100],
-            lookbackSlots: 300,
+            lookbackSlots: 10,
         },
     })
 
-    logger.debug(`Priority fee estimates: ${JSON.stringify(result, null, 2)}`)
+    const feeData = (result as any).result as Array<{
+        slot: number
+        prioritizationFee: number
+    }>
+
+    const microLamports =
+        feeData.find((f: any) => f.slot == -1)?.prioritizationFee ??
+        Math.max(...feeData.map((f: any) => f.prioritizationFee))
+
+    logger.debug(`Priority fee estimates: ${microLamports}`)
 
     return ComputeBudgetProgram.setComputeUnitPrice({
         microLamports: (result as any).result.recommendation,
