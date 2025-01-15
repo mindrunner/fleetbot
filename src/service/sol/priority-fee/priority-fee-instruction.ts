@@ -7,6 +7,7 @@ import {
     VersionedTransaction,
 } from '@solana/web3.js'
 import base58 from 'bs58'
+import { config } from '../../../config'
 
 import { logger } from '../../../logger'
 import { keyPair } from '../../wallet'
@@ -58,5 +59,13 @@ export const createPriorityFeeInstruction = async (
 
     logger.debug(`Priority fee estimates: ${microLamports}`)
 
-    return ComputeBudgetProgram.setComputeUnitPrice({ microLamports })
+    const feeLimit = config.sol.feeLimit
+    if (feeLimit > 0 && microLamports > feeLimit) {
+        logger.warn(`Capping fee at ${feeLimit}`)
+    }
+
+    return ComputeBudgetProgram.setComputeUnitPrice({
+        microLamports:
+            feeLimit > 0 ? Math.min(feeLimit, microLamports) : microLamports,
+    })
 }

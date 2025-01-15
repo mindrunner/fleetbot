@@ -46,6 +46,7 @@ export interface Config {
         foodMint: string
         fuelMint: string
         ammoMint: string
+        feeLimit: number
     }
 }
 
@@ -89,6 +90,7 @@ export const config: Config = {
         foodMint: env.get('FOOD_MINT'),
         fuelMint: env.get('FUEL_MINT'),
         ammoMint: env.get('AMMO_MINT'),
+        feeLimit: Number(env.get('FEE_LIMIT')),
     },
     cron: {
         refillInterval: env.get('REFILL_INTERVAL'),
