@@ -190,7 +190,9 @@ export const sendAndConfirmInstructions = async (
             }
 
             try {
-                logger.debug(Buffer.from(transaction.serialize()).toString('base64'))
+                logger.debug(
+                    Buffer.from(transaction.serialize()).toString('base64'),
+                )
                 const result = await sendAndConfirmTx(
                     transaction,
                     latestBlockHash,
