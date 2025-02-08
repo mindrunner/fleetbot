@@ -1,14 +1,17 @@
 import {
+    LAMPORTS_PER_SOL,
     PublicKey,
     TransactionInstruction,
     TransactionMessage,
     VersionedTransaction,
 } from '@solana/web3.js'
+import { config } from '../../config'
 
 import { logger } from '../../logger'
 import { keyPair } from '../wallet'
 
 import { connection } from './const'
+import { createBloxrouteTipInstruction } from './priority-fee/bloxroute-tip-instruction'
 import { createComputeUnitInstruction } from './priority-fee/compute-unit-instruction'
 import { createPriorityFeeInstruction } from './priority-fee/priority-fee-instruction'
 
@@ -173,6 +176,14 @@ export const sendAndConfirmInstructions = async (
             const txInstructions = [
                 computeUnitsInstruction,
                 priorityFeeInstruction,
+                ...(config.sol.bloxroute
+                    ? [
+                          createBloxrouteTipInstruction(
+                              keyPair.publicKey,
+                              0.0001 * LAMPORTS_PER_SOL,
+                          ),
+                      ]
+                    : []),
                 ...chunk,
             ]
 

@@ -37,6 +37,7 @@ export interface Config {
         resourceInterval: string
     }
     sol: {
+        bloxroute: boolean
         rpcEndpoint: string
         wsEndpoint: string
         fleetAddress: string
@@ -81,6 +82,7 @@ export const config: Config = {
         logging: env.get('DATABASE_LOGGING') as LoggerOptions,
     },
     sol: {
+        bloxroute: env.get('BLOXROUTE') === 'true',
         rpcEndpoint: env.get('RPC_ENDPOINT'),
         wsEndpoint: env.get('WS_ENDPOINT'),
         fleetAddress: env.get('FLEET_ADDRESS'),
