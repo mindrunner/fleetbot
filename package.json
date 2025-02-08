@@ -41,7 +41,7 @@
         "@staratlas/player-profile": "^0.11.0",
         "@staratlas/points": "^1.1.0",
         "@staratlas/profile-faction": "^0.6.0",
-        "@staratlas/sage": "^1.8.4",
+        "@staratlas/sage": "^1.8.5",
         "big.js": "^6.2.2",
         "bip39": "^3.1.0",
         "bn.js": "^5.2.1",
