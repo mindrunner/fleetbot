@@ -1,4 +1,5 @@
 import { Game } from '@staratlas/sage'
+import { mineCarbon } from '../fsm/configs/mine/mine-carbon'
 
 import { mineHydrogen } from '../fsm/configs/mine/mine-hydrogen'
 import { createInfoStrategy } from '../fsm/info'
@@ -18,7 +19,18 @@ export const mainnetLuStrategy = (
         match: nameMapMatcher(createInfoStrategy()),
         map: new Map([
             [
-                'Red Ruffed Lemur Fleet',
+                'Butterfly Fleet',
+                {
+                    fleet: null,
+                    strategy: createMiningStrategy(
+                        mineCarbon(worldMap),
+                        player,
+                        game,
+                    ),
+                },
+            ],
+            [
+                'Mouse',
                 {
                     fleet: null,
                     strategy: createMiningStrategy(
