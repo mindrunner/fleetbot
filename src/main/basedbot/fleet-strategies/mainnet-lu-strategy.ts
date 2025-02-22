@@ -30,7 +30,7 @@ export const mainnetLuStrategy = (
                 },
             ],
             [
-                'Mouse',
+                'Mouse Fleet',
                 {
                     fleet: null,
                     strategy: createMiningStrategy(
