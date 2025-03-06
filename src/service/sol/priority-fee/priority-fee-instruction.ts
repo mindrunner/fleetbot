@@ -1,3 +1,4 @@
+import { an } from '@faker-js/faker/dist/airline-BnpeTvY9'
 import {
     AddressLookupTableAccount,
     ComputeBudgetProgram,
@@ -36,6 +37,12 @@ export const createPriorityFeeInstruction = async (
     instructions: TransactionInstruction[],
 ): Promise<TransactionInstruction> => {
     const transaction = getDummyTransaction(instructions, keyPair.publicKey, [])
+    let encodedTx: string | undefined
+    try {
+        encodedTx = base58.encode(transaction.serialize())
+    } catch (e) {
+        logger.error((e as any).message)
+    }
 
     try {
         const result = await rpcFetch({
@@ -43,7 +50,7 @@ export const createPriorityFeeInstruction = async (
             id: 1,
             method: 'getRecentPrioritizationFees',
             params: {
-                transaction: base58.encode(transaction.serialize()),
+                transaction: encodedTx,
                 percentiles: [50, 75, 95, 100],
                 lookbackSlots: 10,
             },
@@ -72,7 +79,7 @@ export const createPriorityFeeInstruction = async (
                     : microLamports,
         })
     } catch (e) {
-        logger.error(e)
+        logger.error((e as any).message)
         return ComputeBudgetProgram.setComputeUnitPrice({
             microLamports: 5000,
         })
