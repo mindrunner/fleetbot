@@ -29,7 +29,7 @@ export const getFleetStrategy = (
             return atlasnetFcStrategy(150)(map, player, game, 'ustur')
         // return destructAllStrategy(map, player, game)
         case 'FUwHSqujzcPD44SDZYJXuk73NbkEyYQwcLMioHhpjbx2':
-            return atlasnetFcStrategy(1)(map, player, game, 'oni')
+            return atlasnetFcStrategy(150)(map, player, game, 'oni')
         // return destructAllStrategy(map, player, game)
         case '34ghznSJCYEMrS1aC55UYZZUuxfuurA9441aKnigmYyz':
             return atlasnetQtStrategy(1)(map, player, game, 'le.local')
