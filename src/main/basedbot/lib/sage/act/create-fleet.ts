@@ -70,9 +70,9 @@ export const createFleet = async (
         new Map<string, Ship>(),
     )
 
-    const [starbasePlayer, [cargoStatsDefinition]] = await Promise.all([
+    const [starbasePlayer, cargoStatsDefinition] = await Promise.all([
         getStarbasePlayer(player, starbase, programs),
-        getCargoStatsDefinition(),
+        getCargoStatsDefinition(game.data.cargo.statsDefinition),
     ])
 
     const [head, ...tail] = fleetShips.sort(

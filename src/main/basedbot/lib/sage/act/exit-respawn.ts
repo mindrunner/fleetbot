@@ -33,7 +33,9 @@ export const exitRespawn = async (
 
     const starbasePlayer = await getStarbasePlayer(player, starbase, programs)
 
-    const [cargoStatsDefinition] = await getCargoStatsDefinition()
+    const cargoStatsDefinition = await getCargoStatsDefinition(
+        game.data.cargo.statsDefinition,
+    )
 
     const ixs: Array<InstructionReturn> = []
 

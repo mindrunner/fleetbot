@@ -52,7 +52,7 @@ export const getShipByMint = async (
     game: Game,
     programs: StarAtlasPrograms,
 ): Promise<Ship> => {
-    const [ship] = await readAllFromRPC(
+    const ships = await readAllFromRPC(
         connection,
         programs.sage,
         Ship,
@@ -71,6 +71,13 @@ export const getShipByMint = async (
                 },
             },
         ],
+    )
+
+    const ship = ships.find(
+        (s) =>
+            s.type === 'ok' &&
+            (s.data.data as any).next.key.toString() ===
+                '11111111111111111111111111111111',
     )
 
     if (!ship) {

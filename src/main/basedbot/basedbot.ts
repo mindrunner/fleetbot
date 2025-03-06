@@ -200,7 +200,9 @@ const cleanupPods = async (player: Player, game: Game, starbase: Starbase) => {
         programs.cargo,
         starbasePlayer.key,
     )
-    const [cargoStatsDefinition] = await getCargoStatsDefinition()
+    const cargoStatsDefinition = await getCargoStatsDefinition(
+        game.data.cargo.statsDefinition,
+    )
 
     if (!podCleanup) {
         logger.info('Nothing to Clean up')

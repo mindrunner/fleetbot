@@ -37,35 +37,44 @@ export const createPriorityFeeInstruction = async (
 ): Promise<TransactionInstruction> => {
     const transaction = getDummyTransaction(instructions, keyPair.publicKey, [])
 
-    const result = await rpcFetch({
-        jsonrpc: '2.0',
-        id: 1,
-        method: 'getRecentPrioritizationFees',
-        params: {
-            transaction: base58.encode(transaction.serialize()),
-            percentiles: [50, 75, 95, 100],
-            lookbackSlots: 10,
-        },
-    })
+    try {
+        const result = await rpcFetch({
+            jsonrpc: '2.0',
+            id: 1,
+            method: 'getRecentPrioritizationFees',
+            params: {
+                transaction: base58.encode(transaction.serialize()),
+                percentiles: [50, 75, 95, 100],
+                lookbackSlots: 10,
+            },
+        })
 
-    const feeData = (result as any).result as Array<{
-        slot: number
-        prioritizationFee: number
-    }>
+        const feeData = (result as any).result as Array<{
+            slot: number
+            prioritizationFee: number
+        }>
 
-    const microLamports =
-        feeData.find((f: any) => f.slot == -1)?.prioritizationFee ??
-        Math.max(...feeData.map((f: any) => f.prioritizationFee))
+        const microLamports =
+            feeData.find((f: any) => f.slot == -1)?.prioritizationFee ??
+            Math.max(...feeData.map((f: any) => f.prioritizationFee))
 
-    logger.debug(`Priority fee estimates: ${microLamports}`)
+        // const microLamports = 5000
+        logger.debug(`Priority fee estimates: ${microLamports}`)
 
-    const feeLimit = config.sol.feeLimit
-    if (feeLimit > 0 && microLamports > feeLimit) {
-        logger.warn(`Capping fee at ${feeLimit}`)
+        const feeLimit = config.sol.feeLimit
+        if (feeLimit > 0 && microLamports > feeLimit) {
+            logger.warn(`Capping fee at ${feeLimit}`)
+        }
+        return ComputeBudgetProgram.setComputeUnitPrice({
+            microLamports:
+                feeLimit > 0
+                    ? Math.min(feeLimit, microLamports)
+                    : microLamports,
+        })
+    } catch (e) {
+        logger.error(e)
+        return ComputeBudgetProgram.setComputeUnitPrice({
+            microLamports: 5000,
+        })
     }
-
-    return ComputeBudgetProgram.setComputeUnitPrice({
-        microLamports:
-            feeLimit > 0 ? Math.min(feeLimit, microLamports) : microLamports,
-    })
 }

@@ -40,7 +40,7 @@ export const stopSubwarp = async (
                 fleetInfo,
                 player,
                 game,
-                (await getCargoStatsDefinition())[0],
+                await getCargoStatsDefinition(game.data.cargo.statsDefinition),
                 fuelToken.address,
                 game.data.mints.fuel,
                 programs,

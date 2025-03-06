@@ -20,7 +20,7 @@ import { anchorProvider } from '../../../service/sol/anchor'
 // @ts-expect-error
 export type StarAtlasProgram<T extends Idl> = ProgramMethods<T>
 
-export const xpCategoryIds = config.sol.rpcEndpoint.includes('atlasnet')
+export const xpCategoryIds = config.sol.rpcEndpoint.includes('devnet')
     ? {
           dataRunningXpCategory: 'DXPsKQPMyaDtunxDWqiKTGWbQga3Wihck8zb8iSLATJQ',
           councilRankXpCategory: 'CRXPW3csNpkEYU5U4DUp6Ln6aEEWq4PSUAwV8v6Ygcqg',
@@ -38,7 +38,7 @@ export const xpCategoryIds = config.sol.rpcEndpoint.includes('atlasnet')
           loyalityCategory: '',
       }
 
-const programIds = config.sol.rpcEndpoint.includes('atlasnet')
+const programIds = config.sol.rpcEndpoint.includes('devnet')
     ? {
           sage: 'sAgezwJpDb1aHvzNr3o24cKjsETmFEKghBEyJ1askDi',
           profile: 'PprofUW1pURCnMW2si88GWPXEEK3Bvh9Tksy8WtnoYJ',
