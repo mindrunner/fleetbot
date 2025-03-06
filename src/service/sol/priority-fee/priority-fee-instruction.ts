@@ -1,4 +1,3 @@
-import { an } from '@faker-js/faker/dist/airline-BnpeTvY9'
 import {
     AddressLookupTableAccount,
     ComputeBudgetProgram,
