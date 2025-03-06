@@ -21,7 +21,7 @@ export const getCargoPodsForStarbasePlayer = async (
     starbasePlayer: StarbasePlayer,
     programs: StarAtlasPrograms,
 ): Promise<CargoPod> => {
-    const [cargoPod] = await readAllFromRPC(
+    const cargoPods = await readAllFromRPC(
         connection,
         programs.cargo,
         CargoPod,
@@ -35,6 +35,8 @@ export const getCargoPodsForStarbasePlayer = async (
             },
         ],
     )
+
+    const cargoPod = cargoPods[0]
 
     if (!cargoPod) {
         throw new Error('Error reading cargo pods')
@@ -96,7 +98,7 @@ export const getStarbasePlayer = async (
     starbase: Starbase,
     programs: StarAtlasPrograms,
 ): Promise<StarbasePlayer> => {
-    const [starbasePlayer] = await readAllFromRPC(
+    const starbasePlayers = await readAllFromRPC(
         connection,
         programs.sage,
         StarbasePlayer,
@@ -118,6 +120,8 @@ export const getStarbasePlayer = async (
     )
 
     const game = await sageGame()
+
+    const [starbasePlayer] = starbasePlayers
 
     if (!starbasePlayer) {
         const [sageProfileAddress] = SagePlayerProfile.findAddress(
