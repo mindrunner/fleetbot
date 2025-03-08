@@ -3,9 +3,8 @@ import { Game } from '@staratlas/sage'
 import { Player } from '../lib/sage/state/user-account'
 import { WorldMap } from '../lib/sage/state/world-map'
 
-import { atlasnetFcStrategy } from './atlasnet-fc-strategy'
 import { atlasnetLuStrategy } from './atlasnet-lu-strategy'
-import { atlasnetQtStrategy } from './atlasnet-qt-strategy'
+import { destructAllStrategy } from './destruct-all-strategy'
 import { mainnetGellsnStrategy } from './mainnet-gellsn-strategy'
 import { mainnetLuStrategy } from './mainnet-lu-strategy'
 import { StrategyConfig } from './strategy-config'
@@ -23,20 +22,20 @@ export const getFleetStrategy = (
         case 'AePY3wEoUFcFuXeUU9X26YK6tNKQMZovBgvY54LK2B8N':
             return mainnetLuStrategy(map, player, game)
         case 'CgHvzwGbwWv3CwLTvEgeqSKeD8EwMdTfiiCG3dFrKVVC':
-            return atlasnetFcStrategy(150)(map, player, game, 'mud')
-        // return destructAllStrategy(map, player, game)
+            // return atlasnetFcStrategy(150)(map, player, game, 'mud')
+            return destructAllStrategy(map, player, game)
         case '9KBrgWVjsmdZ3YEjcsa3wrbbJREgZgS7vDbgoz2aHaNm':
-            return atlasnetFcStrategy(150)(map, player, game, 'ustur')
-        // return destructAllStrategy(map, player, game)
+            // return atlasnetFcStrategy(150)(map, player, game, 'ustur')
+            return destructAllStrategy(map, player, game)
         case 'FUwHSqujzcPD44SDZYJXuk73NbkEyYQwcLMioHhpjbx2':
-            return atlasnetFcStrategy(150)(map, player, game, 'oni')
-        // return destructAllStrategy(map, player, game)
+            // return atlasnetFcStrategy(150)(map, player, game, 'oni')
+            return destructAllStrategy(map, player, game)
         case '34ghznSJCYEMrS1aC55UYZZUuxfuurA9441aKnigmYyz':
-            return atlasnetQtStrategy(1)(map, player, game, 'le.local')
-        // return destructAllStrategy(map, player, game)
+            // return atlasnetQtStrategy(1)(map, player, game, 'le.local')
+            return destructAllStrategy(map, player, game)
         case '3wGtzSseukZ7ZAdAgRnhgP34QiLx1VWWALBsr9FYShXu':
-            return atlasnetQtStrategy(1)(map, player, game, 'le.local')
-        // return destructAllStrategy(map, player, game)
+            // return atlasnetQtStrategy(1)(map, player, game, 'whosthis')
+            return destructAllStrategy(map, player, game)
         default:
             throw new Error('Unknown strategy')
     }
