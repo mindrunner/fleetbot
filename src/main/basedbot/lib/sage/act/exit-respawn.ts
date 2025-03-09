@@ -1,5 +1,6 @@
 import { getAssociatedTokenAddressSync } from '@solana/spl-token'
 import { PublicKey } from '@solana/web3.js'
+import { CargoType } from '@staratlas/cargo'
 import { InstructionReturn, ixReturnsToIxs } from '@staratlas/data-source'
 import { Game, Starbase } from '@staratlas/sage'
 
@@ -43,14 +44,19 @@ export const exitRespawn = async (
 
     for (const key of cargoMints) {
         const mint = new PublicKey(key)
-        const cargoType = getCargoType(player.cargoTypes, game, mint)
+        let cargoType: CargoType | undefined
+        try {
+            cargoType = getCargoType(player.cargoTypes, game, mint)
+        } catch (e) {
+            logger.error((e as any).message)
+        }
 
         const cargoPod = getFleetCargoHold(mint, game, fleetInfo)
         const tokenFrom = getAssociatedTokenAddressSync(mint, cargoPod, true)
 
         const accountInfo = await connection.getAccountInfo(tokenFrom)
 
-        if (accountInfo) {
+        if (accountInfo && cargoType) {
             ixs.push(
                 forceDropFleetCargoIx(
                     fleetInfo,
