@@ -77,7 +77,7 @@ export const createPriorityFeeInstruction = async (
 
         const feeLimit = config.sol.feeLimit
         if (feeLimit > 0 && microLamports > feeLimit) {
-            logger.warn(`Capping fee at ${feeLimit}`)
+            logger.debug(`Capping fee at ${feeLimit}`)
         }
         return ComputeBudgetProgram.setComputeUnitPrice({
             microLamports:

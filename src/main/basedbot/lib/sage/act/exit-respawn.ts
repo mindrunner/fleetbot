@@ -41,8 +41,13 @@ export const exitRespawn = async (
     const ixs: Array<InstructionReturn> = []
 
     const cargoMints = player.cargoTypes.map((ct) => ct.data.mint)
+    const uniqPublicKeys = (keys: PublicKey[]): PublicKey[] => {
+        const uniqueStrings = [...new Set(keys.map((key) => key.toString()))]
 
-    for (const key of cargoMints) {
+        return uniqueStrings.map((str) => new PublicKey(str))
+    }
+
+    for (const key of uniqPublicKeys(cargoMints)) {
         const mint = new PublicKey(key)
         let cargoType: CargoType | undefined
         try {
@@ -57,6 +62,8 @@ export const exitRespawn = async (
         const accountInfo = await connection.getAccountInfo(tokenFrom)
 
         if (accountInfo && cargoType) {
+            logger.info(tokenFrom.toBase58())
+            logger.info(JSON.stringify(accountInfo))
             ixs.push(
                 forceDropFleetCargoIx(
                     fleetInfo,

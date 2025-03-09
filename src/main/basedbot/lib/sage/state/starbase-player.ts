@@ -121,6 +121,9 @@ export const getStarbasePlayer = async (
 
     const game = await sageGame()
 
+    if (starbasePlayers.length > 1) {
+        throw new Error('Multiple starbase players found')
+    }
     const [starbasePlayer] = starbasePlayers
 
     if (!starbasePlayer) {
