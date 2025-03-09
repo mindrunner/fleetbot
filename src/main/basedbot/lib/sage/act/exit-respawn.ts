@@ -62,8 +62,6 @@ export const exitRespawn = async (
         const accountInfo = await connection.getAccountInfo(tokenFrom)
 
         if (accountInfo && cargoType) {
-            logger.info(tokenFrom.toBase58())
-            logger.info(JSON.stringify(accountInfo))
             ixs.push(
                 forceDropFleetCargoIx(
                     fleetInfo,
