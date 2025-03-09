@@ -47,8 +47,8 @@ export const exitRespawn = async (
         let cargoType: CargoType | undefined
         try {
             cargoType = getCargoType(player.cargoTypes, game, mint)
-        } catch (e) {
-            logger.error((e as any).message)
+        } catch (_) {
+            continue
         }
 
         const cargoPod = getFleetCargoHold(mint, game, fleetInfo)
