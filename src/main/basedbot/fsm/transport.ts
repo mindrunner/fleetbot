@@ -1,4 +1,5 @@
 import { Game } from '@staratlas/sage'
+import BN from 'bn.js'
 import dayjs from 'dayjs'
 
 import { now } from '../../../dayjs'
@@ -208,6 +209,10 @@ const transition = async (
                                 fleetCargoPod,
                                 resource,
                             )
+
+                            if (amount.eq(new BN(0))) {
+                                return Promise.resolve()
+                            }
 
                             logger.info(
                                 `Unloading ${amount} ${resource.toBase58()}`,

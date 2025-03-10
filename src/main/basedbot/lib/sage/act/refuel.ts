@@ -62,7 +62,7 @@ export const refuel = async (
         `Current Fuel: ${currentFuel}, Max Fuel: ${maxFuel}, Fuel Needed: ${fuelNeeded}`,
     )
 
-    // TODO: Check if starbase has enough ammo balance
+    // TODO: Check if starbase has enough fuel balance
 
     const ix = loadCargoIx(
         fleetInfo,
