@@ -15,7 +15,6 @@ import { starbaseByCoordinates } from '../lib/sage/state/starbase-by-coordinates
 import { Player } from '../lib/sage/state/user-account'
 import { FleetInfo } from '../lib/sage/state/user-fleets'
 import { getName } from '../lib/sage/util'
-import { getFuelConsumption } from '../lib/util/fuel-consumption'
 
 import { MineConfig } from './configs/mine/mine-config'
 import { Strategy } from './strategy'
