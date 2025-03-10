@@ -36,6 +36,12 @@ export const getCargoPodsForStarbasePlayer = async (
         ],
     )
 
+    if (cargoPods.length > 1) {
+        logger.warn(
+            `${starbasePlayer.data.starbase.toBase58()} has ${cargoPods.length} cargo pods`,
+        )
+    }
+
     const cargoPod = cargoPods[0]
 
     if (!cargoPod) {

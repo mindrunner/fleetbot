@@ -17,6 +17,7 @@ import { FleetInfo } from '../lib/sage/state/user-fleets'
 import { WorldMap } from '../lib/sage/state/world-map'
 import { getName } from '../lib/sage/util'
 import { Coordinates } from '../lib/util/coordinates'
+import { getFuelConsumption } from '../lib/util/fuel-consumption'
 
 import { Strategy } from './strategy'
 
@@ -33,17 +34,24 @@ const transition = async (
         return acc + load
     }, 0)
 
+    const { homeBase, targetBase, resources, warpMode } = config
+    const fuelConsumption = getFuelConsumption(homeBase, targetBase, fleetInfo)
+
     const { cargoCapacity } = fleetInfo.cargoStats
     const cargoLevelFuel = fleetInfo.cargoLevels.fuel
     const cargoLevelAmmo = fleetInfo.cargoLevels.ammo
-    const fuelReserve = fleetInfo.cargoStats.fuelCapacity / 10
-    const ammoReserve = 0
+    const cargoLevel = Array.from(fleetInfo.cargoLevels.cargo.values()).reduce(
+        (acc, curr) => acc + curr,
+        0,
+    )
+
+    const fuelReserve = Math.ceil(fuelConsumption.auto * 1.1)
+    const ammoReserve = fleetInfo.cargoStats.ammoCapacity
     const hasEnoughFuel = cargoLevelFuel >= fuelReserve
     const hasEnoughAmmo = cargoLevelAmmo >= ammoReserve
     const hasCargo = cargoLoad > 0
     const currentStarbase = await starbaseByCoordinates(fleetInfo.location)
     const { fleetName, location } = fleetInfo
-    const { homeBase, targetBase, resources, warpMode } = config
     const isAtHomeBase = homeBase.equals(location)
     const isAtTargetBase = targetBase.equals(location)
     const isSameBase = homeBase.equals(targetBase)
@@ -87,17 +95,24 @@ const transition = async (
             if (isAtTargetBase) {
                 logger.info(`${fleetName} is at target base`)
 
-                if (!hasCargo) {
-                    logger.info('Ready to go! Moving to home base')
+                if (hasCargo) {
+                    logger.info(
+                        `${fleetName} docking to unload ${cargoLoad} cargo`,
+                    )
+                    return dock(fleetInfo, location, player, game)
+                }
+
+                if (!hasEnoughFuel) {
+                    logger.info(`${fleetName} docking to refuel.`)
+
+                    return dock(fleetInfo, location, player, game)
+                }
+
+                if (hasEnoughFuel && !hasCargo) {
+                    logger.info('Ready to go! Moving to target base')
 
                     return move(fleetInfo, homeBase, player, game, warpMode)
                 }
-
-                logger.info(
-                    `${fleetName} has ${cargoLoad} cargo, docking to unload.`,
-                )
-
-                return dock(fleetInfo, location, player, game)
             }
 
             logger.warn(`${fleetName} doesn't know what to do`)
@@ -112,40 +127,46 @@ const transition = async (
 
             if (isAtHomeBase) {
                 if (!hasEnoughFuel) {
-                    logger.info(`${fleetInfo.fleetName} is refueling`)
+                    const neededFuel =
+                        fleetInfo.cargoStats.fuelCapacity - cargoLevelFuel
+                    logger.info(
+                        `${fleetInfo.fleetName} is refueling ${neededFuel}`,
+                    )
 
                     await loadCargo(
                         fleetInfo,
                         player,
                         game,
                         game.data.mints.fuel,
-                        fleetInfo.cargoStats.fuelCapacity - cargoLevelFuel,
+                        neededFuel,
                     )
                 }
                 if (!hasEnoughAmmo) {
-                    logger.info(`${fleetInfo.fleetName} is rearming`)
+                    const neededAmmo =
+                        fleetInfo.cargoStats.ammoCapacity - cargoLevelAmmo
+                    logger.info(
+                        `${fleetInfo.fleetName} is rearming ${neededAmmo}`,
+                    )
 
                     await loadCargo(
                         fleetInfo,
                         player,
                         game,
                         game.data.mints.ammo,
-                        fleetInfo.cargoStats.ammoCapacity - cargoLevelAmmo,
+                        neededAmmo,
                     )
                 }
 
                 if (!hasCargo) {
                     logger.info(`Loading ${Array.from(resources).length} cargo`)
                     const cargoResources = Array.from(resources).filter(
-                        (resource) =>
-                            !resource.equals(game.data.mints.ammo) &&
-                            !resource.equals(game.data.mints.fuel),
+                        (resource) => !resource.equals(game.data.mints.fuel),
                     )
 
                     await Promise.all(
                         cargoResources.map((resource) => {
                             const count = Math.floor(
-                                cargoCapacity /
+                                (cargoCapacity - cargoLevel) /
                                     Array.from(cargoResources).length,
                             )
 
@@ -159,6 +180,7 @@ const transition = async (
                                 game,
                                 resource,
                                 count,
+                                true,
                             )
                         }),
                     )
@@ -191,7 +213,7 @@ const transition = async (
                                 `Unloading ${amount} ${resource.toBase58()}`,
                             )
 
-                            return unloadCargo(
+                            await unloadCargo(
                                 fleetInfo,
                                 player,
                                 game,
@@ -203,14 +225,17 @@ const transition = async (
                 }
 
                 if (!hasEnoughFuel) {
-                    logger.info(`${fleetInfo.fleetName} is refueling`)
+                    const neededFuel = fuelReserve - cargoLevelFuel
+                    logger.info(
+                        `${fleetInfo.fleetName} is refueling ${neededFuel}`,
+                    )
 
                     await loadCargo(
                         fleetInfo,
                         player,
                         game,
                         game.data.mints.fuel,
-                        fuelReserve - cargoLevelFuel,
+                        neededFuel,
                     )
                 }
             }

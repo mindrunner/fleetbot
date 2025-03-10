@@ -15,6 +15,7 @@ import { starbaseByCoordinates } from '../lib/sage/state/starbase-by-coordinates
 import { Player } from '../lib/sage/state/user-account'
 import { FleetInfo } from '../lib/sage/state/user-fleets'
 import { getName } from '../lib/sage/util'
+import { getFuelConsumption } from '../lib/util/fuel-consumption'
 
 import { MineConfig } from './configs/mine/mine-config'
 import { Strategy } from './strategy'
@@ -35,22 +36,23 @@ const transition = async (
 
             return acc + load
         }, 0)
+    const { homeBase, targetBase, resource, warpMode } = config
+    const fuelConsumption = getFuelConsumption(homeBase, targetBase, fleetInfo)
 
     const { cargoCapacity } = fleetInfo.cargoStats
     const cargoLevelFood = fleetInfo.cargoLevels.food
     const cargoLevelAmmo = fleetInfo.cargoLevels.ammo
     const cargoLevelFuel = fleetInfo.cargoLevels.fuel
     const desiredFood = cargoCapacity / 20
+    const fuelReserve = Math.ceil(fuelConsumption.auto * 1.1)
     const toLoad = desiredFood - cargoLevelFood
     const hasEnoughFood = toLoad <= 10
     const hasEnoughAmmo =
         cargoLevelAmmo >= fleetInfo.cargoStats.ammoCapacity - 100
-    const hasEnoughFuel =
-        cargoLevelFuel >= fleetInfo.cargoStats.fuelCapacity - 100
+    const hasEnoughFuel = cargoLevelFuel >= fuelReserve
     const hasCargo = cargoLoad > 0
     const currentStarbase = await starbaseByCoordinates(fleetInfo.location)
     const { fleetName, location } = fleetInfo
-    const { homeBase, targetBase, resource, warpMode } = config
     const resourceName = getName(resource.mineItem)
     const isAtHomeBase = homeBase.equals(location)
     const isAtTargetBase = targetBase.equals(location)
@@ -103,6 +105,12 @@ const transition = async (
 
             if (isAtTargetBase && !isSameBase) {
                 logger.info(`${fleetName} is at target base`)
+                if (!hasEnoughFuel) {
+                    logger.info(
+                        `${fleetName} doesn't have enough fuel, docking`,
+                    )
+                    return dock(fleetInfo, location, player, game)
+                }
                 if (hasCargo) {
                     logger.info(
                         `${fleetName} has ${cargoLoad} ${resourceName}, returning home`,
@@ -151,30 +159,34 @@ const transition = async (
             }
 
             if (!hasEnoughFuel) {
-                logger.info(`${fleetInfo.fleetName} is refueling`)
+                const neededFuel =
+                    fleetInfo.cargoStats.fuelCapacity - cargoLevelFuel
+                logger.info(`${fleetInfo.fleetName} is refueling ${neededFuel}`)
 
                 return loadCargo(
                     fleetInfo,
                     player,
                     game,
                     game.data.mints.fuel,
-                    fleetInfo.cargoStats.fuelCapacity - cargoLevelFuel,
+                    neededFuel,
                 )
             }
 
-            if (!hasEnoughAmmo) {
-                logger.info(`${fleetInfo.fleetName} is rearming`)
+            if (!hasEnoughAmmo && isAtHomeBase) {
+                const neededAmmo =
+                    fleetInfo.cargoStats.ammoCapacity - cargoLevelAmmo
+                logger.info(`${fleetInfo.fleetName} is rearming ${neededAmmo}`)
 
                 return loadCargo(
                     fleetInfo,
                     player,
                     game,
                     game.data.mints.ammo,
-                    fleetInfo.cargoStats.ammoCapacity - cargoLevelAmmo,
+                    neededAmmo,
                 )
             }
 
-            if (!hasEnoughFood) {
+            if (!hasEnoughFood && isAtHomeBase) {
                 logger.info(
                     `${fleetInfo.fleetName} is loading ${desiredFood - cargoLevelFood} food`,
                 )

@@ -43,10 +43,17 @@ export const loadCargo = async (
     game: Game,
     mint: PublicKey,
     amount: number,
+    forceCargoHold: boolean = false,
 ): Promise<void> => {
+    if (amount < 1) {
+        logger.warn(`Cannot load amount less than 1 (${amount})`)
+        return
+    }
     const starbase = await starbaseByCoordinates(fleetInfo.location)
 
-    const hold = getFleetCargoHold(mint, game, fleetInfo)
+    const hold = forceCargoHold
+        ? fleetInfo.fleet.data.cargoHold
+        : getFleetCargoHold(mint, game, fleetInfo)
 
     if (!starbase) {
         throw new Error(`No starbase found at ${fleetInfo.location}`)

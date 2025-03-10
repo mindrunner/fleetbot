@@ -9,6 +9,7 @@ import { logger } from '../../../../../logger'
 import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
 import { programs } from '../../programs'
 import { Coordinates } from '../../util/coordinates'
+import { getFuelConsumption } from '../../util/fuel-consumption'
 import { subWarpIx } from '../ix/subwarp'
 import { warpIx } from '../ix/warp'
 import { Player } from '../state/user-account'
@@ -48,7 +49,27 @@ export const move = async (
     }
 
     const { maxWarpDistance } = fleetInfo.movementStats
+
     const desiredDistance = fleetInfo.location.distanceFrom(coordinates) * 100
+
+    const fuelConsumption = getFuelConsumption(
+        fleetInfo.location,
+        coordinates,
+        fleetInfo,
+    )
+
+    const subWarpFuelConsumptionRatePerSecond = fuelConsumption.subwarp / 1000
+    const warpFuelConsumptionRatePerSecond = fuelConsumption.warp / 1000
+
+    logger.info(`Distance to Travel: ${desiredDistance}`)
+    logger.info(
+        `Subwarp Fuel Consumption per sec: ${subWarpFuelConsumptionRatePerSecond}`,
+    )
+    logger.info(
+        `Warp Fuel Consumption per sec: ${warpFuelConsumptionRatePerSecond}`,
+    )
+
+    logger.info(`Fuel level: ${fleetInfo.cargoLevels.fuel}`)
 
     const canWarp = desiredDistance <= maxWarpDistance
     const warp = warpMode === 'warp' || (warpMode === 'auto' && canWarp)
@@ -63,6 +84,28 @@ export const move = async (
         )
 
         return
+    }
+
+    const estimatedConsumption = warp
+        ? fuelConsumption.warp
+        : fuelConsumption.subwarp
+
+    logger.info(`Estimated fuel consumption: ${estimatedConsumption}`)
+
+    const hasEnoughFuel = fleetInfo.cargoLevels.fuel >= estimatedConsumption
+
+    const hasEnoughFuelForRoundTrip =
+        fleetInfo.cargoLevels.fuel >= estimatedConsumption * 2
+
+    if (!hasEnoughFuel) {
+        logger.warn('Not enough fuel to move')
+        return
+    }
+
+    if (!hasEnoughFuelForRoundTrip) {
+        logger.warn(
+            'Not enough fuel for the round trip. Need Fuel at destination Starbase',
+        )
     }
 
     const fuelTokenAccount = createAssociatedTokenAccountIdempotent(
