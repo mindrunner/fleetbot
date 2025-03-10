@@ -42,7 +42,7 @@ const confirmTx = async (txId: string): Promise<string | undefined> => {
             res.value.confirmationStatus === 'confirmed' ||
             res.value.confirmationStatus === 'processed'
         ) {
-            const log = res.value.err ? logger.warn : logger.info
+            const log = res.value.err ? logger.warn : logger.debug
 
             // log(`Transaction ${res.value.confirmationStatus}: ${txId} with status: ${res.value.confirmationStatus}`)
             log(`Signature: ${txId} with status: ${JSON.stringify(res)}`)
