@@ -37,19 +37,18 @@ const transition = async (
             return acc + load
         }, 0)
     const { homeBase, targetBase, resource, warpMode } = config
-    const fuelConsumption = getFuelConsumption(homeBase, targetBase, fleetInfo)
 
     const { cargoCapacity } = fleetInfo.cargoStats
     const cargoLevelFood = fleetInfo.cargoLevels.food
     const cargoLevelAmmo = fleetInfo.cargoLevels.ammo
     const cargoLevelFuel = fleetInfo.cargoLevels.fuel
     const desiredFood = cargoCapacity / 20
-    const fuelReserve = Math.ceil(fuelConsumption.auto * 1.1)
+    const fuelReserve = fleetInfo.cargoStats.fuelCapacity
     const toLoad = desiredFood - cargoLevelFood
     const hasEnoughFood = toLoad <= 10
     const hasEnoughAmmo =
         cargoLevelAmmo >= fleetInfo.cargoStats.ammoCapacity - 100
-    const hasEnoughFuel = cargoLevelFuel >= fuelReserve
+    const hasEnoughFuel = cargoLevelFuel >= fuelReserve - 100
     const hasCargo = cargoLoad > 0
     const currentStarbase = await starbaseByCoordinates(fleetInfo.location)
     const { fleetName, location } = fleetInfo
