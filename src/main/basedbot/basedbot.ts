@@ -95,7 +95,7 @@ export const getTokenBalance = async (
     )
 
     if (!mintTokenAccount) {
-        logger.warn('Token account not found, assuming empty balance.')
+        logger.debug('Token account not found, assuming empty balance.')
     }
 
     return new BN(mintTokenAccount ? mintTokenAccount.amount.toString() : 0)
