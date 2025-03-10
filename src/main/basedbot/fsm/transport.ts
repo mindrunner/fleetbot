@@ -1,3 +1,4 @@
+import { PublicKey } from '@solana/web3.js'
 import { Game } from '@staratlas/sage'
 import BN from 'bn.js'
 import dayjs from 'dayjs'
@@ -45,6 +46,10 @@ const transition = async (
         (acc, curr) => acc + curr,
         0,
     )
+
+    for (const [key, value] of fleetInfo.cargoLevels.cargo) {
+        logger.info(`${key}: ${value}`)
+    }
 
     const fuelReserve = Math.ceil(fuelConsumption.auto * 1.1)
     const ammoReserve = fleetInfo.cargoStats.ammoCapacity
@@ -198,17 +203,50 @@ const transition = async (
                         `Unloading ${Array.from(resources).length} cargo`,
                     )
 
+                    //Unload Fuel
+
+                    const unload = async (mint: PublicKey): Promise<void> => {
+                        const fleetCargoPod = getHold(mint, game, fleetInfo)
+                        const amount = await getTokenBalance(
+                            fleetCargoPod,
+                            mint,
+                        )
+
+                        const toUnload = amount.sub(new BN(fuelReserve))
+
+                        if (toUnload.lte(new BN(0))) {
+                            return Promise.resolve()
+                        }
+
+                        logger.info(`Unloading ${toUnload} ${mint}`)
+
+                        await unloadCargo(
+                            fleetInfo,
+                            player,
+                            game,
+                            mint,
+                            toUnload,
+                        )
+                    }
+
+                    await Promise.all([
+                        unload(game.data.mints.ammo),
+                        unload(game.data.mints.fuel),
+                    ])
+
+                    const cargoResources = Array.from(resources).filter(
+                        (resource) => !resource.equals(game.data.mints.fuel),
+                    )
+
                     await Promise.all(
-                        Array.from(resources).map(async (resource) => {
-                            const fleetCargoPod = getHold(
-                                resource,
-                                game,
-                                fleetInfo,
-                            )
+                        Array.from(cargoResources).map(async (resource) => {
+                            const fleetCargoPod = fleetInfo.fleet.data.cargoHold
                             const amount = await getTokenBalance(
                                 fleetCargoPod,
                                 resource,
                             )
+
+                            logger.info(`Unloading ${amount} ${resource}`)
 
                             if (amount.eq(new BN(0))) {
                                 return Promise.resolve()

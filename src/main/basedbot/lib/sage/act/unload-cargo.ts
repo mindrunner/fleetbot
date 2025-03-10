@@ -79,14 +79,14 @@ export const unloadCargo = async (
         true,
     )
 
-    const fuelAmountAtOrigin = await getTokenBalance(fleetCargoPod, mint)
+    const amountAtOrigin = await getTokenBalance(fleetCargoPod, mint)
 
-    if (fuelAmountAtOrigin.lt(amount)) {
+    if (amountAtOrigin.lt(amount)) {
         logger.warn(
-            `Requested ${amount.toNumber()} cargo to unload. can only unload ${fuelAmountAtOrigin.toNumber()}`,
+            `Requested ${amount.toNumber()} cargo to unload. can only unload ${amountAtOrigin.toNumber()}`,
         )
     }
-    const toUnload = fuelAmountAtOrigin.lt(amount) ? fuelAmountAtOrigin : amount
+    const toUnload = amountAtOrigin.lt(amount) ? amountAtOrigin : amount
 
     const ix = unloadCargoIx(
         fleetInfo,

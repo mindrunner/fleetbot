@@ -237,13 +237,14 @@ const basedbot = async (botConfig: BotConfig) => {
         getUserFleets(player),
         sageGame(),
     ])
+
     const fleetInfos = await Promise.all(
         fleets.map((f) => getFleetInfo(f, player, map)),
     )
 
     // const fleetInfos = (
     //     await Promise.all(fleets.map((f) => getFleetInfo(f, player, map)))
-    // ).filter((fn) => fn.fleetName.includes('Logic Matrix'))
+    // ).filter((fn) => fn.fleetName.includes('Alliance of Justice'))
 
     await cleanupPods(player, game, player.homeStarbase)
 
