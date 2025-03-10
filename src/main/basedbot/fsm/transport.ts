@@ -224,6 +224,7 @@ const transition = async (
                                 game,
                                 resource,
                                 amount,
+                                true,
                             )
                         }),
                     )

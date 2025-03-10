@@ -20,6 +20,7 @@ import {
 } from '../state/starbase-player'
 import { Player } from '../state/user-account'
 import { FleetInfo } from '../state/user-fleets'
+import { getFleetCargoHold } from './load-cargo'
 
 export const getHold = (
     mint: PublicKey,
@@ -42,6 +43,7 @@ export const unloadCargo = async (
     game: Game,
     mint: PublicKey,
     amount: BN,
+    forceCargoHold: boolean = false,
 ): Promise<void> => {
     const starbase = await starbaseByCoordinates(fleetInfo.location)
 
@@ -50,7 +52,10 @@ export const unloadCargo = async (
     }
 
     const cargoType = getCargoType(player.cargoTypes, game, mint)
-    const fleetCargoPod = getHold(mint, game, fleetInfo)
+
+    const fleetCargoPod = forceCargoHold
+        ? fleetInfo.fleet.data.cargoHold
+        : getFleetCargoHold(mint, game, fleetInfo)
 
     const starbasePlayer = await getStarbasePlayer(player, starbase, programs)
     const cargoPodTo = await getCargoPodsForStarbasePlayer(
