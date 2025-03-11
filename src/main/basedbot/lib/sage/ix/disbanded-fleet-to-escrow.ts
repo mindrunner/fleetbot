@@ -13,6 +13,7 @@ export const disbandedFleetToEscrowIx = (
     starbasePlayer: StarbasePlayer,
     programs: StarAtlasPrograms,
     shipEscrowIndex: number | null,
+    fleetShipInfoIndex: number,
     disbandedFleet: PublicKey,
     fleetShips: PublicKey,
     shipKey: PublicKey,
@@ -31,7 +32,7 @@ export const disbandedFleetToEscrowIx = (
         game.key,
         game.data.gameState,
         {
-            fleetShipInfoIndex: 0,
+            fleetShipInfoIndex,
             keyIndex: 0,
             shipAmount: shipAmount.toNumber(),
             shipEscrowIndex,

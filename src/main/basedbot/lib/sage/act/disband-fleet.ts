@@ -49,9 +49,10 @@ export const disbandFleet = async (
 
     const [fleetShips] = await getFleetShips(fleet)
 
-    for (const fleetShipInfo of fleetShips.fleetShips) {
+    for (let i = fleetShips.fleetShips.length - 1; i >= 0; --i) {
+        const fleetShipInfo = fleetShips.fleetShips[i]
+
         const pred = (v: WrappedShipEscrow) => v.ship.equals(fleetShipInfo.ship)
-        // const shipEscrow = starbasePlayer.wrappedShipEscrows.find(pred)
         const shipEscrowIndex =
             starbasePlayer.wrappedShipEscrows.findIndex(pred)
 
@@ -63,6 +64,7 @@ export const disbandFleet = async (
                 starbasePlayer,
                 programs,
                 shipEscrowIndex === -1 ? null : shipEscrowIndex,
+                i,
                 disbandedFleetKey[0],
                 fleet.data.fleetShips,
                 fleetShipInfo.ship,
@@ -79,7 +81,7 @@ export const disbandFleet = async (
             fleet.data.fleetShips,
         ),
     )
-    console.log(
+    logger.debug(
         `Added ${ixs.length} ixs for disbanding fleet ${getName(fleet)}`,
     )
 
