@@ -3,6 +3,9 @@ import dotenv from 'dotenv'
 import { Sentry } from '../sentry'
 
 dotenv.config()
+export const getOptional = (key: string): string | undefined => {
+    return process.env[key]
+}
 export const get = (key: string): string => {
     const value = process.env[key]
 
@@ -14,5 +17,5 @@ export const get = (key: string): string => {
         throw error
     }
 
-    return value || ''
+    return value
 }

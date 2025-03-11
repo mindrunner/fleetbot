@@ -54,7 +54,7 @@ export const atlasnetQtStrategy =
             strategyMap.set(getRandomFleetName(chance, 32, player.faction), {
                 fleet: getRandomFleet(player, 'mine'),
                 strategy: createMiningStrategy(
-                    mine(map, home, target),
+                    mine(map, home, target, chance),
                     player,
                     game,
                 ),

@@ -10,10 +10,10 @@ export const mineBiomass = (map: WorldMap): MineConfig =>
     mineConfig({
         homeBase: Coordinates.fromNumber(-40, 30),
         targetBase: Coordinates.fromNumber(-42, 35),
-        resource: Array.from(
-            mineableByCoordinates(
-                map,
-                Coordinates.fromNumber(-42, 35),
-            ).values(),
-        )[0],
+        resource: mineableByCoordinates(
+            map,
+            Coordinates.fromNumber(-30, 30),
+            'Biomass',
+        ),
+        worldMap: map,
     })

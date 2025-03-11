@@ -15,6 +15,7 @@ import {
     Starbase,
 } from '@staratlas/sage'
 import BN from 'bn.js'
+import { config } from '../../config'
 
 import { Sentry } from '../../sentry'
 
@@ -238,13 +239,13 @@ const basedbot = async (botConfig: BotConfig) => {
         sageGame(),
     ])
 
-    const fleetInfos = await Promise.all(
-        fleets.map((f) => getFleetInfo(f, player, map)),
+    const fleetInfos = (
+        await Promise.all(fleets.map((f) => getFleetInfo(f, player, map)))
+    ).filter((fn) =>
+        config.app.fleetFilter
+            ? fn.fleetName.includes(config.app.fleetFilter)
+            : true,
     )
-
-    // const fleetInfos = (
-    //     await Promise.all(fleets.map((f) => getFleetInfo(f, player, map)))
-    // ).filter((fn) => fn.fleetName.includes('Alliance of Justice'))
 
     await cleanupPods(player, game, player.homeStarbase)
 
@@ -261,6 +262,9 @@ const basedbot = async (botConfig: BotConfig) => {
             applyStrategy(fleetInfo, botConfig.fleetStrategies),
         ),
     )
+    // for (const fleetInfo of fleetInfos) {
+    //     await applyStrategy(fleetInfo, botConfig.fleetStrategies)
+    // }
     logger.info(
         '-------------------------------------------------------------------------------------',
     )

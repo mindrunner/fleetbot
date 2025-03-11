@@ -136,8 +136,10 @@ const transition = async (
             logger.info(
                 `${fleetInfo.fleetName} mining ${getName(mineItem)} for ${amountMined}. Ending...`,
             )
-            const [resource] = Array.from(
-                mineableByCoordinates(config.worldMap, fleetInfo.location),
+            const resource = mineableByCoordinates(
+                config.worldMap,
+                fleetInfo.location,
+                getName(mineItem),
             )
 
             return endMine(fleetInfo, player, game, resource)

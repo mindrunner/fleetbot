@@ -10,7 +10,10 @@ export const mineLumanite = (map: WorldMap): MineConfig =>
     mineConfig({
         homeBase: Coordinates.fromNumber(-40, 30),
         targetBase: Coordinates.fromNumber(-23, 4),
-        resource: Array.from(
-            mineableByCoordinates(map, Coordinates.fromNumber(-23, 4)).values(),
-        )[0],
+        resource: mineableByCoordinates(
+            map,
+            Coordinates.fromNumber(-23, 4),
+            'Lumanite',
+        ),
+        worldMap: map,
     })

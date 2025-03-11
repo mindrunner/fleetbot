@@ -1,5 +1,5 @@
 import { WarpMode } from '../../../lib/sage/act/move'
-import { Mineable } from '../../../lib/sage/state/world-map'
+import { Mineable, WorldMap } from '../../../lib/sage/state/world-map'
 import { Coordinates } from '../../../lib/util/coordinates'
 
 export type MineConfig = {
@@ -7,6 +7,7 @@ export type MineConfig = {
     targetBase: Coordinates
     resource: Mineable
     warpMode: WarpMode
+    worldMap: WorldMap
 }
 
 export const mineConfig = (
@@ -14,10 +15,12 @@ export const mineConfig = (
         homeBase: Coordinates
         targetBase: Coordinates
         resource: Mineable
+        worldMap: WorldMap
     },
 ): MineConfig => ({
     homeBase: config.homeBase,
     targetBase: config.targetBase,
     resource: config.resource,
     warpMode: config.warpMode || 'auto',
+    worldMap: config.worldMap,
 })

@@ -7,6 +7,7 @@ export interface Config {
         version: string
         logLevel: string
         quickstart: boolean
+        fleetFilter: string | undefined
     }
     bot: {
         telegramToken: string
@@ -56,6 +57,7 @@ export const config: Config = {
         version: env.get('APP_VERSION'),
         logLevel: env.get('LOG_LEVEL'),
         quickstart: env.get('QUICKSTART') === 'true',
+        fleetFilter: env.getOptional('FLEET_FILTER'),
     },
     bot: {
         telegramToken: env.get('TELEGRAM_TOKEN'),

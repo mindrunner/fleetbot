@@ -1,8 +1,7 @@
 import { Game, MineItem, Planet, Resource, Starbase } from '@staratlas/sage'
-
-import { logger } from '../../../../../logger'
 import { transformSector } from '../../fleet-state/transform/transform-sector'
 import { Coordinates } from '../../util/coordinates'
+import { getName } from '../util'
 
 import { getMineItems } from './mine-items'
 import { getPlanets } from './planets'
@@ -42,7 +41,7 @@ export const mineItemByResource = (
     resource: Resource,
 ): MineItem | undefined => mineItems.get(resource.key.toBase58())
 
-export const mineableByCoordinates = (
+export const mineablesByCoordinates = (
     map: WorldMap,
     coordinates: Coordinates,
 ): Set<Mineable> => {
@@ -51,12 +50,10 @@ export const mineableByCoordinates = (
     )
 
     if (!starbase) {
-        logger.warn(`No starbase found at ${coordinates}`)
-
-        return new Set<Mineable>()
+        throw new Error(`No starbase found at ${coordinates}`)
     }
     const planets = planetsByStarbase(map.planets, starbase)
-    const minables = new Set<Mineable>()
+    const mineables = new Set<Mineable>()
 
     planets.forEach((planet) => {
         const resources = resourcesByPlanet(map.resources, planet)
@@ -65,7 +62,7 @@ export const mineableByCoordinates = (
             const mineItem = mineItemByResource(map.mineItems, resource)
 
             if (mineItem) {
-                minables.add({
+                mineables.add({
                     starbase,
                     planet,
                     resource,
@@ -75,7 +72,21 @@ export const mineableByCoordinates = (
         })
     })
 
-    return minables
+    return mineables
+}
+
+export const mineableByCoordinates = (
+    map: WorldMap,
+    coordinates: Coordinates,
+    name: string,
+): Mineable => {
+    const mineables = mineablesByCoordinates(map, coordinates)
+
+    const res = Array.from(mineables).find((m) => getName(m.mineItem) === name)
+    if (!res) {
+        throw new Error(`No ${name} found at ${coordinates}`)
+    }
+    return res
 }
 
 export const getMapContext = async (game: Game): Promise<WorldMap> => {

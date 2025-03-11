@@ -10,10 +10,10 @@ export const mineNitrogen = (map: WorldMap): MineConfig =>
     mineConfig({
         homeBase: Coordinates.fromNumber(-40, 30),
         targetBase: Coordinates.fromNumber(-45, 15),
-        resource: Array.from(
-            mineableByCoordinates(
-                map,
-                Coordinates.fromNumber(-45, 15),
-            ).values(),
-        )[0],
+        resource: mineableByCoordinates(
+            map,
+            Coordinates.fromNumber(-45, 15),
+            'Nitrogen',
+        ),
+        worldMap: map,
     })

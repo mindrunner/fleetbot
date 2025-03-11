@@ -14,6 +14,7 @@ import { unloadAllCargo } from '../lib/sage/act/unload-all-cargo'
 import { starbaseByCoordinates } from '../lib/sage/state/starbase-by-coordinates'
 import { Player } from '../lib/sage/state/user-account'
 import { FleetInfo } from '../lib/sage/state/user-fleets'
+import { mineableByCoordinates } from '../lib/sage/state/world-map'
 import { getName } from '../lib/sage/util'
 
 import { MineConfig } from './configs/mine/mine-config'
@@ -238,8 +239,13 @@ const transition = async (
                 logger.info(
                     `${fleetInfo.fleetName} has finished mining ${getName(mineItem)} for ${amountMined}`,
                 )
+                const resource = mineableByCoordinates(
+                    config.worldMap,
+                    fleetInfo.location,
+                    getName(mineItem),
+                )
 
-                return endMine(fleetInfo, player, game, config.resource)
+                return endMine(fleetInfo, player, game, resource)
             }
 
             const log = endReason === 'FULL' ? logger.info : logger.warn

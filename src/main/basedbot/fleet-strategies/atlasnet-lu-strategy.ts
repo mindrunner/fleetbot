@@ -2,7 +2,6 @@ import { Game } from '@staratlas/sage'
 
 import { mineBiomass } from '../fsm/configs/mine/mine-biomass'
 import { mineCarbon } from '../fsm/configs/mine/mine-carbon'
-import { mineConfig } from '../fsm/configs/mine/mine-config'
 import { mineCopperOre } from '../fsm/configs/mine/mine-copper-ore'
 import { mineHydrogen } from '../fsm/configs/mine/mine-hydrogen'
 import { mineIronOre } from '../fsm/configs/mine/mine-iron-ore'
@@ -14,8 +13,7 @@ import { mineTitaniumOre } from '../fsm/configs/mine/mine-titanium-ore'
 import { createInfoStrategy } from '../fsm/info'
 import { createMiningStrategy } from '../fsm/mine'
 import { Player } from '../lib/sage/state/user-account'
-import { mineableByCoordinates, WorldMap } from '../lib/sage/state/world-map'
-import { Coordinates } from '../lib/util/coordinates'
+import { WorldMap } from '../lib/sage/state/world-map'
 
 import { nameMapMatcher } from './name-map-matcher'
 import { StrategyConfig } from './strategy-config'
@@ -34,46 +32,6 @@ export const atlasnetLuStrategy = (
                     fleet: null,
                     strategy: createMiningStrategy(
                         mineBiomass(map),
-                        player,
-                        game,
-                    ),
-                },
-            ],
-            [
-                'Barnacle Fleet',
-                {
-                    fleet: null,
-                    strategy: createMiningStrategy(
-                        mineConfig({
-                            homeBase: Coordinates.fromNumber(-40, 30),
-                            targetBase: Coordinates.fromNumber(-19, 40),
-                            resource: Array.from(
-                                mineableByCoordinates(
-                                    map,
-                                    Coordinates.fromNumber(-19, 40),
-                                ),
-                            )[0],
-                        }),
-                        player,
-                        game,
-                    ),
-                },
-            ],
-            [
-                'Cobra Fleet',
-                {
-                    fleet: null,
-                    strategy: createMiningStrategy(
-                        mineConfig({
-                            homeBase: Coordinates.fromNumber(-40, 30),
-                            targetBase: Coordinates.fromNumber(-18, 23),
-                            resource: Array.from(
-                                mineableByCoordinates(
-                                    map,
-                                    Coordinates.fromNumber(-18, 23),
-                                ),
-                            )[0],
-                        }),
                         player,
                         game,
                     ),
@@ -218,46 +176,6 @@ export const atlasnetLuStrategy = (
                     fleet: null,
                     strategy: createMiningStrategy(
                         mineBiomass(map),
-                        player,
-                        game,
-                    ),
-                },
-            ],
-            [
-                'Antelope Fleet',
-                {
-                    fleet: null,
-                    strategy: createMiningStrategy(
-                        mineConfig({
-                            homeBase: Coordinates.fromNumber(-40, 30),
-                            targetBase: Coordinates.fromNumber(-19, 40),
-                            resource: Array.from(
-                                mineableByCoordinates(
-                                    map,
-                                    Coordinates.fromNumber(-19, 40),
-                                ),
-                            )[0],
-                        }),
-                        player,
-                        game,
-                    ),
-                },
-            ],
-            [
-                'Boa Fleet',
-                {
-                    fleet: null,
-                    strategy: createMiningStrategy(
-                        mineConfig({
-                            homeBase: Coordinates.fromNumber(-40, 30),
-                            targetBase: Coordinates.fromNumber(-18, 23),
-                            resource: Array.from(
-                                mineableByCoordinates(
-                                    map,
-                                    Coordinates.fromNumber(-18, 23),
-                                ),
-                            )[0],
-                        }),
                         player,
                         game,
                     ),

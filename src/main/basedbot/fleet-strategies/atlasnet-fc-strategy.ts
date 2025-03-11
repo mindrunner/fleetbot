@@ -35,37 +35,42 @@ export const atlasnetFcStrategy =
             const home = randomSector(chance, sectors)
             const target = randomSector(chance, sectors)
 
-            strategyMap.set(getRandomFleetName(chance, 32, player.faction), {
+            const name = getRandomFleetName(chance, 32, player.faction)
+            // if (strategyMap.has(name)) {
+            //     throw new Error(`${name} already exist`)
+            // }
+            strategyMap.set(name, {
                 fleet: getRandomFleet(player, 'mine'),
                 strategy: createMiningStrategy(
-                    mine(map, home, target),
+                    mine(map, home, target, chance),
                     player,
                     game,
                 ),
             })
             // No transport fleet needed if mining fleet uses CSS as home base.
             if (!home.equals(player.homeCoordinates)) {
-                strategyMap.set(
-                    getRandomFleetName(chance, 32, player.faction),
-                    {
-                        fleet: getRandomFleet(player, 'transport'),
-                        strategy: createTransportStrategy(
-                            transport(
-                                map,
-                                player.homeCoordinates,
-                                home,
-                                new Set([
-                                    game.data.mints.fuel,
-                                    game.data.mints.ammo,
-                                    game.data.mints.food,
-                                    game.data.mints.repairKit,
-                                ]),
-                            ),
-                            player,
-                            game,
+                const name = getRandomFleetName(chance, 32, player.faction)
+                // if (strategyMap.has(name)) {
+                //     throw new Error(`${name} already exist`)
+                // }
+                strategyMap.set(name, {
+                    fleet: getRandomFleet(player, 'transport'),
+                    strategy: createTransportStrategy(
+                        transport(
+                            map,
+                            player.homeCoordinates,
+                            home,
+                            new Set([
+                                game.data.mints.fuel,
+                                game.data.mints.ammo,
+                                game.data.mints.food,
+                                game.data.mints.repairKit,
+                            ]),
                         ),
-                    },
-                )
+                        player,
+                        game,
+                    ),
+                })
             }
         }
 
