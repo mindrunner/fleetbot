@@ -7,19 +7,13 @@ import {
     getParsedTokenAccountsByOwner,
     ixReturnsToIxs,
 } from '@staratlas/data-source'
-import {
-    Fleet,
-    Game,
-    getCleanPodsByStarbasePlayerAccounts,
-    getPodCleanupInstructions,
-    Starbase,
-} from '@staratlas/sage'
+import { Fleet, Game, Starbase } from '@staratlas/sage'
 import BN from 'bn.js'
 import { config } from '../../config'
 
-import { Sentry } from '../../sentry'
-
 import { logger } from '../../logger'
+
+import { Sentry } from '../../sentry'
 import { sleep } from '../../service/sleep'
 import { connection } from '../../service/sol'
 import { sendAndConfirmInstructions } from '../../service/sol/send-and-confirm-tx'
@@ -44,6 +38,10 @@ import {
 } from './lib/sage/state/user-fleets'
 import { getMapContext, WorldMap } from './lib/sage/state/world-map'
 import { getName } from './lib/sage/util'
+import {
+    getCleanPodsByStarbasePlayerAccounts,
+    getPodCleanupInstructions,
+} from './lib/util/pod-cleanup'
 
 export const create = async (): Promise<void> => {
     logger.info('Starting basedbot...')
@@ -225,6 +223,8 @@ const cleanupPods = async (player: Player, game: Game, starbase: Starbase) => {
         player.signer,
         0,
     )
+
+    logger.info(`Pod Cleanup Instructions: ${ixs.length}`)
 
     await sendAndConfirmInstructions(await ixReturnsToIxs(ixs, player.signer))
 }
