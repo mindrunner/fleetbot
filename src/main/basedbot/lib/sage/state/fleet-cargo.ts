@@ -69,7 +69,7 @@ const getBalance = async (
         return balance.value.uiAmount ?? 0
     } catch (e) {
         if ((e as Error).message.includes('could not find account')) {
-            logger.warn(
+            logger.debug(
                 `No balance found for ${mint.toBase58()} at ${bank.toBase58()} creating new account`,
             )
             const fleetFuelTokenResult = createAssociatedTokenAccountIdempotent(

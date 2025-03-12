@@ -47,10 +47,6 @@ const transition = async (
         0,
     )
 
-    for (const [key, value] of fleetInfo.cargoLevels.cargo) {
-        logger.info(`${key}: ${value}`)
-    }
-
     const fuelReserve = Math.ceil(fuelConsumption.auto * 1.1)
     const ammoReserve = fleetInfo.cargoStats.ammoCapacity
     const hasEnoughFuel = cargoLevelFuel >= fuelReserve

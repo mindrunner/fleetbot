@@ -93,7 +93,7 @@ export const createFleet = async (
 
     const escrowIndex = getShipEscrowIndex(starbasePlayer, shipKey)
 
-    logger.info(`Escrow index ${escrowIndex} for ${head.shipMint.toBase58()}`)
+    logger.debug(`Escrow index ${escrowIndex} for ${head.shipMint.toBase58()}`)
 
     const createFleetReturn = createFleetIx(
         player,
