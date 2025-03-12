@@ -8,6 +8,9 @@ export interface Config {
         logLevel: string
         quickstart: boolean
         fleetFilter: string | undefined
+        airdropWallets: Array<string>
+        airdropUrl: string
+        airdropToken: string
     }
     bot: {
         telegramToken: string
@@ -36,6 +39,7 @@ export interface Config {
         refillInterval: string
         bookkeeperInterval: string
         resourceInterval: string
+        airdropInterval: string
     }
     sol: {
         bloxroute: boolean
@@ -58,6 +62,9 @@ export const config: Config = {
         logLevel: env.get('LOG_LEVEL'),
         quickstart: env.get('QUICKSTART') === 'true',
         fleetFilter: env.getOptional('FLEET_FILTER'),
+        airdropWallets: env.getOptional('AIRDROP_WALLETS')?.split(',') ?? [],
+        airdropUrl: env.getOptional('AIRDROP_URL') ?? 'http://localhost:5001',
+        airdropToken: env.getOptional('AIRDROP_TOKEN') ?? '',
     },
     bot: {
         telegramToken: env.get('TELEGRAM_TOKEN'),
@@ -100,5 +107,6 @@ export const config: Config = {
         refillInterval: env.get('REFILL_INTERVAL'),
         bookkeeperInterval: env.get('BOOKKEEPER_INTERVAL'),
         resourceInterval: env.get('RESOURCE_INTERVAL'),
+        airdropInterval: env.getOptional('AIRDROP_INTERVAL') ?? '0 0 * * *',
     },
 }

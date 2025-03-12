@@ -10,8 +10,10 @@
         "lint:docker": "docker run --rm -i hadolint/hadolint < cicd/docker/app/Dockerfile",
         "lint:yaml": "yamllint .",
         "clean": "rm -rf build",
-        "start:fleetbot": "ts-node-dev -r ./src/setup-aliases.ts --transpile-only --rs --inspect=19230 -- src/main/fleetbot",
-        "start:basedbot": "ts-node-dev -r ./src/setup-aliases.ts --transpile-only --rs --inspect=19230 -- src/main/basedbot",
+        "start": "ts-node-dev -r ./src/setup-aliases.ts --transpile-only --rs --inspect=19230 --",
+        "start:airdrop": "pnpm run start src/main/airdrop",
+        "start:basedbot": "pnpm run start src/main/basedbot",
+        "start:fleetbot": "pnpm run start src/main/fleetbot",
         "typeorm": "typeorm-ts-node-commonjs -d src/db/db-data-source.ts"
     },
     "repository": {
