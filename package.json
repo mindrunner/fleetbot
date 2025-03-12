@@ -30,7 +30,7 @@
         "@coral-xyz/anchor": "^0.29.0",
         "@faker-js/faker": "^9.3.0",
         "@sentry/integrations": "^7.114.0",
-        "@sentry/node": "^8.54.0",
+        "@sentry/node": "^9.5.0",
         "@sentry/tracing": "^7.120.3",
         "@solana/spl-token": "^0.4.13",
         "@solana/web3.js": "^1.98.0",
