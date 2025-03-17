@@ -38,6 +38,11 @@ export const getFleetStrategy = (
             return atlasnetQtStrategy(1)(map, player, game, 'whosthis')
         // return disbandAllStrategy(map, player, game)
         default:
-            throw new Error('Unknown strategy')
+            return atlasnetFcStrategy(150)(
+                map,
+                player,
+                game,
+                player.profile.key.toBase58(),
+            )
     }
 }
