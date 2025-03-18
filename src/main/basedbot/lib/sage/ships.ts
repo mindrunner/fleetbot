@@ -61,7 +61,7 @@ export enum FimbulBYOS {
     Packlite = 'FBLBPL',
     Tankship = 'FBLBTA',
     Butch = 'FBLBBU',
-    Ranger = 'RNGR',
+    Ranger = 'FBLBRA',
 }
 
 export enum Rainbow {
@@ -79,7 +79,7 @@ export enum Calico {
     AtsEnforcer = 'CALATS',
     Scud = 'CALSCD',
     Maxhog = 'CALMAX',
-    Shipit = 'SHiPit',
+    Shipit = 'CALSHIP',
 }
 
 export enum Tufa {
@@ -90,7 +90,7 @@ export enum Busan {
     ThrillOfLife = 'THRILL',
     MaidenHeart = 'HEART',
     TheLastStand = 'STAND',
-    Pulse = 'puLS',
+    Pulse = 'PULSE',
 }
 
 export enum Armstrong {
