@@ -36,9 +36,6 @@ export const atlasnetFcStrategy =
             const target = randomSector(chance, sectors)
 
             const name = getRandomFleetName(chance, 32, player.faction)
-            // if (strategyMap.has(name)) {
-            //     throw new Error(`${name} already exist`)
-            // }
             strategyMap.set(name, {
                 fleet: getRandomFleet(player, 'mine'),
                 strategy: createMiningStrategy(
@@ -50,9 +47,6 @@ export const atlasnetFcStrategy =
             // No transport fleet needed if mining fleet uses CSS as home base.
             if (!home.equals(player.homeCoordinates)) {
                 const name = getRandomFleetName(chance, 32, player.faction)
-                // if (strategyMap.has(name)) {
-                //     throw new Error(`${name} already exist`)
-                // }
                 strategyMap.set(name, {
                     fleet: getRandomFleet(player, 'transport'),
                     strategy: createTransportStrategy(

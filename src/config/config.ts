@@ -11,6 +11,7 @@ export interface Config {
         airdropWallets: Array<string>
         airdropUrl: string
         airdropToken: string
+        basedCleanup: boolean
     }
     bot: {
         telegramToken: string
@@ -65,6 +66,7 @@ export const config: Config = {
         airdropWallets: env.getOptional('AIRDROP_WALLETS')?.split(',') ?? [],
         airdropUrl: env.getOptional('AIRDROP_URL') ?? 'http://localhost:5001',
         airdropToken: env.getOptional('AIRDROP_TOKEN') ?? '',
+        basedCleanup: Boolean(env.getOptional('BASED_CLEANUP')),
     },
     bot: {
         telegramToken: env.get('TELEGRAM_TOKEN'),
