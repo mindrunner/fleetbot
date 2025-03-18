@@ -12,14 +12,11 @@ import BN from 'bn.js'
 import { config } from '../../config'
 
 import { logger } from '../../logger'
-
 import { Sentry } from '../../sentry'
 import { sleep } from '../../service/sleep'
 import { connection } from '../../service/sol'
 import { sendAndConfirmInstructions } from '../../service/sol/send-and-confirm-tx'
 import { keyPair } from '../../service/wallet'
-
-import { getFleetStrategy } from './fleet-strategies/get-fleet-strategy'
 import { StrategyConfig } from './fleet-strategies/strategy-config'
 import { createInfoStrategy } from './fsm/info'
 import { programs } from './lib/programs'
@@ -42,6 +39,7 @@ import {
     getCleanPodsByStarbasePlayerAccounts,
     getPodCleanupInstructions,
 } from './lib/util/pod-cleanup'
+import { getFleetStrategy } from './fleet-strategies/get-fleet-strategy'
 
 export const create = async (): Promise<void> => {
     logger.info('Starting basedbot...')
