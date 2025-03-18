@@ -61,12 +61,14 @@ export enum FimbulBYOS {
     Packlite = 'FBLBPL',
     Tankship = 'FBLBTA',
     Butch = 'FBLBBU',
+    Ranger = 'FBLBRA',
 }
 
 export enum Rainbow {
     Chi = 'CHI',
     Om = 'OM',
     Arc = 'ARC',
+    Phi = 'PHI',
 }
 
 export enum Calico {
@@ -77,6 +79,7 @@ export enum Calico {
     AtsEnforcer = 'CALATS',
     Scud = 'CALSCD',
     Maxhog = 'CALMAX',
+    Shipit = 'CALSHIP',
 }
 
 export enum Tufa {
@@ -87,6 +90,7 @@ export enum Busan {
     ThrillOfLife = 'THRILL',
     MaidenHeart = 'HEART',
     TheLastStand = 'STAND',
+    Pulse = 'PULSE',
 }
 
 export enum Armstrong {
@@ -455,5 +459,25 @@ export const ships: ShipMap = {
         name: 'Armstrong IMP',
         mint: new PublicKey('1MP3RpP21TVoEWVnvNuG1piq32AnWtsxzd2fykS8yJe'),
         role: ShipRole.MINER,
+    },
+    [Rainbow.Phi]: {
+        name: 'Rainbow Phi',
+        mint: new PublicKey('phi4PYgmxeTMLLpGkU87T16VUZ6AjWZESkfT1JGJ635'),
+        role: ShipRole.FIGHTER,
+    },
+    [Calico.Shipit]: {
+        name: 'Calico Shipit',
+        mint: new PublicKey('SHiPitEZcCoyXEKqw9ovCdYeNzck9uVbb1KCcsHaGhc'),
+        role: ShipRole.TRANSPORT,
+    },
+    [FimbulBYOS.Ranger]: {
+        name: 'Fimbul BYOS Ranger',
+        mint: new PublicKey('RNGRjeGyFeyFT4k5aTJXKZukVx3GbG215fcSQJxg64G'),
+        role: ShipRole.DATARUNNER,
+    },
+    [Busan.Pulse]: {
+        name: 'Busan Pulse',
+        mint: new PublicKey('puLSevjndZbxLSynPQgGVh7oPCGimhqLppV5Kb8o3S8'),
+        role: ShipRole.RACER,
     },
 }

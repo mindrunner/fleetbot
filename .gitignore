@@ -5,3 +5,5 @@
 !.env.example
 *.iml
 
+src/main/basedbot/lib/sage/ships.json
+package-lock.json
