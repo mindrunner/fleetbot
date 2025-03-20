@@ -13,6 +13,7 @@ export const settleFleet = async (
     player: Player,
     game: Game,
 ): Promise<void> => {
+    logger.info(`${fleetInfo.fleetName} ${fleetInfo.fleetState.type}`)
     switch (fleetInfo.fleetState.type) {
         case 'MoveWarp': {
             const { warpFinish } = fleetInfo.fleetState.data

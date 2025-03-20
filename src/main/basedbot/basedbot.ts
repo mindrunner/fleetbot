@@ -208,7 +208,7 @@ const cleanupPods = async (player: Player, game: Game, starbase: Starbase) => {
     if (!podCleanup) {
         logger.info('Nothing to Clean up')
 
-        return
+        return Promise.resolve()
     }
 
     const ixs = getPodCleanupInstructions(
@@ -280,7 +280,7 @@ export const start = async (): Promise<void> => {
             Sentry.captureException(e)
             logger.error(e)
         } finally {
-            await sleep(10000)
+            await sleep(1000)
         }
     }
 }

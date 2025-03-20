@@ -1,19 +1,13 @@
 import { Game } from '@staratlas/sage'
 import { Chance } from 'chance'
 
-import { mine } from '../fsm/configs/mine/mine'
 import { createInfoStrategy } from '../fsm/info'
-import { createMiningStrategy } from '../fsm/mine'
-import { createTransportStrategy, transport } from '../fsm/transport'
+import { createScanningStrategy, scan } from '../fsm/scan'
 import { FleetShips } from '../lib/sage/act/create-fleet'
 import { Calico, Ogrika, Pearce, ships } from '../lib/sage/ships'
 import { Player } from '../lib/sage/state/user-account'
 import { WorldMap } from '../lib/sage/state/world-map'
-import {
-    Faction,
-    galaxySectorsData,
-    SectorInfo,
-} from '../lib/util/galaxy-sectors-data'
+import { Faction } from '../lib/util/galaxy-sectors-data'
 
 import { nameMapMatcher } from './name-map-matcher'
 import { makeStrategyMap, StrategyConfig, StrategyMap } from './strategy-config'
@@ -74,8 +68,8 @@ const getRandomFleetName = (chance: Chance.Chance, maxLen: number): string => {
     return name
 }
 
-const randomSector = (chance: Chance.Chance, sectors: Array<SectorInfo>) =>
-    sectors[chance.integer({ min: 0, max: sectors.length - 1 })].coordinates
+// const randomSector = (chance: Chance.Chance, sectors: Array<SectorInfo>) =>
+//     sectors[chance.integer({ min: 0, max: sectors.length - 1 })].coordinates
 
 export const atlasnetQtStrategy =
     (count: number) =>
@@ -87,59 +81,61 @@ export const atlasnetQtStrategy =
     ): StrategyConfig => {
         const strategyMap: StrategyMap = makeStrategyMap()
         const chance = new Chance(seed)
-        const sectors = galaxySectorsData()
-            .filter((sector) => sector.closestFaction === player.faction)
-            .filter((sector) =>
-                [
-                    'MUD-2',
-                    'MUD-3',
-                    'MUD-4',
-                    'MUD-5',
-                    'ONI-2',
-                    'ONI-3',
-                    'ONI-4',
-                    'ONI-5',
-                    'UST-2',
-                    'UST-3',
-                    'UST-4',
-                    'UST-5',
-                ].includes(sector.name),
-            )
-            .sort((a, b) => a.name.localeCompare(b.name))
+        // const sectors = galaxySectorsData()
+        //     .filter((sector) => sector.closestFaction === player.faction)
+        //     .filter((sector) =>
+        //         [
+        //             'MUD-2',
+        //             'MUD-3',
+        //             'MUD-4',
+        //             'MUD-5',
+        //             'ONI-2',
+        //             'ONI-3',
+        //             'ONI-4',
+        //             'ONI-5',
+        //             'UST-2',
+        //             'UST-3',
+        //             'UST-4',
+        //             'UST-5',
+        //         ].includes(sector.name),
+        //     )
+        //     .sort((a, b) => a.name.localeCompare(b.name))
 
         for (let i = 0; i < count; i++) {
-            const home = randomSector(chance, sectors)
-            const target = randomSector(chance, sectors)
-
             strategyMap.set(getRandomFleetName(chance, 32), {
                 fleet: getRandomFleetForFaction(player.faction),
-                strategy: createMiningStrategy(
-                    mine(map, home, target),
-                    player,
-                    game,
-                ),
+                strategy: createScanningStrategy(scan(map), player, game),
             })
-            // No transport fleet needed if mining fleet uses CSS as home base.
-            if (!home.equals(player.homeCoordinates)) {
-                strategyMap.set(getRandomFleetName(chance, 32), {
-                    fleet: getRandomFleetForFaction(player.faction),
-                    strategy: createTransportStrategy(
-                        transport(
-                            map,
-                            player.homeCoordinates,
-                            home,
-                            new Set([
-                                game.data.mints.fuel,
-                                game.data.mints.ammo,
-                                game.data.mints.food,
-                                game.data.mints.repairKit,
-                            ]),
-                        ),
-                        player,
-                        game,
-                    ),
-                })
-            }
+
+            // strategyMap.set(getRandomFleetName(chance, 32), {
+            //     fleet: getRandomFleetForFaction(player.faction),
+            //     strategy: createMiningStrategy(
+            //         mine(map, home, target),
+            //         player,
+            //         game,
+            //     ),
+            // })
+            // // No transport fleet needed if mining fleet uses CSS as home base.
+            // if (!home.equals(player.homeCoordinates)) {
+            //     strategyMap.set(getRandomFleetName(chance, 32), {
+            //         fleet: getRandomFleetForFaction(player.faction),
+            //         strategy: createTransportStrategy(
+            //             transport(
+            //                 map,
+            //                 player.homeCoordinates,
+            //                 home,
+            //                 new Set([
+            //                     game.data.mints.fuel,
+            //                     game.data.mints.ammo,
+            //                     game.data.mints.food,
+            //                     game.data.mints.repairKit,
+            //                 ]),
+            //             ),
+            //             player,
+            //             game,
+            //         ),
+            //     })
+            // }
         }
 
         return {

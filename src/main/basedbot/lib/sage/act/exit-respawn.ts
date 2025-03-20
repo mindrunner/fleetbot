@@ -1,5 +1,6 @@
 import { getAssociatedTokenAddressSync } from '@solana/spl-token'
-import { PublicKey } from '@solana/web3.js'
+// eslint-disable-next-line import/named
+import { AccountInfo, PublicKey } from '@solana/web3.js'
 import { InstructionReturn, ixReturnsToIxs } from '@staratlas/data-source'
 import { Game, Starbase } from '@staratlas/sage'
 
@@ -39,6 +40,27 @@ export const exitRespawn = async (
 
     const cargoMints = player.cargoTypes.map((ct) => ct.data.mint)
 
+    const mintAccountInfos = (
+        await Promise.all(
+            cargoMints.map(async (mint) => {
+                const cargoPod = getFleetCargoHold(mint, game, fleetInfo)
+                const tokenFrom = getAssociatedTokenAddressSync(
+                    mint,
+                    cargoPod,
+                    true,
+                )
+
+                return {
+                    mint,
+                    accountInfo: await connection.getAccountInfo(tokenFrom),
+                }
+            }),
+        )
+    ).reduce(
+        (acc, curr) => acc.set(curr.mint.toBase58(), curr.accountInfo),
+        new Map<string, AccountInfo<Buffer> | null>(),
+    )
+
     for (const key of cargoMints) {
         const mint = new PublicKey(key)
         const cargoType = getCargoType(player.cargoTypes, game, mint)
@@ -46,7 +68,7 @@ export const exitRespawn = async (
         const cargoPod = getFleetCargoHold(mint, game, fleetInfo)
         const tokenFrom = getAssociatedTokenAddressSync(mint, cargoPod, true)
 
-        const accountInfo = await connection.getAccountInfo(tokenFrom)
+        const accountInfo = mintAccountInfos.get(mint.toBase58())
 
         if (accountInfo) {
             ixs.push(

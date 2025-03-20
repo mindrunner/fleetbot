@@ -1,9 +1,4 @@
-import {
-    PublicKey,
-    TransactionInstruction,
-    TransactionMessage,
-    VersionedTransaction,
-} from '@solana/web3.js'
+import { PublicKey, TransactionInstruction, TransactionMessage, VersionedTransaction } from '@solana/web3.js'
 
 import { logger } from '../../logger'
 import { keyPair } from '../wallet'
@@ -40,7 +35,7 @@ const confirmTx = async (txId: string): Promise<string | undefined> => {
             res.value.confirmationStatus === 'confirmed' ||
             res.value.confirmationStatus === 'processed'
         ) {
-            const log = res.value.err ? logger.warn : logger.info
+            const log = res.value.err ? logger.warn : logger.debug
 
             // log(`Transaction ${res.value.confirmationStatus}: ${txId} with status: ${res.value.confirmationStatus}`)
             log(`Signature: ${txId} with status: ${JSON.stringify(res)}`)
@@ -130,6 +125,7 @@ const getOptimalInstructionChunk = (
     instructions: TransactionInstruction[],
     maxSize: number,
 ): TransactionInstruction[] => {
+    if (instructions.length === 1) return instructions
     for (let i = 0; i < instructions.length; ++i) {
         const instructionSize = getInstructionSize(instructions.slice(0, i + 1))
 
@@ -153,10 +149,7 @@ export const sendAndConfirmInstructions = async (
     const results: string[] = []
 
     while (instructions.length > 0) {
-        const availableSize =
-            MAX_TRANSACTION_SIZE - TRANSACTION_HEADER_SIZE - SIGNATURE_SIZE
-
-        const chunk = getOptimalInstructionChunk(instructions, availableSize)
+        const chunk = getOptimalInstructionChunk(instructions, MAX_TRANSACTION_SIZE)
 
         /* eslint-disable no-await-in-loop */
         for (let i = 0; i < maxRetries; ++i) {

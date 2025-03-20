@@ -79,7 +79,7 @@ export const disbandFleet = async (
             fleet.data.fleetShips,
         ),
     )
-    console.log(
+    logger.info(
         `Added ${ixs.length} ixs for disbanding fleet ${getName(fleet)}`,
     )
 
