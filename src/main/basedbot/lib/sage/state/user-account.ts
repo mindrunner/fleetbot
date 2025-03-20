@@ -14,7 +14,7 @@ import { connection } from '../../../../../service/sol'
 import { programs } from '../../programs'
 import { Coordinates } from '../../util/coordinates'
 import { Faction, galaxySectorsData } from '../../util/galaxy-sectors-data'
-import { ExtShipMap, getShipData, ships } from '../ships'
+import { ExtShipData, getShipData } from '../ships'
 
 import { getCargoType, getCargoTypes } from './cargo-types'
 import { sageGame } from './game'
@@ -49,7 +49,7 @@ export type Player = {
     fuelCargoType: CargoType
     foodCargoType: CargoType
     ammoCargoType: CargoType
-    shipData: ExtShipMap
+    shipData: Array<ExtShipData>
 }
 
 const getXpAccount = (
@@ -163,7 +163,7 @@ export const getPlayerContext = async (
     if (!homeStarbase) {
         throw new Error('No home starbase found')
     }
-    const shipData = await getShipData(game, ships)
+    const shipData = await getShipData(game)
 
     return {
         publicKey: user,

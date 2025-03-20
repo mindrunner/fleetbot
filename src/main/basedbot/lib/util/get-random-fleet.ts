@@ -1,5 +1,5 @@
 import { FleetShips } from '../sage/act/create-fleet'
-import { ShipRole } from '../sage/ships'
+import { ShipMake } from '../sage/ships'
 import { Player } from '../sage/state/user-account'
 import { Faction } from './galaxy-sectors-data'
 
@@ -9,47 +9,46 @@ export const getRandomFleet = (
 ): FleetShips => {
     const { faction, shipData } = player
 
-    const factionShips = Object.entries(shipData).filter(([_, value]) => {
-        if (faction === Faction.MUD)
-            return (
-                value.name.startsWith('Fimbul') ||
-                value.name.startsWith('Rainbow') ||
-                value.name.startsWith('Armstrong') ||
-                value.name.startsWith('Pearce') ||
-                value.name.startsWith('Calico') ||
-                value.name.startsWith('Opal')
-            )
-        if (faction === Faction.ONI)
-            return (
-                value.name.startsWith('Fimbul') ||
-                value.name.startsWith('Rainbow') ||
-                value.name.startsWith('Armstrong') ||
-                value.name.startsWith('Busan') ||
-                value.name.startsWith('Calico') ||
-                value.name.startsWith('Ogrika')
-            )
-        if (faction === Faction.UST)
-            return (
-                value.name.startsWith('Fimbul') ||
-                value.name.startsWith('Rainbow') ||
-                value.name.startsWith('Armstrong') ||
-                value.name.startsWith('VZUS') ||
-                value.name.startsWith('Ogrika') ||
-                value.name.startsWith('Opal')
-            )
-        return false
-    })
+    const factionMakes: Record<Faction, ShipMake[]> = {
+        [Faction.MUD]: [
+            'Fimbul',
+            'Rainbow',
+            'Armstrong',
+            'Pearce',
+            'Calico',
+            'Opal',
+        ],
+        [Faction.ONI]: [
+            'Fimbul',
+            'Rainbow',
+            'Armstrong',
+            'Busan',
+            'Calico',
+            'Ogrika',
+        ],
+        [Faction.UST]: [
+            'Fimbul',
+            'Rainbow',
+            'Armstrong',
+            'VZUS',
+            'Ogrika',
+            'Opal',
+        ],
+    }
+
+    const factionShips = shipData.filter((ship) =>
+        factionMakes[faction]?.includes(ship.make),
+    )
 
     // Filter by mode (mining or transport)
-    const roleShips = factionShips.filter(([_, value]) => {
+    const roleShips = factionShips.filter((value) => {
         if (mode === 'mine')
-            return (
-                value.role === ShipRole.MINER || value.role === ShipRole.MULTI
-            )
+            return value.role === 'miner' || value.role === 'multi-role'
         if (mode === 'transport')
             return (
-                value.role === ShipRole.TRANSPORT ||
-                value.role === ShipRole.MULTI
+                value.role === 'freighter' ||
+                value.role === 'transport' ||
+                value.role === 'multi-role'
             )
         return false
     })
@@ -61,7 +60,9 @@ export const getRandomFleet = (
         let shipAdded = false
 
         const randomIndex = Math.floor(Math.random() * roleShips.length)
-        const [_, shipData] = roleShips[randomIndex]
+        const shipData = roleShips.sort((a, b) =>
+            a.mint.toBase58().localeCompare(b.mint.toBase58()),
+        )[randomIndex]
 
         if (fleetSize + shipData.size <= 145) {
             fleet.push({
