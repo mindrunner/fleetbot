@@ -1,3 +1,4 @@
+import { logger } from '../../../../logger'
 import { FleetShips } from '../sage/act/create-fleet'
 import { ShipMake } from '../sage/ships'
 import { Player } from '../sage/state/user-account'
@@ -52,6 +53,7 @@ export const getRandomFleet = (
             )
         return false
     })
+    logger.info(`Selecting ${mode} fleet out of ${roleShips.length} options`)
 
     let fleetSize = 0
     const fleet: FleetShips = []
@@ -60,9 +62,9 @@ export const getRandomFleet = (
         let shipAdded = false
 
         const randomIndex = Math.floor(Math.random() * roleShips.length)
-        const shipData = roleShips.sort((a, b) =>
-            a.mint.toBase58().localeCompare(b.mint.toBase58()),
-        )[randomIndex]
+        const shipData = roleShips[randomIndex]
+
+        logger.info(`Index ${randomIndex} is ${JSON.stringify(shipData)}`)
 
         if (fleetSize + shipData.size <= 145) {
             fleet.push({

@@ -108,18 +108,20 @@ export const fetchGalaxyData = async (baseUrl: string) => {
 
 export const getShipData = async (game: Game): Promise<Array<ExtShipData>> => {
     const shipData = parseShips(await fetchGalaxyData(config.app.airdropUrl))
-    return Promise.all(
-        shipData.map(async (value): Promise<ExtShipData> => {
-            const ship = await getShipByMint(value.mint, game, programs)
-            const size = ship.data.sizeClass ** 2
-            return {
-                make: value.make,
-                model: value.model,
-                role: value.role,
-                mint: value.mint,
-                ship: ship,
-                size,
-            }
-        }),
-    )
+    return (
+        await Promise.all(
+            shipData.map(async (value): Promise<ExtShipData> => {
+                const ship = await getShipByMint(value.mint, game, programs)
+                const size = ship.data.sizeClass ** 2
+                return {
+                    make: value.make,
+                    model: value.model,
+                    role: value.role,
+                    mint: value.mint,
+                    ship: ship,
+                    size,
+                }
+            }),
+        )
+    ).sort((a, b) => a.mint.toBase58().localeCompare(b.mint.toBase58()))
 }
