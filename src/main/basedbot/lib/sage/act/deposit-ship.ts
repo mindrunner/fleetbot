@@ -52,14 +52,21 @@ export const depositShip = async (
 
     instructions.push(shipEscrowTokenAccountResult.instructions)
 
-    const info = await connection.getTokenAccountBalance(sourceTokenAccount)
+    let uiAmount = 0
+    try {
+        const info = await connection.getTokenAccountBalance(sourceTokenAccount)
+        if (info.value.uiAmount === null) uiAmount = 0
+        else uiAmount = info.value.uiAmount
+    } catch (_) {
+        uiAmount = 0
+    }
 
-    if (info.value.uiAmount === null) throw new Error('No balance found')
-
-    const amountAtOrigin = new BN(info.value.uiAmount)
+    const amountAtOrigin = new BN(uiAmount)
 
     if (amountAtOrigin.lt(new BN(amount))) {
-        throw new Error('Not enough ships available at origin')
+        throw new Error(
+            `Not enough ships available at origin ${ship.data.mint.toBase58()}`,
+        )
     }
 
     const pred = (v: WrappedShipEscrow) => v.ship.equals(ship.key)

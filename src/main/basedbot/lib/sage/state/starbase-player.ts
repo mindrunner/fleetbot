@@ -89,7 +89,7 @@ export const getShipByMint = async (
     )
 
     if (!ship) {
-        throw new Error('Error reading ship')
+        throw new Error('Error reading ship with mint ' + mint.toBase58())
     }
 
     if (ship.type === 'error') {
