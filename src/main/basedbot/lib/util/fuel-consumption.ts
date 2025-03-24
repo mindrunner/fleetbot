@@ -18,26 +18,17 @@ export const getFuelConsumption = (
         warpFuelConsumptionRate,
         subwarpSpeed,
         warpSpeed,
+        maxWarpDistance,
     } = fleetInfo.movementStats
 
-    const warpDistancePerSecond = warpSpeed / 1000000
-    const subwarpDistancePerSecond = subwarpSpeed / 1000000
+    const warpTime = distance / warpSpeed
+    const subwarpTime = distance / subwarpSpeed
 
-    const subWarpFuelConsumptionRatePerSecond = subwarpFuelConsumptionRate / 100
-    const warpFuelConsumptionRatePerSecond = warpFuelConsumptionRate / 100
-
-    const { maxWarpDistance } = fleetInfo.movementStats
-    const canWarp = distance <= maxWarpDistance
-
-    const subwarp =
-        distance *
-        subwarpDistancePerSecond *
-        subWarpFuelConsumptionRatePerSecond
-    const warp =
-        distance * warpDistancePerSecond * warpFuelConsumptionRatePerSecond
+    const warp = warpTime * (warpFuelConsumptionRate / 100)
+    const subwarp = subwarpTime * (subwarpFuelConsumptionRate / 100)
 
     return {
-        auto: canWarp ? warp : subwarp,
+        auto: distance <= maxWarpDistance ? warp : subwarp,
         subwarp,
         warp,
     }
