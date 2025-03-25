@@ -31,6 +31,7 @@ import { getPlayerContext, Player } from './lib/sage/state/user-account'
 import {
     FleetInfo,
     getFleetInfo,
+    getUserDisbandedFleets,
     getUserFleets,
 } from './lib/sage/state/user-fleets'
 import { getMapContext, WorldMap } from './lib/sage/state/world-map'
@@ -232,10 +233,17 @@ const basedbot = async (botConfig: BotConfig) => {
         '-------------------------------------------------------------------------------------',
     )
     const { player, map } = botConfig
-    const [fleets, game] = await Promise.all([
+    const [fleets, disbandedFleets, game] = await Promise.all([
         getUserFleets(player),
+        getUserDisbandedFleets(player),
         sageGame(),
     ])
+
+    if (disbandedFleets.length > 0) {
+        logger.warn(
+            `Fleets: ${fleets.length}, Disbanded Fleets: ${disbandedFleets.length}`,
+        )
+    }
 
     const fleetInfos = (
         await Promise.all(fleets.map((f) => getFleetInfo(f, player, map)))

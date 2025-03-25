@@ -1,5 +1,5 @@
 import { readAllFromRPC } from '@staratlas/data-source'
-import { Fleet } from '@staratlas/sage'
+import { DisbandedFleet, Fleet } from '@staratlas/sage'
 import BN from 'bn.js'
 
 import { connection } from '../../../../../service/sol'
@@ -65,6 +65,29 @@ export type FleetInfo = {
     miscStats: MiscStats
     fleetState: FleetState
     cargoLevels: FleetCargo
+}
+
+export const getUserDisbandedFleets = async (
+    player: Player,
+): Promise<Array<DisbandedFleet>> => {
+    const fleets = await readAllFromRPC(
+        connection,
+        programs.sage,
+        DisbandedFleet,
+        'processed',
+        [
+            {
+                memcmp: {
+                    offset: 8 + 1 + 32, // 8 (discriminator) + 1 (version) + 32 (gameId)
+                    bytes: player.profile.key.toBase58(),
+                },
+            },
+        ],
+    )
+
+    return fleets
+        .filter((f) => f.type === 'ok' && 'data' in f)
+        .map((f) => (f as any).data)
 }
 
 export const getUserFleets = async (player: Player): Promise<Array<Fleet>> => {
