@@ -26,7 +26,7 @@ export const getFleetStrategy = (
         default:
             return config.app.basedCleanup
                 ? disbandAllStrategy(map, player, game)
-                : atlasnetFcStrategy(1000)(
+                : atlasnetFcStrategy(config.app.fleetCount)(
                       map,
                       player,
                       game,

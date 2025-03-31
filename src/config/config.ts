@@ -12,6 +12,7 @@ export interface Config {
         airdropUrl: string
         airdropToken: string
         basedCleanup: boolean
+        fleetCount: number
     }
     bot: {
         telegramToken: string
@@ -67,6 +68,7 @@ export const config: Config = {
         airdropUrl: env.getOptional('AIRDROP_URL') ?? 'http://localhost:5001',
         airdropToken: env.getOptional('AIRDROP_TOKEN') ?? '',
         basedCleanup: Boolean(env.getOptional('BASED_CLEANUP')),
+        fleetCount: Number(env.getOptional('FLEET_COUNT') ?? 10),
     },
     bot: {
         telegramToken: env.get('TELEGRAM_TOKEN'),
