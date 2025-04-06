@@ -67,7 +67,7 @@ export const config: Config = {
         airdropWallets: env.getOptional('AIRDROP_WALLETS')?.split(',') ?? [],
         airdropUrl: env.getOptional('AIRDROP_URL') ?? 'http://localhost:5001',
         airdropToken: env.getOptional('AIRDROP_TOKEN') ?? '',
-        basedCleanup: Boolean(env.getOptional('BASED_CLEANUP')),
+        basedCleanup: env.getOptional('BASED_CLEANUP') === 'true',
         fleetCount: Number(env.getOptional('FLEET_COUNT') ?? 10),
     },
     bot: {
