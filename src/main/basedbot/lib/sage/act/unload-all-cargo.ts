@@ -90,5 +90,5 @@ export const unloadAllCargo = async (
         player.signer,
     )
 
-    await sendAndConfirmInstructions(instructions)
+    await sendAndConfirmInstructions()(instructions)
 }

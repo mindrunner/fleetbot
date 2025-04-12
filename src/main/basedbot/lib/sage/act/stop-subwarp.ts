@@ -47,6 +47,6 @@ export const stopSubwarp = async (
             ),
         ],
         player.signer,
-    ).then(sendAndConfirmInstructions)
+    ).then(sendAndConfirmInstructions())
     await endMove(fleetInfo, player, game)
 }

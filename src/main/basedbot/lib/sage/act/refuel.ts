@@ -85,5 +85,5 @@ export const refuel = async (
         player.signer,
     )
 
-    await sendAndConfirmInstructions(instructions)
+    await sendAndConfirmInstructions()(instructions)
 }

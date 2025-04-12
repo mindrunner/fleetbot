@@ -70,5 +70,5 @@ export const mine = async (
         player.signer,
     )
 
-    await sendAndConfirmInstructions(instructions)
+    await sendAndConfirmInstructions()(instructions)
 }

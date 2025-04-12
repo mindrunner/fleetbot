@@ -179,7 +179,7 @@ export const getStarbasePlayer = async (
             player: player.profile.key.toBase58(),
             starbase: starbase.key.toBase58(),
         })
-        await sendAndConfirmInstructions(
+        await sendAndConfirmInstructions()(
             await ixReturnsToIxs(instructionReturns, player.signer),
         )
 

@@ -93,5 +93,5 @@ export const refillFleet = async (
         )
     }
 
-    return sendAndConfirmInstructions(instructions)
+    return sendAndConfirmInstructions()(instructions)
 }

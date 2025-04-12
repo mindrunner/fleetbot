@@ -225,7 +225,7 @@ const cleanupPods = async (player: Player, game: Game, starbase: Starbase) => {
 
     logger.info(`Pod Cleanup Instructions: ${ixs.length}`)
 
-    await sendAndConfirmInstructions(await ixReturnsToIxs(ixs, player.signer))
+    await sendAndConfirmInstructions()(await ixReturnsToIxs(ixs, player.signer))
 }
 
 const basedbot = async (botConfig: BotConfig) => {

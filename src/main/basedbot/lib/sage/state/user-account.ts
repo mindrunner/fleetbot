@@ -9,17 +9,19 @@ import { PlayerProfile } from '@staratlas/player-profile'
 import { UserPoints } from '@staratlas/points'
 import { ProfileFactionAccount } from '@staratlas/profile-faction'
 import { SagePointsCategory, Starbase } from '@staratlas/sage'
+import { config } from '../../../../../config'
+import { logger } from '../../../../../logger'
 
 import { connection } from '../../../../../service/sol'
 import { programs } from '../../programs'
 import { Coordinates } from '../../util/coordinates'
 import { Faction, galaxySectorsData } from '../../util/galaxy-sectors-data'
+import { createAndInitializeCharacter } from '../../util/profile'
 import { ExtShipData, getShipData } from '../ships'
 
 import { getCargoType, getCargoTypes } from './cargo-types'
 import { sageGame } from './game'
 import { starbaseByCoordinates } from './starbase-by-coordinates'
-import { logger } from '../../../../../logger'
 
 export type XpAccounts = {
     councilRank: XpAccount
@@ -91,10 +93,18 @@ export const getPlayerContext = async (
             },
         ],
     )
+    const game = await sageGame()
 
-    // TODO: only support one profile for now
-
-    const [profile] = myProfiles
+    const [profile] =
+        myProfiles.length > 0
+            ? myProfiles
+            : config.app.autoCreateProfile
+              ? await createAndInitializeCharacter(
+                    game,
+                    'fleetbot',
+                    Faction.ONI,
+                )
+              : []
 
     if (!profile) {
         throw new Error('no player profile found')
@@ -126,7 +136,6 @@ export const getPlayerContext = async (
     if (profileFaction.type === 'error') {
         throw new Error('Error reading faction account')
     }
-    const game = await sageGame()
 
     const xpAccounts = {
         councilRank: getXpAccount(

@@ -30,5 +30,5 @@ export const selfDestruct = async (
     await ixReturnsToIxs(
         idleToRespawnIx(player, game, fleet, atlasTokenFrom, programs),
         player.signer,
-    ).then(sendAndConfirmInstructions)
+    ).then(sendAndConfirmInstructions())
 }

@@ -80,7 +80,7 @@ export const endMine = async (
             ),
         ],
         player.signer,
-    ).then(sendAndConfirmInstructions)
+    ).then(sendAndConfirmInstructions())
 
     await ixReturnsToIxs(
         [
@@ -95,5 +95,5 @@ export const endMine = async (
             ),
         ],
         player.signer,
-    ).then(sendAndConfirmInstructions)
+    ).then(sendAndConfirmInstructions())
 }

@@ -85,5 +85,5 @@ export const rearm = async (
         player.signer,
     )
 
-    await sendAndConfirmInstructions(instructions)
+    await sendAndConfirmInstructions()(instructions)
 }

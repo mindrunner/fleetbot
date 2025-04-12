@@ -13,6 +13,7 @@ export interface Config {
         airdropToken: string
         basedCleanup: boolean
         fleetCount: number
+        autoCreateProfile: boolean
     }
     bot: {
         telegramToken: string
@@ -69,6 +70,7 @@ export const config: Config = {
         airdropToken: env.getOptional('AIRDROP_TOKEN') ?? '',
         basedCleanup: env.getOptional('BASED_CLEANUP') === 'true',
         fleetCount: Number(env.getOptional('FLEET_COUNT') ?? 10),
+        autoCreateProfile: env.getOptional('AUTO_CREATE_PROFILE') === 'true',
     },
     bot: {
         telegramToken: env.get('TELEGRAM_TOKEN'),

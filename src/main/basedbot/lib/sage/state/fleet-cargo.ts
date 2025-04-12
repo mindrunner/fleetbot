@@ -78,7 +78,7 @@ const getBalance = async (
                 true,
             )
 
-            await sendAndConfirmInstructions(
+            await sendAndConfirmInstructions()(
                 await ixReturnsToIxs(
                     fleetFuelTokenResult.instructions,
                     player.signer,

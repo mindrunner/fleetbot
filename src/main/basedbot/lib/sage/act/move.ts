@@ -128,5 +128,5 @@ export const move = async (
         player.signer,
     )
 
-    await sendAndConfirmInstructions(instructions)
+    await sendAndConfirmInstructions()(instructions)
 }

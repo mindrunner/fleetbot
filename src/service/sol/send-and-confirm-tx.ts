@@ -1,4 +1,5 @@
 import {
+    Keypair,
     LAMPORTS_PER_SOL,
     PublicKey,
     TransactionInstruction,
@@ -79,9 +80,13 @@ export const sendAndConfirmTx = async (
 
             const logs = (e as any).logs as string[]
 
-            logs.filter((log) => log.includes('AnchorError')).forEach((log) => {
-                logger.error(log)
-            })
+            if (logs) {
+                logs.filter((log) => log.includes('AnchorError')).forEach(
+                    (log) => {
+                        logger.error(log)
+                    },
+                )
+            }
 
             if (message.includes('has already been processed') && txId) {
                 await confirmTx(txId)
@@ -106,6 +111,7 @@ export const sendAndConfirmTx = async (
 const createAndSignTransaction = (
     instructions: TransactionInstruction[],
     blockhash: Blockhash,
+    signers: Array<Keypair>,
 ): VersionedTransaction => {
     const messageV0 = new TransactionMessage({
         payerKey: keyPair.publicKey,
@@ -114,7 +120,7 @@ const createAndSignTransaction = (
     }).compileToV0Message()
     const transaction = new VersionedTransaction(messageV0)
 
-    transaction.sign([keyPair, keyPair])
+    transaction.sign(signers)
 
     return transaction
 }
@@ -149,84 +155,88 @@ const getOptimalInstructionChunk = (
     return instructions
 }
 
-export const sendAndConfirmInstructions = async (
-    instructionArray: TransactionInstruction[],
-): Promise<string[]> => {
-    const maxRetries = 10
-    let instructions = instructionArray
-    const results: string[] = []
+export const sendAndConfirmInstructions =
+    (signers: Array<Keypair> = [keyPair]) =>
+    async (instructionArray: TransactionInstruction[]): Promise<string[]> => {
+        const maxRetries = 10
+        let instructions = instructionArray
+        const results: string[] = []
 
-    while (instructions.length > 0) {
-        const availableSize =
-            MAX_TRANSACTION_SIZE - TRANSACTION_HEADER_SIZE - SIGNATURE_SIZE
+        while (instructions.length > 0) {
+            const availableSize =
+                MAX_TRANSACTION_SIZE - TRANSACTION_HEADER_SIZE - SIGNATURE_SIZE
 
-        const chunk = getOptimalInstructionChunk(instructions, availableSize)
-
-        for (let i = 0; i < maxRetries; ++i) {
-            const [
-                latestBlockHash,
-                priorityFeeInstruction,
-                computeUnitsInstruction,
-            ] = await Promise.all([
-                connection.getLatestBlockhash(),
-                createPriorityFeeInstruction(chunk),
-                createComputeUnitInstruction(chunk),
-            ])
-
-            const txInstructions = [
-                computeUnitsInstruction,
-                priorityFeeInstruction,
-                ...(config.sol.bloxroute
-                    ? [
-                          createBloxrouteTipInstruction(
-                              keyPair.publicKey,
-                              0.0001 * LAMPORTS_PER_SOL,
-                          ),
-                      ]
-                    : []),
-                ...chunk,
-            ]
-
-            const transaction = createAndSignTransaction(
-                txInstructions,
-                latestBlockHash.blockhash,
+            const chunk = getOptimalInstructionChunk(
+                instructions,
+                availableSize,
             )
 
-            const rawTransaction = transaction.serialize()
-
-            if (rawTransaction.length > MAX_TRANSACTION_SIZE) {
-                throw new Error(
-                    `Transaction too large: ${rawTransaction.length} bytes`,
-                )
-            }
-
-            try {
-                logger.debug(
-                    Buffer.from(transaction.serialize()).toString('base64'),
-                )
-                const result = await sendAndConfirmTx(
-                    transaction,
+            for (let i = 0; i < maxRetries; ++i) {
+                const [
                     latestBlockHash,
+                    priorityFeeInstruction,
+                    computeUnitsInstruction,
+                ] = await Promise.all([
+                    connection.getLatestBlockhash(),
+                    createPriorityFeeInstruction(chunk),
+                    createComputeUnitInstruction(chunk),
+                ])
+
+                const txInstructions = [
+                    computeUnitsInstruction,
+                    priorityFeeInstruction,
+                    ...(config.sol.bloxroute
+                        ? [
+                              createBloxrouteTipInstruction(
+                                  keyPair.publicKey,
+                                  0.0001 * LAMPORTS_PER_SOL,
+                              ),
+                          ]
+                        : []),
+                    ...chunk,
+                ]
+
+                const transaction = createAndSignTransaction(
+                    txInstructions,
+                    latestBlockHash.blockhash,
+                    signers,
                 )
 
-                results.push(result)
-                instructions = instructions.slice(chunk.length)
-                break // Exit retry loop if successful
-            } catch (e) {
-                const message = (e as any).message as string
+                const rawTransaction = transaction.serialize()
 
-                logger.error(
-                    `Transaction failed: ${message}, retrying... (${i + 1}/${maxRetries})`,
-                )
-
-                if (i === maxRetries - 1) {
+                if (rawTransaction.length > MAX_TRANSACTION_SIZE) {
                     throw new Error(
-                        `Transaction failed after ${maxRetries} attempts`,
+                        `Transaction too large: ${rawTransaction.length} bytes`,
                     )
+                }
+
+                try {
+                    logger.debug(
+                        Buffer.from(transaction.serialize()).toString('base64'),
+                    )
+                    const result = await sendAndConfirmTx(
+                        transaction,
+                        latestBlockHash,
+                    )
+
+                    results.push(result)
+                    instructions = instructions.slice(chunk.length)
+                    break // Exit retry loop if successful
+                } catch (e) {
+                    const message = (e as any).message as string
+
+                    logger.error(
+                        `Transaction failed: ${message}, retrying... (${i + 1}/${maxRetries})`,
+                    )
+
+                    if (i === maxRetries - 1) {
+                        throw new Error(
+                            `Transaction failed after ${maxRetries} attempts`,
+                        )
+                    }
                 }
             }
         }
-    }
 
-    return results
-}
+        return results
+    }

@@ -86,5 +86,5 @@ export const exitRespawn = async (
             programs,
         ),
     )
-    await ixReturnsToIxs(ixs, player.signer).then(sendAndConfirmInstructions)
+    await ixReturnsToIxs(ixs, player.signer).then(sendAndConfirmInstructions())
 }

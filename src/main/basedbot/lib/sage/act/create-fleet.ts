@@ -136,7 +136,7 @@ export const createFleet = async (
         )
     }
 
-    await sendAndConfirmInstructions(
+    await sendAndConfirmInstructions()(
         await ixReturnsToIxs(instructions, player.signer),
     )
 }

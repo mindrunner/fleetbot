@@ -64,13 +64,11 @@ export const getRandomFleet = (
     let fleetSize = 0
     const fleet: FleetShips = []
 
-    while (fleetSize < 145) {
+    while (fleetSize < 145 && fleet.length <= 5) {
         let shipAdded = false
 
         const randomIndex = Math.floor(Math.random() * roleShips.length)
         const shipData = roleShips[randomIndex]
-
-        logger.info(`Index ${randomIndex} is ${JSON.stringify(shipData)}`)
 
         if (fleetSize + shipData.size <= 145) {
             fleet.push({

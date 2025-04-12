@@ -34,5 +34,5 @@ export const dock = async (
 
     const instructions = await ixReturnsToIxs(ix, player.signer)
 
-    await sendAndConfirmInstructions(instructions)
+    await sendAndConfirmInstructions()(instructions)
 }

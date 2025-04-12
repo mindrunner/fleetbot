@@ -85,5 +85,5 @@ export const disbandFleet = async (
         `Added ${ixs.length} ixs for disbanding fleet ${getName(fleet)}`,
     )
 
-    await sendAndConfirmInstructions(await ixReturnsToIxs(ixs, player.signer))
+    await sendAndConfirmInstructions()(await ixReturnsToIxs(ixs, player.signer))
 }

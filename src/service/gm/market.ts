@@ -78,7 +78,7 @@ export const sendAtlas = (
         ),
     ]
 
-    return sendAndConfirmInstructions(instructions)
+    return sendAndConfirmInstructions()(instructions)
 }
 
 export const getBalanceMarket = async (
@@ -135,7 +135,7 @@ export const buyResource = async (
 
     logger.info(`Buying ${amount.toFixed(0)} ${res} for ${order.uiPrice} each`)
 
-    return sendAndConfirmInstructions(exchangeTx.transaction.instructions)
+    return sendAndConfirmInstructions()(exchangeTx.transaction.instructions)
 }
 export const buyResources = async (amount: Amounts): Promise<string[]> => {
     const res = (
