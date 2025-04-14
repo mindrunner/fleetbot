@@ -45,23 +45,26 @@ export const createPriorityFeeInstruction = async (
     }
 
     try {
-        const result = config.sol.rpcEndpoint.includes('devnet')
-            ? await rpcFetch({
-                  jsonrpc: '2.0',
-                  id: 1,
-                  method: 'getRecentPrioritizationFees',
-                  params: [[programs.sage.programId.toBase58()]],
-              })
-            : await rpcFetch({
-                  jsonrpc: '2.0',
-                  id: 1,
-                  method: 'getRecentPrioritizationFees',
-                  params: {
-                      transaction: encodedTx,
-                      percentiles: [50, 75, 95, 100],
-                      lookbackSlots: 10,
-                  },
-              })
+        const result =
+            config.sol.rpcEndpoint.includes('devnet') ||
+            config.sol.rpcEndpoint.includes('validator') ||
+            config.sol.rpcEndpoint.includes('localhost')
+                ? await rpcFetch({
+                      jsonrpc: '2.0',
+                      id: 1,
+                      method: 'getRecentPrioritizationFees',
+                      params: [[programs.sage.programId.toBase58()]],
+                  })
+                : await rpcFetch({
+                      jsonrpc: '2.0',
+                      id: 1,
+                      method: 'getRecentPrioritizationFees',
+                      params: {
+                          transaction: encodedTx,
+                          percentiles: [50, 75, 95, 100],
+                          lookbackSlots: 10,
+                      },
+                  })
 
         const feeData = (result as any).result.result as Array<{
             slot: number
