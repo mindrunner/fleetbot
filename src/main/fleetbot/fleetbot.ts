@@ -43,24 +43,22 @@ export const start = async (): Promise<void> => {
     // https://github.com/telegraf/telegraf/issues/1749
     telegramBot.launch().catch((e) => logger.error(e))
 
-    if (config.app.quickstart) {
-        await stockResources()
-        await checkTransactions()
-        await refill()
-    }
     resourcesCronJob = CronJob.from({
         cronTime: config.cron.resourceInterval,
         onTick: stockResources,
+        runOnInit: config.app.quickstart,
         start: true,
     })
     refillCronJob = CronJob.from({
         cronTime: config.cron.refillInterval,
         onTick: refill,
+        runOnInit: config.app.quickstart,
         start: true,
     })
     transactionCronJob = CronJob.from({
         cronTime: config.cron.bookkeeperInterval,
         onTick: checkTransactions,
+        runOnInit: config.app.quickstart,
         start: true,
     })
 }
