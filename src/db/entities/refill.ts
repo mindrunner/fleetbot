@@ -27,16 +27,16 @@ export class Refill extends BaseEntity {
     @Column({ type: 'float', default: 0.15 })
     tip!: number
 
-    @Column({ type: 'number' })
+    @Column({ type: 'integer' })
     food!: number
 
-    @Column({ type: 'number' })
+    @Column({ type: 'integer' })
     tool!: number
 
-    @Column({ type: 'number' })
+    @Column({ type: 'integer' })
     fuel!: number
 
-    @Column({ type: 'number' })
+    @Column({ type: 'integer' })
     ammo!: number
 
     @RelationIdColumn({ type: 'string' })

@@ -111,7 +111,7 @@ export class Bonus extends BaseEntity {
     @RelationIdColumn({ type: 'text' })
     walletPublicKey!: string
 
-    @ManyToOne(() => Wallet, (wallet) => wallet.transactions, {
+    @ManyToOne(() => Wallet, (wallet) => wallet.bonuses, {
         onDelete: 'CASCADE',
     })
     wallet!: Wallet

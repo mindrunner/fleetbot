@@ -34,8 +34,8 @@ ENV APP_VERSION=$APP_VERSION
 WORKDIR /app
 
 COPY --from=builder /app/dist/airdrop/index.js /usr/local/bin/airdrop
-COPY --from=builder /app/dist/airdrop/fleetbot.js /usr/local/bin/fleetbot
-COPY --from=builder /app/dist/airdrop/basedbot.js /usr/local/bin/basedbot
+COPY --from=builder /app/dist/fleetbot/index.js /usr/local/bin/fleetbot
+COPY --from=builder /app/dist/basedbot/index.js /usr/local/bin/basedbot
 COPY docker/bin/* /usr/local/bin/
 
 USER node
