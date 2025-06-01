@@ -1,5 +1,5 @@
 #!/bin/bash
 
-migrate-db.sh
+#migrate-db.sh
 
 /app/fleetbot.js
