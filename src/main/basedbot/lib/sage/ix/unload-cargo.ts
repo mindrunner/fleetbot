@@ -3,9 +3,9 @@ import { InstructionReturn } from '@staratlas/data-source'
 import { Fleet, Game, Starbase, StarbasePlayer } from '@staratlas/sage'
 import BN from 'bn.js'
 
-import { StarAtlasPrograms } from '../../programs'
-import { Player } from '../state/user-account'
-import { FleetInfo } from '../state/user-fleets'
+import { StarAtlasPrograms } from '../../programs.js'
+import { Player } from '../state/user-account.js'
+import { FleetInfo } from '../state/user-fleets.js'
 
 export const unloadCargoIx = (
     fleetInfo: FleetInfo,

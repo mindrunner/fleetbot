@@ -1,13 +1,13 @@
 import dayjs from 'dayjs'
-import advancedFormat from 'dayjs/plugin/advancedFormat'
-import customParseFormat from 'dayjs/plugin/customParseFormat'
-import duration from 'dayjs/plugin/duration'
-import minMax from 'dayjs/plugin/minMax'
-import relativeTime from 'dayjs/plugin/relativeTime'
-import utc from 'dayjs/plugin/utc'
+import advancedFormat from 'dayjs/plugin/advancedFormat.js'
+import customParseFormat from 'dayjs/plugin/customParseFormat.js'
+import duration from 'dayjs/plugin/duration.js'
+import minMax from 'dayjs/plugin/minMax.js'
+import relativeTime from 'dayjs/plugin/relativeTime.js'
+import utc from 'dayjs/plugin/utc.js'
 
-export { Dayjs } from 'dayjs'
-export { Duration } from 'dayjs/plugin/duration'
+export type { Dayjs } from 'dayjs'
+export type { Duration } from 'dayjs/plugin/duration'
 
 export const now = (): dayjs.Dayjs => dayjs()
 

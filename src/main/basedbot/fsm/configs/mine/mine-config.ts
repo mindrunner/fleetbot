@@ -1,6 +1,6 @@
-import { WarpMode } from '../../../lib/sage/act/move'
-import { Mineable, WorldMap } from '../../../lib/sage/state/world-map'
-import { Coordinates } from '../../../lib/util/coordinates'
+import { WarpMode } from '../../../lib/sage/act/move.js'
+import { Mineable, WorldMap } from '../../../lib/sage/state/world-map.js'
+import { Coordinates } from '../../../lib/util/coordinates.js'
 
 export type MineConfig = {
     homeBase: Coordinates

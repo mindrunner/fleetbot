@@ -2,27 +2,27 @@ import { CargoStats, Fleet, MiscStats } from '@staratlas/sage'
 import Big from 'big.js'
 import BN from 'bn.js'
 
-import { now } from '../../../../dayjs'
-import { FleetCargo } from '../sage/state/fleet-cargo'
-import { planetByKey } from '../sage/state/planet-by-key'
-import { starbaseByKey } from '../sage/state/starbase-by-key'
-import { WorldMap } from '../sage/state/world-map'
-import { Coordinates } from '../util/coordinates'
+import { now } from '../../../../dayjs.js'
+import { FleetCargo } from '../sage/state/fleet-cargo.js'
+import { planetByKey } from '../sage/state/planet-by-key.js'
+import { starbaseByKey } from '../sage/state/starbase-by-key.js'
+import { WorldMap } from '../sage/state/world-map.js'
+import { Coordinates } from '../util/coordinates.js'
 
-import { transformSector } from './transform/transform-sector'
-import { transformTime } from './transform/transform-time'
-import { isIdleData } from './type-guard/idle'
-import { isMineAsteroidData } from './type-guard/mine-asteroid'
-import { isMoveSubWarpData } from './type-guard/move-sub-warp'
-import { isMoveWarpData } from './type-guard/move-warp'
-import { isRespawnData } from './type-guard/respawn'
-import { isStarbaseLoadingBayData } from './type-guard/starbase-loading-bay'
+import { transformSector } from './transform/transform-sector.js'
+import { transformTime } from './transform/transform-time.js'
+import { isIdleData } from './type-guard/idle.js'
+import { isMineAsteroidData } from './type-guard/mine-asteroid.js'
+import { isMoveSubWarpData } from './type-guard/move-sub-warp.js'
+import { isMoveWarpData } from './type-guard/move-warp.js'
+import { isRespawnData } from './type-guard/respawn.js'
+import { isStarbaseLoadingBayData } from './type-guard/starbase-loading-bay.js'
 import {
     EndReason,
     FleetState,
     FleetStateType,
     RawMineAsteroidData,
-} from './types'
+} from './types.js'
 
 const toBig = (bn: BN): Big => new Big(bn.toString())
 const toBN = (bigInt: Big): BN => new BN(bigInt.toString())

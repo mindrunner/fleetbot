@@ -2,9 +2,9 @@ import { PublicKey } from '@solana/web3.js'
 import { InstructionReturn } from '@staratlas/data-source'
 import { Fleet, Game } from '@staratlas/sage'
 
-import { StarAtlasPrograms } from '../../programs'
-import { Player } from '../state/user-account'
-import { FleetInfo } from '../state/user-fleets'
+import { StarAtlasPrograms } from '../../programs.js'
+import { Player } from '../state/user-account.js'
+import { FleetInfo } from '../state/user-fleets.js'
 
 export const stopWarpIx = (
     fleetInfo: FleetInfo,

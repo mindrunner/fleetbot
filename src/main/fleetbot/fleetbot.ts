@@ -1,15 +1,15 @@
 import { CronJob } from 'cron'
 
-import { config } from '../../config'
-import * as db from '../../db'
+import { config } from '../../config/index.js'
+import * as db from '../../db/index.js'
 import {
     checkTransactions,
     refill,
     stockResources,
     telegramBot,
-} from '../../lib'
-import { logger } from '../../logger'
-import { initOrderBook } from '../../service/gm'
+} from '../../lib/index.js'
+import { logger } from '../../logger.js'
+import { initOrderBook } from '../../service/gm/index.js'
 
 let refillCronJob: CronJob | undefined,
     resourcesCronJob: CronJob | undefined,

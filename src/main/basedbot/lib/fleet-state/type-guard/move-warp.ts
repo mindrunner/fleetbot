@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 
-import { RawMoveWarpData } from '../types'
+import { RawMoveWarpData } from '../types.js'
 
 // TODO: Add all the fields that are required to be present in the data
 export const isMoveWarpData = (data: unknown): data is RawMoveWarpData =>

@@ -1,9 +1,9 @@
 import { Telegraf } from 'telegraf'
 
-import { Transaction } from '../../../db/entities'
-import { AD } from '../../../service/sol'
-import { ContextMessageUpdate } from '../context-message-update'
-import { unauthorized } from '../response'
+import { Transaction } from '../../../db/entities/index.js'
+import { AD } from '../../../service/sol/index.js'
+import { ContextMessageUpdate } from '../context-message-update.js'
+import { unauthorized } from '../response/index.js'
 
 export const transactions = (bot: Telegraf<ContextMessageUpdate>): void => {
     bot.command(['transactions'], async (ctx: ContextMessageUpdate) => {

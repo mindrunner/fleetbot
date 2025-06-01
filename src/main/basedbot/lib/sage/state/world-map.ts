@@ -1,12 +1,12 @@
 import { Game, MineItem, Planet, Resource, Starbase } from '@staratlas/sage'
-import { transformSector } from '../../fleet-state/transform/transform-sector'
-import { Coordinates } from '../../util/coordinates'
-import { getName } from '../util'
+import { transformSector } from '../../fleet-state/transform/transform-sector.js'
+import { Coordinates } from '../../util/coordinates.js'
+import { getName } from '../util.js'
 
-import { getMineItems } from './mine-items'
-import { getPlanets } from './planets'
-import { getResources } from './resources'
-import { getStarbases } from './starbases'
+import { getMineItems } from './mine-items.js'
+import { getPlanets } from './planets.js'
+import { getResources } from './resources.js'
+import { getStarbases } from './starbases.js'
 
 export type PlanetId = string
 export type ResourceId = string

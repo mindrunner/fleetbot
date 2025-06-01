@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 
-import { Sentry } from '../sentry'
+import { Sentry } from '../sentry.js'
 
 dotenv.config()
 export const getOptional = (key: string): string | undefined => {

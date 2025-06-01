@@ -1,1 +1,1 @@
-export * from './relation-id'
+export * from './relation-id.js'

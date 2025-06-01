@@ -1,13 +1,13 @@
 import { getScoreVarsShipInfo } from '@staratlas/factory'
 import Big from 'big.js'
 
-import { getFleetRemainingResources } from '../../service/fleet'
-import { Amounts } from '../../service/fleet/const'
-import { connection, fleetProgram } from '../../service/sol'
-import { FleetRefill, max } from '../const'
-import { getPrice } from '../get-price'
+import { getFleetRemainingResources } from '../../service/fleet/index.js'
+import { Amounts } from '../../service/fleet/const/index.js'
+import { connection, fleetProgram } from '../../service/sol/index.js'
+import { FleetRefill, max } from '../const/index.js'
+import { getPrice } from '../get-price.js'
 
-import { RefillStrategy } from './refill-strategy'
+import { RefillStrategy } from './refill-strategy.js'
 
 export const optimalRefillStrategy: RefillStrategy = async (
     shipStakingInfos,

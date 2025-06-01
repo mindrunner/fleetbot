@@ -1,18 +1,25 @@
 import { Game } from '@staratlas/sage'
 import { Chance } from 'chance'
 
-import { mine } from '../fsm/configs/mine/mine'
-import { createInfoStrategy } from '../fsm/info'
-import { createMiningStrategy } from '../fsm/mine'
-import { createTransportStrategy, transport } from '../fsm/transport'
-import { Player } from '../lib/sage/state/user-account'
-import { WorldMap } from '../lib/sage/state/world-map'
-import { galaxySectorsData, SectorInfo } from '../lib/util/galaxy-sectors-data'
-import { getRandomFleet } from '../lib/util/get-random-fleet'
+import { mine } from '../fsm/configs/mine/mine.js'
+import { createInfoStrategy } from '../fsm/info.js'
+import { createMiningStrategy } from '../fsm/mine.js'
+import { createTransportStrategy, transport } from '../fsm/transport.js'
+import { Player } from '../lib/sage/state/user-account.js'
+import { WorldMap } from '../lib/sage/state/world-map.js'
+import {
+    galaxySectorsData,
+    SectorInfo,
+} from '../lib/util/galaxy-sectors-data.js'
+import { getRandomFleet } from '../lib/util/get-random-fleet.js'
 
-import { nameMapMatcher } from './name-map-matcher'
-import { getRandomFleetName } from './random-fleet-name'
-import { makeStrategyMap, StrategyConfig, StrategyMap } from './strategy-config'
+import { nameMapMatcher } from './name-map-matcher.js'
+import { getRandomFleetName } from './random-fleet-name.js'
+import {
+    makeStrategyMap,
+    StrategyConfig,
+    StrategyMap,
+} from './strategy-config.js'
 
 const randomSector = (chance: Chance.Chance, sectors: Array<SectorInfo>) =>
     sectors[chance.integer({ min: 0, max: sectors.length - 1 })].coordinates

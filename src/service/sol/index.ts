@@ -1,2 +1,2 @@
-export * from './const'
-export * from './get-account'
+export * from './const/index.js'
+export * from './get-account.js'

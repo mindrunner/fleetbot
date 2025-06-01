@@ -1,7 +1,7 @@
 import { Telegraf } from 'telegraf'
 
-import { config } from '../../../config'
-import { ContextMessageUpdate } from '../context-message-update'
+import { config } from '../../../config/index.js'
+import { ContextMessageUpdate } from '../context-message-update.js'
 
 export const help = (bot: Telegraf<ContextMessageUpdate>): void => {
     bot.command(['start', 'help'], async (ctx: ContextMessageUpdate) => {

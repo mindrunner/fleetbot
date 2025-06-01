@@ -5,38 +5,40 @@ import {
     CreateDateColumn,
     Entity,
     Index,
+    ManyToOne,
     OneToMany,
     PrimaryColumn,
+    PrimaryGeneratedColumn,
+    Unique,
     UpdateDateColumn,
 } from 'typeorm'
 
-import { Bonus } from './bonus'
-import { Refill } from './refill'
-import { Transaction } from './transaction'
+import { Refill } from './refill.js'
+import { RelationIdColumn } from '../columns/index.js'
 
 @Entity()
 export class Wallet extends BaseEntity {
-    @PrimaryColumn()
-    publicKey: string
+    @PrimaryColumn({ type: 'text' })
+    publicKey!: string
 
     @CreateDateColumn({ type: 'timestamptz' })
-    createdAt: Date
+    createdAt!: Date
 
     @UpdateDateColumn({ type: 'timestamptz' })
-    updatedAt: Date
+    updatedAt!: Date
 
     @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
     @Index()
-    nextRefill: Date
+    nextRefill!: Date
 
     @Column({ type: 'float', default: 0.15 })
-    tip: number
+    tip!: number
 
-    @Column({ nullable: true })
+    @Column({ type: 'text', nullable: true })
     nick?: string
 
-    @Column({ default: false })
-    authed: boolean
+    @Column({ type: 'boolean', default: false })
+    authed!: boolean
 
     @Column({ type: 'float', nullable: true })
     authTxAmount?: number | null
@@ -49,20 +51,20 @@ export class Wallet extends BaseEntity {
     telegramId?: number | null
 
     @Index()
-    @Column({ default: true })
-    enabled: boolean
+    @Column({ type: 'boolean', default: true })
+    enabled!: boolean
 
-    @Column({ default: true })
-    notify: boolean
+    @Column({ type: 'boolean', default: true })
+    notify!: boolean
 
     @OneToMany(() => Transaction, (transaction) => transaction.wallet)
-    transactions: Promise<Transaction[]>
+    transactions!: Promise<Transaction[]>
 
     @OneToMany(() => Bonus, (bonus) => bonus.wallet)
-    bonuses: Promise<Bonus[]>
+    bonuses!: Promise<Bonus[]>
 
     @OneToMany(() => Refill, (refill) => refill.wallet)
-    refills: Promise<Refill[]>
+    refills!: Promise<Refill[]>
 
     async getBalance(): Promise<Big> {
         const deposit = (await this.transactions).reduce(
@@ -90,4 +92,58 @@ export class Wallet extends BaseEntity {
             Big(0),
         )
     }
+}
+
+@Entity()
+export class Bonus extends BaseEntity {
+    @PrimaryGeneratedColumn('uuid')
+    id!: string
+
+    @Column('timestamptz')
+    time!: Date
+
+    @Column({ type: 'float' })
+    amount!: number
+
+    @Column({ type: 'text' })
+    reason!: string
+
+    @RelationIdColumn({ type: 'text' })
+    walletPublicKey!: string
+
+    @ManyToOne(() => Wallet, (wallet) => wallet.bonuses, {
+        onDelete: 'CASCADE',
+    })
+    wallet!: Wallet
+}
+
+@Entity()
+@Unique(['signature', 'resource'])
+export class Transaction extends BaseEntity {
+    @PrimaryGeneratedColumn('uuid')
+    id!: string
+
+    @Column({ type: 'text' })
+    @Index()
+    signature!: string
+
+    @Column('timestamptz')
+    time!: Date
+
+    @Column({ type: 'float' })
+    amount!: number
+
+    @Column({ type: 'float' })
+    originalAmount!: number
+
+    @Column({ type: 'text' })
+    resource!: string
+
+    @RelationIdColumn({ type: 'text' })
+    walletPublicKey!: Wallet['publicKey']
+
+    @ManyToOne(() => Wallet, (wallet) => wallet.transactions, {
+        onDelete: 'CASCADE',
+    })
+    wallet!: Wallet
 }

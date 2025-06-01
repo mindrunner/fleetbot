@@ -13,14 +13,14 @@ import {
 } from '@staratlas/sage'
 import BN from 'bn.js'
 
-import { connection } from '../../../../../service/sol'
-import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
-import { programs } from '../../programs'
-import { addShipEscrowIx } from '../ix/add-ship-escrow'
-import { getShipByMint, getStarbasePlayer } from '../state/starbase-player'
-import { Player } from '../state/user-account'
+import { connection } from '../../../../../service/sol/index.js'
+import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx.js'
+import { programs } from '../../programs.js'
+import { addShipEscrowIx } from '../ix/add-ship-escrow.js'
+import { getShipByMint, getStarbasePlayer } from '../state/starbase-player.js'
+import { Player } from '../state/user-account.js'
 
-import { FleetShips } from './create-fleet'
+import { FleetShips } from './create-fleet.js'
 
 export const depositShip = async (
     player: Player,

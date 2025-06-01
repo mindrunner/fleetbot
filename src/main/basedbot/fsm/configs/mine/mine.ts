@@ -1,11 +1,11 @@
 import {
     mineablesByCoordinates,
     WorldMap,
-} from '../../../lib/sage/state/world-map'
-import { getName } from '../../../lib/sage/util'
-import { Coordinates } from '../../../lib/util/coordinates'
+} from '../../../lib/sage/state/world-map.js'
+import { getName } from '../../../lib/sage/util.js'
+import { Coordinates } from '../../../lib/util/coordinates.js'
 
-import { mineConfig, MineConfig } from './mine-config'
+import { mineConfig, MineConfig } from './mine-config.js'
 
 export const mine = (
     map: WorldMap,

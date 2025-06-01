@@ -2,16 +2,16 @@ import { PublicKey } from '@solana/web3.js'
 import { getAllFleetsForUserPublicKey } from '@staratlas/factory'
 import Big from 'big.js'
 
-import dayjs from '../dayjs'
-import { Wallet } from '../db/entities'
-import { logger } from '../logger'
-import { getResourcePrices } from '../service/gm'
-import { AD, connection, fleetProgram } from '../service/sol'
+import dayjs from '../dayjs.js'
+import { Wallet } from '../db/entities/index.js'
+import { logger } from '../logger.js'
+import { getResourcePrices } from '../service/gm/index.js'
+import { AD, connection, fleetProgram } from '../service/sol/index.js'
 
-import { max } from './const'
-import { refillPlayer } from './refill-player'
-import { optimalRefillStrategy } from './refill-strategy'
-import { getDailyBurnRate } from './stock-resources'
+import { max } from './const/index.js'
+import { refillPlayer } from './refill-player.js'
+import { optimalRefillStrategy } from './refill-strategy/index.js'
+import { getDailyBurnRate } from './stock-resources.js'
 
 export const refill = async (): Promise<void> => {
     const players = await Wallet.findBy({ enabled: true })

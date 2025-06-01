@@ -2,8 +2,8 @@ import { PublicKey } from '@solana/web3.js'
 import { readFromRPC } from '@staratlas/data-source'
 import { Planet } from '@staratlas/sage'
 
-import { connection } from '../../../../../service/sol'
-import { programs } from '../../programs'
+import { connection } from '../../../../../service/sol/index.js'
+import { programs } from '../../programs.js'
 
 export const planetByKey = async (key: PublicKey): Promise<Planet> => {
     const planet = await readFromRPC(

@@ -13,7 +13,7 @@ WORKDIR /app
 
 RUN corepack enable
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml* ./
-COPY .swcrc ./
+COPY tsup.config.ts ./
 COPY tsconfig.json ./
 COPY src ./src
 
@@ -33,8 +33,9 @@ ENV APP_VERSION=$APP_VERSION
 
 WORKDIR /app
 
-COPY --from=builder /app/dist ./
-COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist/airdrop/index.js /usr/local/bin/airdrop
+COPY --from=builder /app/dist/fleetbot/index.js /usr/local/bin/fleetbot
+COPY --from=builder /app/dist/basedbot/index.js /usr/local/bin/basedbot
 COPY docker/bin/* /usr/local/bin/
 
 USER node

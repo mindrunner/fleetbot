@@ -4,14 +4,14 @@ import {
 } from '@staratlas/data-source'
 import { Game } from '@staratlas/sage'
 
-import { logger } from '../../../../../logger'
-import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
-import { programs } from '../../programs'
-import { miningHandlerIx } from '../ix/fleet-state-handler'
-import { stopMiningIx } from '../ix/stop-mining'
-import { Player } from '../state/user-account'
-import { FleetInfo } from '../state/user-fleets'
-import { Mineable } from '../state/world-map'
+import { logger } from '../../../../../logger.js'
+import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx.js'
+import { programs } from '../../programs.js'
+import { miningHandlerIx } from '../ix/fleet-state-handler.js'
+import { stopMiningIx } from '../ix/stop-mining.js'
+import { Player } from '../state/user-account.js'
+import { FleetInfo } from '../state/user-fleets.js'
+import { Mineable } from '../state/world-map.js'
 
 export const endMine = async (
     fleetInfo: FleetInfo,

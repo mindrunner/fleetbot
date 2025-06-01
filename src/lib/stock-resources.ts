@@ -9,18 +9,21 @@ import {
 import Big from 'big.js'
 import superagent from 'superagent'
 
-import dayjs from '../dayjs'
-import { ShipInfo, Wallet } from '../db/entities'
-import { logger } from '../logger'
-import { getFleetRemainingResources, getTimePass } from '../service/fleet'
-import { Amounts } from '../service/fleet/const'
+import dayjs from '../dayjs.js'
+import { ShipInfo, Wallet } from '../db/entities/index.js'
+import { logger } from '../logger.js'
+import {
+    getFleetRemainingResources,
+    getTimePass,
+} from '../service/fleet/index.js'
+import { Amounts } from '../service/fleet/const/index.js'
 import {
     buyResources,
     getResourceBalances,
     getResourcePrices,
-} from '../service/gm'
-import { AD, connection, fleetProgram } from '../service/sol'
-import { keyPair } from '../service/wallet'
+} from '../service/gm/index.js'
+import { AD, connection, fleetProgram } from '../service/sol/index.js'
+import { keyPair } from '../service/wallet/index.js'
 
 /**
  * Returns a list of player deployed fleets to the SCORE program

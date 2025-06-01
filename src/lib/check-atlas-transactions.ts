@@ -5,13 +5,13 @@ import {
     SignaturesForAddressOptions,
 } from '@solana/web3.js'
 
-import dayjs from '../dayjs'
-import { Transaction } from '../db/entities'
-import { logger } from '../logger'
-import { connection } from '../service/sol'
-import { keyPair, resource } from '../service/wallet'
+import dayjs from '../dayjs.js'
+import { Transaction } from '../db/entities/index.js'
+import { logger } from '../logger.js'
+import { connection } from '../service/sol/index.js'
+import { keyPair, resource } from '../service/wallet/index.js'
 
-import { ensureWallet } from './ensure-wallet'
+import { ensureWallet } from './ensure-wallet.js'
 
 export const checkAtlasTransactions = async (
     options?: SignaturesForAddressOptions,

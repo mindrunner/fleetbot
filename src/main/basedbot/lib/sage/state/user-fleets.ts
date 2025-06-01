@@ -2,16 +2,16 @@ import { readAllFromRPC } from '@staratlas/data-source'
 import { DisbandedFleet, Fleet } from '@staratlas/sage'
 import BN from 'bn.js'
 
-import { connection } from '../../../../../service/sol'
-import { getFleetState } from '../../fleet-state/fleet-state'
-import { FleetState } from '../../fleet-state/types'
-import { programs } from '../../programs'
-import { Coordinates } from '../../util/coordinates'
-import { getName } from '../util'
+import { connection } from '../../../../../service/sol/index.js'
+import { getFleetState } from '../../fleet-state/fleet-state.js'
+import { FleetState } from '../../fleet-state/types.js'
+import { programs } from '../../programs.js'
+import { Coordinates } from '../../util/coordinates.js'
+import { getName } from '../util.js'
 
-import { FleetCargo, getFleetCargoBalance } from './fleet-cargo'
-import { Player } from './user-account'
-import { WorldMap } from './world-map'
+import { FleetCargo, getFleetCargoBalance } from './fleet-cargo.js'
+import { Player } from './user-account.js'
+import { WorldMap } from './world-map.js'
 
 type ShipCounts = {
     total: number

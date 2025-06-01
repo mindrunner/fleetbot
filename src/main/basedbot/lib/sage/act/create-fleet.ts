@@ -8,14 +8,14 @@ import {
     WrappedShipEscrow,
 } from '@staratlas/sage'
 
-import { logger } from '../../../../../logger'
-import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
-import { programs } from '../../programs'
-import { addShipToFleetIx } from '../ix/add-ship-to-fleet'
-import { createFleetIx } from '../ix/create-fleet'
-import { getCargoStatsDefinition } from '../state/cargo-stats-definition'
-import { getShipByMint, getStarbasePlayer } from '../state/starbase-player'
-import { Player } from '../state/user-account'
+import { logger } from '../../../../../logger.js'
+import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx.js'
+import { programs } from '../../programs.js'
+import { addShipToFleetIx } from '../ix/add-ship-to-fleet.js'
+import { createFleetIx } from '../ix/create-fleet.js'
+import { getCargoStatsDefinition } from '../state/cargo-stats-definition.js'
+import { getShipByMint, getStarbasePlayer } from '../state/starbase-player.js'
+import { Player } from '../state/user-account.js'
 
 export type FleetShips = Array<FleetShip>
 export type FleetShip = {

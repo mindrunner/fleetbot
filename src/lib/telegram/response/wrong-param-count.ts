@@ -1,6 +1,6 @@
 import { Message } from 'telegraf/types'
 
-import { ContextMessageUpdate } from '../context-message-update'
+import { ContextMessageUpdate } from '../context-message-update.js'
 
 export const wrongParamCount = (
     ctx: ContextMessageUpdate,

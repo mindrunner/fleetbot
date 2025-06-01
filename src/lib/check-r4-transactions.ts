@@ -6,16 +6,16 @@ import {
 } from '@solana/web3.js'
 import Big from 'big.js'
 
-import dayjs from '../dayjs'
-import { Transaction, Wallet } from '../db/entities'
-import { TxCache } from '../db/entities/tx-cache'
-import { logger } from '../logger'
-import { Amounts } from '../service/fleet/const'
-import { AD, connection } from '../service/sol'
-import { keyPair } from '../service/wallet'
+import dayjs from '../dayjs.js'
+import { Transaction, Wallet } from '../db/entities/index.js'
+import { TxCache } from '../db/entities/tx-cache.js'
+import { logger } from '../logger.js'
+import { Amounts } from '../service/fleet/const/index.js'
+import { AD, connection } from '../service/sol/index.js'
+import { keyPair } from '../service/wallet/index.js'
 
-import { ensureWallet } from './ensure-wallet'
-import { getPrice } from './get-price'
+import { ensureWallet } from './ensure-wallet.js'
+import { getPrice } from './get-price.js'
 
 type ResourceName = 'food' | 'tool' | 'fuel' | 'ammo'
 

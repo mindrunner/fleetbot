@@ -1,8 +1,8 @@
 import { Telegraf } from 'telegraf'
 
-import { Wallet } from '../../../db/entities'
-import { ContextMessageUpdate } from '../context-message-update'
-import { unauthorized } from '../response'
+import { Wallet } from '../../../db/entities/index.js'
+import { ContextMessageUpdate } from '../context-message-update.js'
+import { unauthorized } from '../response/index.js'
 
 export const logout = (bot: Telegraf<ContextMessageUpdate>): void => {
     bot.command(['logout'], async (ctx) => {

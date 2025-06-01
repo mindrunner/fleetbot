@@ -9,13 +9,13 @@ import {
     StarbasePlayer,
 } from '@staratlas/sage'
 
-import { logger } from '../../../../../logger'
-import { connection } from '../../../../../service/sol'
-import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
-import { StarAtlasPrograms } from '../../programs'
+import { logger } from '../../../../../logger.js'
+import { connection } from '../../../../../service/sol/index.js'
+import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx.js'
+import { StarAtlasPrograms } from '../../programs.js'
 
-import { sageGame } from './game'
-import { Player } from './user-account'
+import { sageGame } from './game.js'
+import { Player } from './user-account.js'
 
 export const getCargoPodsForStarbasePlayer = async (
     starbasePlayer: StarbasePlayer,

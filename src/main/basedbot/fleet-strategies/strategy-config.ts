@@ -1,5 +1,5 @@
-import { Strategy } from '../fsm/strategy'
-import { FleetShips } from '../lib/sage/act/create-fleet'
+import { Strategy } from '../fsm/strategy.js'
+import { FleetShips } from '../lib/sage/act/create-fleet.js'
 
 export type FleetStrategy = {
     fleet: FleetShips | null

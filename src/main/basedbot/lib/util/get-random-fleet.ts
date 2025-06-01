@@ -1,8 +1,8 @@
-import { logger } from '../../../../logger'
-import { FleetShips } from '../sage/act/create-fleet'
-import { ShipMake } from '../sage/ships'
-import { Player } from '../sage/state/user-account'
-import { Faction } from './galaxy-sectors-data'
+import { logger } from '../../../../logger.js'
+import { FleetShips } from '../sage/act/create-fleet.js'
+import { ShipMake } from '../sage/ships.js'
+import { Player } from '../sage/state/user-account.js'
+import { Faction } from './galaxy-sectors-data.js'
 
 export const getRandomFleet = (
     player: Player,

@@ -1,2 +1,2 @@
-export * from './context-message-update'
-export * from './telegram-bot'
+export * from './context-message-update.js'
+export * from './telegram-bot.js'

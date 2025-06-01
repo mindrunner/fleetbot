@@ -1,10 +1,10 @@
 import { DataSource } from 'typeorm'
-import { LoggerOptions } from 'typeorm/logger/LoggerOptions'
+import { LoggerOptions } from 'typeorm'
 
-import { config } from '../config'
-import { logger } from '../logger'
+import { config } from '../config/index.js'
+import { logger } from '../logger.js'
 
-import dbConfig from './db-config'
+import dbConfig from './db-config.js'
 
 export let dataSource: DataSource
 

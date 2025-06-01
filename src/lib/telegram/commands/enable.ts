@@ -1,7 +1,7 @@
 import { Telegraf } from 'telegraf'
 
-import { ContextMessageUpdate } from '../context-message-update'
-import { unauthorized } from '../response'
+import { ContextMessageUpdate } from '../context-message-update.js'
+import { unauthorized } from '../response/index.js'
 
 export const enable = (bot: Telegraf<ContextMessageUpdate>): void => {
     bot.command(['enable'], async (ctx) => {

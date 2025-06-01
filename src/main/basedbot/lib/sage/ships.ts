@@ -1,10 +1,10 @@
 import { PublicKey } from '@solana/web3.js'
 import { Game, Ship } from '@staratlas/sage'
 import superagent from 'superagent'
-import { config } from '../../../../config'
-import { logger } from '../../../../logger'
-import { programs } from '../programs'
-import { getShipByMint } from './state/starbase-player'
+import { config } from '../../../../config/index.js'
+import { logger } from '../../../../logger.js'
+import { programs } from '../programs.js'
+import { getShipByMint } from './state/starbase-player.js'
 
 interface ApiItem {
     _id: string

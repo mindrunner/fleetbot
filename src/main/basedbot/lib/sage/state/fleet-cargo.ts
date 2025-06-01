@@ -11,12 +11,12 @@ import { Fleet } from '@staratlas/sage'
 import BN from 'bn.js'
 import bs58 from 'bs58'
 
-import { logger } from '../../../../../logger'
-import { connection } from '../../../../../service/sol'
-import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
+import { logger } from '../../../../../logger.js'
+import { connection } from '../../../../../service/sol/index.js'
+import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx.js'
 
-import { sageGame } from './game'
-import { Player } from './user-account'
+import { sageGame } from './game.js'
+import { Player } from './user-account.js'
 
 type PartialTokenAccount = {
     amount: number | null

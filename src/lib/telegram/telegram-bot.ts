@@ -1,11 +1,11 @@
 import { Telegraf } from 'telegraf'
 
-import { config } from '../../config'
+import { config } from '../../config/index.js'
 
-import * as commands from './commands'
-import { ContextMessageUpdate } from './context-message-update'
-import { auth } from './middleware'
-import { params } from './middleware/params'
+import * as commands from './commands/index.js'
+import { ContextMessageUpdate } from './context-message-update.js'
+import { auth } from './middleware/index.js'
+import { params } from './middleware/params.js'
 
 const telegramBot: Telegraf<ContextMessageUpdate> = new Telegraf(
     config.bot.telegramToken,

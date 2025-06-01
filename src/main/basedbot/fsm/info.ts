@@ -1,13 +1,13 @@
 import dayjs from 'dayjs'
 
-import { now } from '../../../dayjs'
-import { logger } from '../../../logger'
-import { planetsByCoordinates } from '../lib/sage/state/planets-by-coordinates'
-import { starbaseByCoordinates } from '../lib/sage/state/starbase-by-coordinates'
-import { FleetInfo } from '../lib/sage/state/user-fleets'
-import { getName } from '../lib/sage/util'
+import { now } from '../../../dayjs.js'
+import { logger } from '../../../logger.js'
+import { planetsByCoordinates } from '../lib/sage/state/planets-by-coordinates.js'
+import { starbaseByCoordinates } from '../lib/sage/state/starbase-by-coordinates.js'
+import { FleetInfo } from '../lib/sage/state/user-fleets.js'
+import { getName } from '../lib/sage/util.js'
 
-import { Strategy } from './strategy'
+import { Strategy } from './strategy.js'
 
 const transition = async (fleetInfo: FleetInfo): Promise<void> => {
     switch (fleetInfo.fleetState.type) {

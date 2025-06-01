@@ -7,9 +7,9 @@ import {
     VersionedTransaction,
 } from '@solana/web3.js'
 
-import { logger } from '../../../logger'
-import { keyPair } from '../../wallet'
-import { connection } from '../const'
+import { logger } from '../../../logger.js'
+import { keyPair } from '../../wallet/index.js'
+import { connection } from '../const/index.js'
 
 const getSimulationUnits = async (
     instructions: TransactionInstruction[],

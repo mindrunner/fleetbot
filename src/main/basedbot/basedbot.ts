@@ -9,38 +9,38 @@ import {
 } from '@staratlas/data-source'
 import { Fleet, Game, Starbase } from '@staratlas/sage'
 import BN from 'bn.js'
-import { config } from '../../config'
+import { config } from '../../config/index.js'
 
-import { logger } from '../../logger'
-import { Sentry } from '../../sentry'
-import { sleep } from '../../service/sleep'
-import { connection } from '../../service/sol'
-import { sendAndConfirmInstructions } from '../../service/sol/send-and-confirm-tx'
-import { keyPair } from '../../service/wallet'
-import { StrategyConfig } from './fleet-strategies/strategy-config'
-import { createInfoStrategy } from './fsm/info'
-import { programs } from './lib/programs'
-import { createFleet, FleetShip } from './lib/sage/act/create-fleet'
-import { depositCargo } from './lib/sage/act/deposit-cargo'
-import { ensureShips } from './lib/sage/act/deposit-ship'
-import { getCargoStatsDefinition } from './lib/sage/state/cargo-stats-definition'
-import { sageGame } from './lib/sage/state/game'
-import { settleFleet } from './lib/sage/state/settle-fleet'
-import { getStarbasePlayer } from './lib/sage/state/starbase-player'
-import { getPlayerContext, Player } from './lib/sage/state/user-account'
+import { logger } from '../../logger.js'
+import { Sentry } from '../../sentry.js'
+import { sleep } from '../../service/sleep.js'
+import { connection } from '../../service/sol/index.js'
+import { sendAndConfirmInstructions } from '../../service/sol/send-and-confirm-tx.js'
+import { keyPair } from '../../service/wallet/index.js'
+import { StrategyConfig } from './fleet-strategies/strategy-config.js'
+import { createInfoStrategy } from './fsm/info.js'
+import { programs } from './lib/programs.js'
+import { createFleet, FleetShip } from './lib/sage/act/create-fleet.js'
+import { depositCargo } from './lib/sage/act/deposit-cargo.js'
+import { ensureShips } from './lib/sage/act/deposit-ship.js'
+import { getCargoStatsDefinition } from './lib/sage/state/cargo-stats-definition.js'
+import { sageGame } from './lib/sage/state/game.js'
+import { settleFleet } from './lib/sage/state/settle-fleet.js'
+import { getStarbasePlayer } from './lib/sage/state/starbase-player.js'
+import { getPlayerContext, Player } from './lib/sage/state/user-account.js'
 import {
     FleetInfo,
     getFleetInfo,
     getUserDisbandedFleets,
     getUserFleets,
-} from './lib/sage/state/user-fleets'
-import { getMapContext, WorldMap } from './lib/sage/state/world-map'
-import { getName } from './lib/sage/util'
+} from './lib/sage/state/user-fleets.js'
+import { getMapContext, WorldMap } from './lib/sage/state/world-map.js'
+import { getName } from './lib/sage/util.js'
 import {
     getCleanPodsByStarbasePlayerAccounts,
     getPodCleanupInstructions,
-} from './lib/util/pod-cleanup'
-import { getFleetStrategy } from './fleet-strategies/get-fleet-strategy'
+} from './lib/util/pod-cleanup.js'
+import { getFleetStrategy } from './fleet-strategies/get-fleet-strategy.js'
 
 export const create = async (): Promise<void> => {
     logger.info('Starting basedbot...')

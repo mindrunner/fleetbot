@@ -1,7 +1,7 @@
 import Big from 'big.js'
 
-import { Amounts } from '../service/fleet/const'
-import { getResourcePrices } from '../service/gm'
+import { Amounts } from '../service/fleet/const/index.js'
+import { getResourcePrices } from '../service/gm/index.js'
 
 export const getPrice = (amount: Amounts, price?: Amounts): Big => {
     const p: Amounts = price ? price : getResourcePrices()

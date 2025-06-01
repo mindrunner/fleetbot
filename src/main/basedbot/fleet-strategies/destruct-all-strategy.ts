@@ -1,11 +1,11 @@
 import { Game } from '@staratlas/sage'
 
-import { createDestructStrategy, destructConfig } from '../fsm/destruct'
-import { Player } from '../lib/sage/state/user-account'
-import { WorldMap } from '../lib/sage/state/world-map'
+import { createDestructStrategy, destructConfig } from '../fsm/destruct.js'
+import { Player } from '../lib/sage/state/user-account.js'
+import { WorldMap } from '../lib/sage/state/world-map.js'
 
-import { nameMapMatcher } from './name-map-matcher'
-import { makeStrategyMap, StrategyConfig } from './strategy-config'
+import { nameMapMatcher } from './name-map-matcher.js'
+import { makeStrategyMap, StrategyConfig } from './strategy-config.js'
 
 export const destructAllStrategy = (
     worldMap: WorldMap,

@@ -1,7 +1,7 @@
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { PublicKey } from '@solana/web3.js'
 
-import { Resource } from '../wallet'
+import { Resource } from '../wallet/index.js'
 
 const resourceAccounts: Map<string, PublicKey> = new Map()
 

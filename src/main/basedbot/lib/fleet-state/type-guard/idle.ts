@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 
-import { RawIdleData } from '../types'
+import { RawIdleData } from '../types.js'
 
 export const isIdleData = (data: unknown): data is RawIdleData =>
     data !== undefined &&

@@ -1,15 +1,15 @@
 import { Game } from '@staratlas/sage'
-import { config } from '../../../config'
+import { config } from '../../../config/index.js'
 
-import { Player } from '../lib/sage/state/user-account'
-import { WorldMap } from '../lib/sage/state/world-map'
-import { atlasnetFcStrategy } from './atlasnet-fc-strategy'
+import { Player } from '../lib/sage/state/user-account.js'
+import { WorldMap } from '../lib/sage/state/world-map.js'
+import { atlasnetFcStrategy } from './atlasnet-fc-strategy.js'
 
-import { atlasnetLuStrategy } from './atlasnet-lu-strategy'
-import { disbandAllStrategy } from './disband-all-strategy'
-import { mainnetGellsnStrategy } from './mainnet-gellsn-strategy'
-import { mainnetLuStrategy } from './mainnet-lu-strategy'
-import { StrategyConfig } from './strategy-config'
+import { atlasnetLuStrategy } from './atlasnet-lu-strategy.js'
+import { disbandAllStrategy } from './disband-all-strategy.js'
+import { mainnetGellsnStrategy } from './mainnet-gellsn-strategy.js'
+import { mainnetLuStrategy } from './mainnet-lu-strategy.js'
+import { StrategyConfig } from './strategy-config.js'
 
 export const getFleetStrategy = (
     map: WorldMap,

@@ -5,7 +5,7 @@ import globals from 'globals'
 
 export default [
     {
-        ignores: ['node_modules/', 'build/'],
+        ignores: ['node_modules/', 'dist/'],
     },
     {
         files: ['src/**/*.ts', 'test/**/*.ts'],

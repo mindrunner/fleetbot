@@ -3,14 +3,14 @@ import { readAllFromRPC } from '@staratlas/data-source'
 import { PlayerProfile } from '@staratlas/player-profile'
 import { CronJob } from 'cron'
 
-import { config } from '../../config'
-import { airdrop } from '../../lib/airdrop'
-import { logger } from '../../logger'
-import { connection } from '../../service/sol'
-import { programs } from '../basedbot/lib/programs'
-import { sageGame } from '../basedbot/lib/sage/state/game'
-import { Faction } from '../basedbot/lib/util/galaxy-sectors-data'
-import { createAndInitializeCharacter } from '../basedbot/lib/util/profile'
+import { config } from '../../config/index.js'
+import { airdrop } from '../../lib/airdrop.js'
+import { logger } from '../../logger.js'
+import { connection } from '../../service/sol/index.js'
+import { programs } from '../basedbot/lib/programs.js'
+import { sageGame } from '../basedbot/lib/sage/state/game.js'
+import { Faction } from '../basedbot/lib/util/galaxy-sectors-data.js'
+import { createAndInitializeCharacter } from '../basedbot/lib/util/profile.js'
 
 let airdropCronJob: CronJob | undefined
 
