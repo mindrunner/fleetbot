@@ -37,7 +37,7 @@ export class Wallet extends BaseEntity {
     @Column({ type: 'text', nullable: true })
     nick?: string
 
-    @Column({ type: 'bool', default: false })
+    @Column({ type: 'boolean', default: false })
     authed!: boolean
 
     @Column({ type: 'float', nullable: true })
@@ -51,10 +51,10 @@ export class Wallet extends BaseEntity {
     telegramId?: number | null
 
     @Index()
-    @Column({ type: 'bool', default: true })
+    @Column({ type: 'boolean', default: true })
     enabled!: boolean
 
-    @Column({ type: 'bool', default: true })
+    @Column({ type: 'boolean', default: true })
     notify!: boolean
 
     @OneToMany(() => Transaction, (transaction) => transaction.wallet)
