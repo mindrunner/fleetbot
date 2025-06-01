@@ -21,6 +21,6 @@ export const rpcFetch = async <T>(
     return {
         ok: res.ok,
         code: res.status,
-        result: await res.json(),
+        result: (await res.json()) as T,
     }
 }
