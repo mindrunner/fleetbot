@@ -59,18 +59,6 @@ importers:
       '@staratlas/sage':
         specifier: ^1.8.10
         version: 1.8.10(bufferutil@4.0.9)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.8.3)(utf-8-validate@5.0.10)
-      '@swc-node/register':
-        specifier: ^1.10.10
-        version: 1.10.10(@swc/core@1.11.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.8.3)
-      '@swc/cli':
-        specifier: ^0.7.7
-        version: 0.7.7(@swc/core@1.11.29(@swc/helpers@0.5.17))
-      '@swc/core':
-        specifier: ^1.11.29
-        version: 1.11.29(@swc/helpers@0.5.17)
-      '@swc/jest':
-        specifier: ^0.2.38
-        version: 0.2.38(@swc/core@1.11.29(@swc/helpers@0.5.17))
       big.js:
         specifier: ^7.0.1
         version: 7.0.1
@@ -129,6 +117,18 @@ importers:
         specifier: ^3.17.0
         version: 3.17.0
     devDependencies:
+      '@swc-node/register':
+        specifier: ^1.10.10
+        version: 1.10.10(@swc/core@1.11.29(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.8.3)
+      '@swc/cli':
+        specifier: ^0.7.7
+        version: 0.7.7(@swc/core@1.11.29(@swc/helpers@0.5.17))
+      '@swc/core':
+        specifier: ^1.11.29
+        version: 1.11.29(@swc/helpers@0.5.17)
+      '@swc/jest':
+        specifier: ^0.2.38
+        version: 0.2.38(@swc/core@1.11.29(@swc/helpers@0.5.17))
       '@types/big.js':
         specifier: ^6.2.2
         version: 6.2.2

@@ -45,10 +45,6 @@
         "@staratlas/points": "^1.1.0",
         "@staratlas/profile-faction": "^0.6.0",
         "@staratlas/sage": "^1.8.10",
-        "@swc-node/register": "^1.10.10",
-        "@swc/cli": "^0.7.7",
-        "@swc/core": "^1.11.29",
-        "@swc/jest": "^0.2.38",
         "big.js": "^7.0.1",
         "bip39": "^3.1.0",
         "bn.js": "^5.2.2",
@@ -70,6 +66,10 @@
         "winston": "^3.17.0"
     },
     "devDependencies": {
+        "@swc-node/register": "^1.10.10",
+        "@swc/cli": "^0.7.7",
+        "@swc/core": "^1.11.29",
+        "@swc/jest": "^0.2.38",
         "@types/big.js": "^6.2.2",
         "@types/bn.js": "^5.1.6",
         "@types/chance": "^1.1.6",

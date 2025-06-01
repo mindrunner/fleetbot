@@ -38,14 +38,3 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY docker/bin/* /usr/local/bin/
 
 USER node
-
-
-
-
-
-
-
-
-
-
-# (Removed the large commented-out block of the old Docker stage for clarity)
