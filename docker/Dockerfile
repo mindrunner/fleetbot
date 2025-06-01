@@ -39,6 +39,8 @@ COPY --from=builder /app/node_modules /app/node_modules
 COPY --from=builder /app/dist/airdrop/index.js /app/airdrop.js
 COPY --from=builder /app/dist/fleetbot/index.js /app/fleetbot.js
 COPY --from=builder /app/dist/basedbot/index.js /app/basedbot.js
+COPY src/db/db-data-source.ts /app/db/db-data-source.ts
+COPY src/db/migrations /app/db/migrations
 COPY docker/bin/* /usr/local/bin/
 
 USER node
