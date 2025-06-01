@@ -18,4 +18,6 @@ export default defineConfig({
     banner: {
         js: '#!/usr/bin/env node'
     },
+    bundle: true,
+    external: [],
 });
