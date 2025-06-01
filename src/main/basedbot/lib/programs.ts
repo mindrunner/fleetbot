@@ -14,8 +14,8 @@ import { ProfileFaction } from '@staratlas/profile-faction/dist/src/idl/profile_
 import { SageProgram } from '@staratlas/sage'
 import { Sage } from '@staratlas/sage/dist/src/idl/sage'
 
-import { config } from '../../../config'
-import { anchorProvider } from '../../../service/sol/anchor'
+import { config } from '../../../config/index.js'
+import { anchorProvider } from '../../../service/sol/anchor.js'
 
 // @ts-expect-error
 export type StarAtlasProgram<T extends Idl> = ProgramMethods<T>

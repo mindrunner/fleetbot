@@ -1,6 +1,6 @@
-import { Strategy } from '../fsm/strategy'
+import { Strategy } from '../fsm/strategy.js'
 
-import { FleetStrategy, StrategyMap } from './strategy-config'
+import { FleetStrategy, StrategyMap } from './strategy-config.js'
 
 export const numberMapMatcher =
     (fallback: Strategy) =>

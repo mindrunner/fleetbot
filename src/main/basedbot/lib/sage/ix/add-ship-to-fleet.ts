@@ -2,8 +2,8 @@ import { PublicKey } from '@solana/web3.js'
 import { InstructionReturn } from '@staratlas/data-source'
 import { Fleet, Game, Starbase, StarbasePlayer } from '@staratlas/sage'
 
-import { StarAtlasPrograms } from '../../programs'
-import { Player } from '../state/user-account'
+import { StarAtlasPrograms } from '../../programs.js'
+import { Player } from '../state/user-account.js'
 
 export const addShipToFleetIx = (
     player: Player,

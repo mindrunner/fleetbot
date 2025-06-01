@@ -1,4 +1,4 @@
-import { Faction } from '../lib/util/galaxy-sectors-data'
+import { Faction } from '../lib/util/galaxy-sectors-data.js'
 
 const thematicWords = {
     [Faction.ONI]: [

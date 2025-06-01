@@ -1,49 +1,49 @@
 import { BaseEntity, Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm'
 
-import { RelationIdColumn } from '../columns'
+import { RelationIdColumn } from '../columns/index.js'
 
-import { Wallet } from './wallet'
+import { Wallet } from './wallet.js'
 
 @Entity()
 export class Refill extends BaseEntity {
-    @PrimaryColumn()
-    signature: string
+    @PrimaryColumn({ type: 'text' })
+    signature!: string
 
     @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
-    time: Date
+    time!: Date
 
-    @Column()
-    fleet: string
+    @Column({ type: 'text' })
+    fleet!: string
 
     @Column({ type: 'float' })
-    price: number
+    price!: number
 
     @Column({ type: 'float', default: 0.0 })
-    preBalance: number
+    preBalance!: number
 
     @Column({ type: 'float', default: 0.0 })
-    postBalance: number
+    postBalance!: number
 
     @Column({ type: 'float', default: 0.15 })
-    tip: number
+    tip!: number
 
-    @Column()
-    food: number
+    @Column({ type: 'number' })
+    food!: number
 
-    @Column()
-    tool: number
+    @Column({ type: 'number' })
+    tool!: number
 
-    @Column()
-    fuel: number
+    @Column({ type: 'number' })
+    fuel!: number
 
-    @Column()
-    ammo: number
+    @Column({ type: 'number' })
+    ammo!: number
 
-    @RelationIdColumn()
-    walletPublicKey: Wallet['publicKey']
+    @RelationIdColumn({ type: 'string' })
+    walletPublicKey!: Wallet['publicKey']
 
     @ManyToOne(() => Wallet, (wallet) => wallet.refills, {
         onDelete: 'CASCADE',
     })
-    wallet: Wallet
+    wallet!: Wallet
 }

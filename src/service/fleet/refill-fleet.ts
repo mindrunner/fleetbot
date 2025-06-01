@@ -7,11 +7,11 @@ import {
     createRepairInstruction,
 } from '@staratlas/factory'
 
-import { connection, fleetProgram, getAccount } from '../sol'
-import { sendAndConfirmInstructions } from '../sol/send-and-confirm-tx'
-import { keyPair, resource } from '../wallet'
+import { connection, fleetProgram, getAccount } from '../sol/index.js'
+import { sendAndConfirmInstructions } from '../sol/send-and-confirm-tx.js'
+import { keyPair, resource } from '../wallet/index.js'
 
-import { Amounts } from './const'
+import { Amounts } from './const/index.js'
 
 export const refillFleet = async (
     player: PublicKey,

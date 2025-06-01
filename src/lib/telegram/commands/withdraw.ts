@@ -2,12 +2,12 @@ import { PublicKey } from '@solana/web3.js'
 import Big from 'big.js'
 import { Telegraf } from 'telegraf'
 
-import dayjs from '../../../dayjs'
-import { Transaction } from '../../../db/entities'
-import { sendAtlas } from '../../../service/gm'
-import { AD } from '../../../service/sol'
-import { ContextMessageUpdate } from '../context-message-update'
-import { unauthorized, wrongParamCount } from '../response'
+import dayjs from '../../../dayjs.js'
+import { Transaction } from '../../../db/entities/index.js'
+import { sendAtlas } from '../../../service/gm/index.js'
+import { AD } from '../../../service/sol/index.js'
+import { ContextMessageUpdate } from '../context-message-update.js'
+import { unauthorized, wrongParamCount } from '../response/index.js'
 
 export const withdraw = (bot: Telegraf<ContextMessageUpdate>): void => {
     bot.command(['withdraw'], async (ctx) => {

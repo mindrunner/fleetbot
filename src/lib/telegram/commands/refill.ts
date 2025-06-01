@@ -1,14 +1,14 @@
 import { PublicKey } from '@solana/web3.js'
 import { Telegraf } from 'telegraf'
 
-import { AD } from '../../../service/sol'
-import { refillPlayer } from '../../refill-player'
+import { AD } from '../../../service/sol/index.js'
+import { refillPlayer } from '../../refill-player.js'
 import {
     fullRefillStrategy,
     optimalRefillStrategy,
-} from '../../refill-strategy'
-import { ContextMessageUpdate } from '../context-message-update'
-import { unauthorized } from '../response'
+} from '../../refill-strategy/index.js'
+import { ContextMessageUpdate } from '../context-message-update.js'
+import { unauthorized } from '../response/index.js'
 
 export const refill = (bot: Telegraf<ContextMessageUpdate>): void => {
     bot.command(['refill'], async (ctx: ContextMessageUpdate) => {

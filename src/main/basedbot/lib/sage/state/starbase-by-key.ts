@@ -2,8 +2,8 @@ import { PublicKey } from '@solana/web3.js'
 import { readFromRPC } from '@staratlas/data-source'
 import { Starbase } from '@staratlas/sage'
 
-import { connection } from '../../../../../service/sol'
-import { programs } from '../../programs'
+import { connection } from '../../../../../service/sol/index.js'
+import { programs } from '../../programs.js'
 
 export const starbaseByKey = async (key: PublicKey): Promise<Starbase> => {
     const starbase = await readFromRPC(

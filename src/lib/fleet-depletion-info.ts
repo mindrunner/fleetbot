@@ -1,8 +1,8 @@
 import { getScoreVarsShipInfo, ShipStakingInfo } from '@staratlas/factory'
 
-import dayjs from '../dayjs'
-import { getFleetRemainingResources } from '../service/fleet'
-import { connection, fleetProgram } from '../service/sol'
+import dayjs from '../dayjs.js'
+import { getFleetRemainingResources } from '../service/fleet/index.js'
+import { connection, fleetProgram } from '../service/sol/index.js'
 
 type FleetDepletionInfo = {
     seconds: number

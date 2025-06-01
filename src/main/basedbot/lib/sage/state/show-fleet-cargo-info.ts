@@ -1,6 +1,6 @@
-import { logger } from '../../../../../logger'
+import { logger } from '../../../../../logger.js'
 
-import { FleetInfo } from './user-fleets'
+import { FleetInfo } from './user-fleets.js'
 
 export const showFleetCargoInfo = (fleetInfo: FleetInfo): void => {
     const { ammo, cargo, food, fuel, toolkit } = fleetInfo.cargoLevels

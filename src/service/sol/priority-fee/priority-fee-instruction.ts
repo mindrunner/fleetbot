@@ -7,12 +7,12 @@ import {
     VersionedTransaction,
 } from '@solana/web3.js'
 import base58 from 'bs58'
-import { config } from '../../../config'
+import { config } from '../../../config/index.js'
 
-import { logger } from '../../../logger'
-import { programs } from '../../../main/basedbot/lib/programs'
-import { keyPair } from '../../wallet'
-import { rpcFetch } from '../rpc-fetch'
+import { logger } from '../../../logger.js'
+import { programs } from '../../../main/basedbot/lib/programs.js'
+import { keyPair } from '../../wallet/index.js'
+import { rpcFetch } from '../rpc-fetch.js'
 
 const getDummyTransaction = (
     instructions: TransactionInstruction[],

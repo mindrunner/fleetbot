@@ -9,18 +9,18 @@ import {
 
 @Entity()
 export class ShipInfo extends BaseEntity {
-    @PrimaryColumn()
-    mint: string
+    @PrimaryColumn({ type: 'string' })
+    mint!: string
 
-    @Column()
-    name: string
+    @Column({ type: 'string' })
+    name!: string
 
-    @Column()
-    imageName: string
+    @Column({ type: 'string' })
+    imageName!: string
 
     @CreateDateColumn({ type: 'timestamptz' })
-    createdAt: Date
+    createdAt!: Date
 
     @UpdateDateColumn({ type: 'timestamptz' })
-    updatedAt: Date
+    updatedAt!: Date
 }

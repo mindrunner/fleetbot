@@ -2,14 +2,14 @@ import { faker } from '@faker-js/faker'
 import dayjs from 'dayjs'
 import { Telegraf } from 'telegraf'
 
-import { Wallet } from '../../../db/entities'
-import { ContextMessageUpdate } from '../context-message-update'
+import { Wallet } from '../../../db/entities/index.js'
+import { ContextMessageUpdate } from '../context-message-update.js'
 import {
     alreadyRegistered,
     authPending,
     unknownWallet,
     wrongParamCount,
-} from '../response'
+} from '../response/index.js'
 
 export const verify = (bot: Telegraf<ContextMessageUpdate>): void => {
     bot.command(['verify'], async (ctx) => {

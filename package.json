@@ -2,19 +2,19 @@
     "name": "fleetbot",
     "version": "1.0.0",
     "description": "fleetbot refills your fleets in Star Atlas Score",
+    "type": "module",
     "scripts": {
-        "build": "pnpm run type-check && swc src -d dist --strip-leading-paths --copy-files",
         "type-check": "tsc --noEmit",
+        "start:fleetbot": "tsx src/main/fleetbot/index.ts",
+        "start:basedbot": "tsx src/main/basedbot/index.ts",
+        "start:airdrop": "tsx src/main/airdrop/index.ts",
+        "build": "pnpm run type-check && tsup",
         "build:docker": "docker build -t fleetbot -f docker/app/Dockerfile .",
         "db:migrate": "npm run typeorm -- migration:run",
         "lint": "eslint .",
         "lint:docker": "docker run --rm -i hadolint/hadolint < cicd/docker/app/Dockerfile",
         "lint:yaml": "yamllint .",
         "clean": "rm -rf build",
-        "start": "node -r source-map-support/register -r @swc-node/register",
-        "start:airdrop": "pnpm run start src/main/airdrop",
-        "start:basedbot": "pnpm run start src/main/basedbot",
-        "start:fleetbot": "pnpm run start src/main/fleetbot",
         "typeorm": "typeorm-ts-node-commonjs -d src/db/db-data-source.ts"
     },
     "repository": {
@@ -66,10 +66,6 @@
         "winston": "^3.17.0"
     },
     "devDependencies": {
-        "@swc-node/register": "^1.10.10",
-        "@swc/cli": "^0.7.7",
-        "@swc/core": "^1.11.29",
-        "@swc/jest": "^0.2.38",
         "@types/big.js": "^6.2.2",
         "@types/bn.js": "^5.1.6",
         "@types/chance": "^1.1.6",
@@ -88,7 +84,10 @@
         "globals": "^16.1.0",
         "prettier": "^3.5.3",
         "ts-jest": "^29.3.2",
+        "ts-node": "^10.9.2",
         "ts-node-dev": "^2.0.0",
+        "tsup": "^8.5.0",
+        "tsx": "^4.19.4",
         "typescript": "^5.8.3"
     },
     "packageManager": "pnpm@10.11.0",
@@ -97,6 +96,7 @@
             "@swc/core",
             "bigint-buffer",
             "bufferutil",
+            "esbuild",
             "utf-8-validate"
         ]
     }

@@ -1,10 +1,10 @@
-import dayjs, { now } from '../../../../../dayjs'
-import { logger } from '../../../../../logger'
-import { getName } from '../util'
+import dayjs, { now } from '../../../../../dayjs.js'
+import { logger } from '../../../../../logger.js'
+import { getName } from '../util.js'
 
-import { planetsByCoordinates } from './planets-by-coordinates'
-import { starbaseByCoordinates } from './starbase-by-coordinates'
-import { FleetInfo } from './user-fleets'
+import { planetsByCoordinates } from './planets-by-coordinates.js'
+import { starbaseByCoordinates } from './starbase-by-coordinates.js'
+import { FleetInfo } from './user-fleets.js'
 
 export const showFleetInfo = async (fleetInfo: FleetInfo): Promise<void> => {
     switch (fleetInfo.fleetState.type) {

@@ -1,12 +1,12 @@
 import { Game } from '@staratlas/sage'
 
-import { now } from '../../../../../dayjs'
-import { logger } from '../../../../../logger'
-import { endMove } from '../act/end-move'
-import { exitRespawn } from '../act/exit-respawn'
+import { now } from '../../../../../dayjs.js'
+import { logger } from '../../../../../logger.js'
+import { endMove } from '../act/end-move.js'
+import { exitRespawn } from '../act/exit-respawn.js'
 
-import { Player } from './user-account'
-import { FleetInfo } from './user-fleets'
+import { Player } from './user-account.js'
+import { FleetInfo } from './user-fleets.js'
 
 export const settleFleet = async (
     fleetInfo: FleetInfo,

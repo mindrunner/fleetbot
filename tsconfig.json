@@ -23,14 +23,14 @@
         "strictBindCallApply": true,
         "strictFunctionTypes": true,
         "strictNullChecks": true,
-        "strictPropertyInitialization": false,
+        "strictPropertyInitialization": true,
 
         // Modules
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
-        "isolatedModules": false,
-        "moduleResolution": "node",
+        "isolatedModules": true,
+        "moduleResolution": "bundler",
         "resolveJsonModule": true,
 
         // Experimental Options

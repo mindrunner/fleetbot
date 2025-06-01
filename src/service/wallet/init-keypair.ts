@@ -2,8 +2,8 @@ import { Keypair, PublicKey } from '@solana/web3.js'
 import { mnemonicToSeedSync } from 'bip39'
 import { derivePath } from 'ed25519-hd-key'
 
-import { config } from '../../config'
-import { logger } from '../../logger'
+import { config } from '../../config/index.js'
+import { logger } from '../../logger.js'
 
 const initKeypairBySecretKey = (key: number[], pubKey: PublicKey): Keypair => {
     const keypair = Keypair.fromSecretKey(new Uint8Array(key))

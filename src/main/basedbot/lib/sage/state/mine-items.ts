@@ -1,8 +1,8 @@
 import { readAllFromRPC } from '@staratlas/data-source'
 import { Game, MineItem } from '@staratlas/sage'
 
-import { connection } from '../../../../../service/sol'
-import { programs } from '../../programs'
+import { connection } from '../../../../../service/sol/index.js'
+import { programs } from '../../programs.js'
 
 export const getMineItems = async (game: Game): Promise<Array<MineItem>> => {
     const mineItems = await readAllFromRPC(

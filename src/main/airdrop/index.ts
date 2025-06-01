@@ -1,8 +1,8 @@
-import { Sentry } from '../../sentry' // import this as early as possible to catch early startup errors
+import { Sentry } from '../../sentry.js' // import this as early as possible to catch early startup errors
 
-import { logger } from '../../logger'
+import { logger } from '../../logger.js'
 
-import * as app from './airdrop'
+import * as app from './airdrop.js'
 
 const stop = async (signal?: NodeJS.Signals) => {
     logger.info(`Shutting down${signal ? ` (${signal})` : ''}`)

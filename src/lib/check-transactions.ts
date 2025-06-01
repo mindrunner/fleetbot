@@ -1,18 +1,18 @@
 import { LessThan, MoreThan } from 'typeorm'
 
-import dayjs from '../dayjs'
-import { Transaction, Wallet } from '../db/entities'
-import { logger } from '../logger'
+import dayjs from '../dayjs.js'
+import { Transaction, Wallet } from '../db/entities/index.js'
+import { logger } from '../logger.js'
 import {
     getBalanceAtlas,
     getResourceBalances,
     getResourcePrices,
-} from '../service/gm'
-import { AD } from '../service/sol'
-import { keyPair, resource } from '../service/wallet'
+} from '../service/gm/index.js'
+import { AD } from '../service/sol/index.js'
+import { keyPair, resource } from '../service/wallet/index.js'
 
-import { checkAtlasTransactions } from './check-atlas-transactions'
-import { checkR4Transactions } from './check-r4-transactions'
+import { checkAtlasTransactions } from './check-atlas-transactions.js'
+import { checkR4Transactions } from './check-r4-transactions.js'
 
 export const checkTransactions = async (): Promise<void> => {
     const atlasBalance = await getBalanceAtlas(keyPair.publicKey)

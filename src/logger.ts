@@ -1,7 +1,7 @@
 import PrettyError from 'pretty-error'
 import winston from 'winston'
 
-import { config } from './config'
+import { config } from './config/index.js'
 
 const prettyError = new PrettyError()
     .skipNodeFiles()

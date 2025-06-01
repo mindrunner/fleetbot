@@ -1,4 +1,4 @@
-import { Coordinates } from './coordinates'
+import { Coordinates } from './coordinates.js'
 
 export enum Faction {
     MUD = 1,

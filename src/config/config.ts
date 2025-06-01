@@ -1,6 +1,6 @@
 import { LoggerOptions } from 'typeorm'
 
-import * as env from './env'
+import * as env from './env.js'
 
 export interface Config {
     app: {

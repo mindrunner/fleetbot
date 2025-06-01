@@ -1,6 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
 import superagent from 'superagent'
-import { logger } from '../logger'
+import { logger } from '../logger.js'
 
 export const airdrop = async (
     baseUrl: string,

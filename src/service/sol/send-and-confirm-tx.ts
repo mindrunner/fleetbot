@@ -6,15 +6,15 @@ import {
     TransactionMessage,
     VersionedTransaction,
 } from '@solana/web3.js'
-import { config } from '../../config'
+import { config } from '../../config/index.js'
 
-import { logger } from '../../logger'
-import { keyPair } from '../wallet'
+import { logger } from '../../logger.js'
+import { keyPair } from '../wallet/index.js'
 
-import { connection } from './const'
-import { createBloxrouteTipInstruction } from './priority-fee/bloxroute-tip-instruction'
-import { createComputeUnitInstruction } from './priority-fee/compute-unit-instruction'
-import { createPriorityFeeInstruction } from './priority-fee/priority-fee-instruction'
+import { connection } from './const/index.js'
+import { createBloxrouteTipInstruction } from './priority-fee/bloxroute-tip-instruction.js'
+import { createComputeUnitInstruction } from './priority-fee/compute-unit-instruction.js'
+import { createPriorityFeeInstruction } from './priority-fee/priority-fee-instruction.js'
 
 // Constants for Solana transaction size limits
 const MAX_TRANSACTION_SIZE = 1232 // Maximum size of a transaction in bytes

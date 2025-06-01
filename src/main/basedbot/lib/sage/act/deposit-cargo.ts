@@ -8,16 +8,16 @@ import {
 import { Game, Starbase } from '@staratlas/sage'
 import BN from 'bn.js'
 
-import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
-import { getTokenBalance } from '../../../basedbot'
-import { programs } from '../../programs'
-import { depositCargoIx } from '../ix/deposit-cargo'
-import { getCargoType } from '../state/cargo-types'
+import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx.js'
+import { getTokenBalance } from '../../../basedbot.js'
+import { programs } from '../../programs.js'
+import { depositCargoIx } from '../ix/deposit-cargo.js'
+import { getCargoType } from '../state/cargo-types.js'
 import {
     getCargoPodsForStarbasePlayer,
     getStarbasePlayer,
-} from '../state/starbase-player'
-import { Player } from '../state/user-account'
+} from '../state/starbase-player.js'
+import { Player } from '../state/user-account.js'
 
 export const depositCargo = async (
     player: Player,

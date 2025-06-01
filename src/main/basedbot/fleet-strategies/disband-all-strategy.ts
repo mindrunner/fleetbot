@@ -1,12 +1,12 @@
 import { Game } from '@staratlas/sage'
 
-import { disbandConfig } from '../fsm/configs/disband-config'
-import { createDisbandStrategy } from '../fsm/disband'
-import { Player } from '../lib/sage/state/user-account'
-import { WorldMap } from '../lib/sage/state/world-map'
+import { disbandConfig } from '../fsm/configs/disband-config.js'
+import { createDisbandStrategy } from '../fsm/disband.js'
+import { Player } from '../lib/sage/state/user-account.js'
+import { WorldMap } from '../lib/sage/state/world-map.js'
 
-import { nameMapMatcher } from './name-map-matcher'
-import { makeStrategyMap, StrategyConfig } from './strategy-config'
+import { nameMapMatcher } from './name-map-matcher.js'
+import { makeStrategyMap, StrategyConfig } from './strategy-config.js'
 
 export const disbandAllStrategy = (
     worldMap: WorldMap,

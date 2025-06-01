@@ -1,6 +1,6 @@
 import { Middleware } from 'telegraf'
 
-import { ContextMessageUpdate } from '../context-message-update'
+import { ContextMessageUpdate } from '../context-message-update.js'
 
 export const params: Middleware<ContextMessageUpdate> = (
     ctx: ContextMessageUpdate,

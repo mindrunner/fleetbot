@@ -4,15 +4,15 @@ import {
 } from '@staratlas/data-source'
 import { Game } from '@staratlas/sage'
 
-import { logger } from '../../../../../logger'
-import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
-import { programs } from '../../programs'
-import { stopSubWarpIx } from '../ix/stop-subwarp'
-import { getCargoStatsDefinition } from '../state/cargo-stats-definition'
-import { Player } from '../state/user-account'
-import { FleetInfo } from '../state/user-fleets'
+import { logger } from '../../../../../logger.js'
+import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx.js'
+import { programs } from '../../programs.js'
+import { stopSubWarpIx } from '../ix/stop-subwarp.js'
+import { getCargoStatsDefinition } from '../state/cargo-stats-definition.js'
+import { Player } from '../state/user-account.js'
+import { FleetInfo } from '../state/user-fleets.js'
 
-import { endMove } from './end-move'
+import { endMove } from './end-move.js'
 
 export const stopSubwarp = async (
     fleetInfo: FleetInfo,

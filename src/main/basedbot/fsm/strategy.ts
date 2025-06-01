@@ -1,4 +1,4 @@
-import { FleetInfo } from '../lib/sage/state/user-fleets'
+import { FleetInfo } from '../lib/sage/state/user-fleets.js'
 
 export type Strategy = {
     apply: (fleetInfo: FleetInfo) => Promise<void>

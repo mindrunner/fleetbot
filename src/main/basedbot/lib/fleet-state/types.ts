@@ -2,8 +2,8 @@ import { PublicKey } from '@solana/web3.js'
 import { MineItem, Starbase } from '@staratlas/sage'
 import BN from 'bn.js'
 
-import dayjs from '../../../../dayjs'
-import { Coordinates } from '../util/coordinates'
+import dayjs from '../../../../dayjs.js'
+import { Coordinates } from '../util/coordinates.js'
 
 export type EndReason = 'FULL' | 'AMMO' | 'FOOD'
 type BaseData = {

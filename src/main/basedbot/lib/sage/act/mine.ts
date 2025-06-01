@@ -4,16 +4,16 @@ import {
 } from '@staratlas/data-source'
 import { Game } from '@staratlas/sage'
 
-import { logger } from '../../../../../logger'
-import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
-import { programs } from '../../programs'
-import { startMiningIx } from '../ix/start-mining'
-import { getStarbasePlayer } from '../state/starbase-player'
-import { Player } from '../state/user-account'
-import { FleetInfo } from '../state/user-fleets'
-import { Mineable } from '../state/world-map'
+import { logger } from '../../../../../logger.js'
+import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx.js'
+import { programs } from '../../programs.js'
+import { startMiningIx } from '../ix/start-mining.js'
+import { getStarbasePlayer } from '../state/starbase-player.js'
+import { Player } from '../state/user-account.js'
+import { FleetInfo } from '../state/user-fleets.js'
+import { Mineable } from '../state/world-map.js'
 
-import { undock } from './undock'
+import { undock } from './undock.js'
 
 export const mine = async (
     fleetInfo: FleetInfo,

@@ -1,8 +1,8 @@
 import { readAllFromRPC } from '@staratlas/data-source'
 import { Game, Starbase } from '@staratlas/sage'
 
-import { connection } from '../../../../../service/sol'
-import { programs } from '../../programs'
+import { connection } from '../../../../../service/sol/index.js'
+import { programs } from '../../programs.js'
 
 export const getStarbases = async (game: Game): Promise<Array<Starbase>> => {
     const starbases = await readAllFromRPC(

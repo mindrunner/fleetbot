@@ -1,7 +1,7 @@
 import { PublicKey } from '@solana/web3.js'
 import BN from 'bn.js'
 
-import { RawMineAsteroidData } from '../types'
+import { RawMineAsteroidData } from '../types.js'
 
 export const isMineAsteroidData = (
     data: unknown,

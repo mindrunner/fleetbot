@@ -1,3 +1,3 @@
-export * from './kitten'
-export * from './porn'
-export * from './wen'
+export * from './kitten.js'
+export * from './porn.js'
+export * from './wen.js'

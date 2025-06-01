@@ -1,8 +1,8 @@
 import { Telegraf } from 'telegraf'
 
-import { ShipInfo } from '../../../../db/entities'
-import { logger } from '../../../../logger'
-import { ContextMessageUpdate } from '../../context-message-update'
+import { ShipInfo } from '../../../../db/entities/index.js'
+import { logger } from '../../../../logger.js'
+import { ContextMessageUpdate } from '../../context-message-update.js'
 
 export const porn = (bot: Telegraf<ContextMessageUpdate>): void => {
     bot.command(['porn'], async (ctx) => {

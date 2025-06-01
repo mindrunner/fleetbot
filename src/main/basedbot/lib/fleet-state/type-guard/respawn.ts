@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 
-import { RawRespawnData } from '../types'
+import { RawRespawnData } from '../types.js'
 
 export const isRespawnData = (data: unknown): data is RawRespawnData =>
     data !== undefined &&

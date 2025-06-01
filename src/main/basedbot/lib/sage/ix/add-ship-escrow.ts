@@ -8,8 +8,8 @@ import {
 } from '@staratlas/sage'
 import BN from 'bn.js'
 
-import { StarAtlasPrograms } from '../../programs'
-import { Player } from '../state/user-account'
+import { StarAtlasPrograms } from '../../programs.js'
+import { Player } from '../state/user-account.js'
 
 export const addShipEscrowIx = (
     player: Player,

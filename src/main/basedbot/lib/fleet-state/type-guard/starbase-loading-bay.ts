@@ -1,7 +1,7 @@
 import { PublicKey } from '@solana/web3.js'
 import BN from 'bn.js'
 
-import { RawStarbaseLoadingBayData } from '../types'
+import { RawStarbaseLoadingBayData } from '../types.js'
 
 export const isStarbaseLoadingBayData = (
     data: unknown,

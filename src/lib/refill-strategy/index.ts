@@ -1,3 +1,3 @@
-export * from './full-refill-strategy'
-export * from './optimal-refill-strategy'
-export * from './refill-strategy'
+export * from './full-refill-strategy.js'
+export * from './optimal-refill-strategy.js'
+export * from './refill-strategy.js'

@@ -19,15 +19,15 @@ import {
     Starbase,
     StarbasePlayer,
 } from '@staratlas/sage'
-import { airdrop, airdropCrew, airdropSol } from '../../../../lib/airdrop'
-import { logger } from '../../../../logger'
-import { connection } from '../../../../service/sol'
-import { sendAndConfirmInstructions } from '../../../../service/sol/send-and-confirm-tx'
-import { keyPair } from '../../../../service/wallet'
-import { programs, StarAtlasPrograms } from '../programs'
-import { starbaseByCoordinates } from '../sage/state/starbase-by-coordinates'
-import { Faction, galaxySectorsData } from './galaxy-sectors-data'
-import { config } from '../../../../config'
+import { airdrop, airdropCrew, airdropSol } from '../../../../lib/airdrop.js'
+import { logger } from '../../../../logger.js'
+import { connection } from '../../../../service/sol/index.js'
+import { sendAndConfirmInstructions } from '../../../../service/sol/send-and-confirm-tx.js'
+import { keyPair } from '../../../../service/wallet/index.js'
+import { programs, StarAtlasPrograms } from '../programs.js'
+import { starbaseByCoordinates } from '../sage/state/starbase-by-coordinates.js'
+import { Faction, galaxySectorsData } from './galaxy-sectors-data.js'
+import { config } from '../../../../config/index.js'
 
 export const getStarbasePlayer = async (
     keyPair: Keypair,

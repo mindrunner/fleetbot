@@ -7,13 +7,13 @@ import { Keypair, PublicKey } from '@solana/web3.js'
 import { GmClientService, GmOrderbookService, Order } from '@staratlas/factory'
 import Big from 'big.js'
 
-import { Sentry } from '../../sentry'
+import { Sentry } from '../../sentry.js'
 
-import { logger } from '../../logger'
-import { Amounts } from '../fleet/const'
-import { connection, marketProgram } from '../sol'
-import { sendAndConfirmInstructions } from '../sol/send-and-confirm-tx'
-import { keyPair, resource } from '../wallet'
+import { logger } from '../../logger.js'
+import { Amounts } from '../fleet/const/index.js'
+import { connection, marketProgram } from '../sol/index.js'
+import { sendAndConfirmInstructions } from '../sol/send-and-confirm-tx.js'
+import { keyPair, resource } from '../wallet/index.js'
 
 const gmClientService = new GmClientService()
 const gmOrderbookService = new GmOrderbookService(connection, marketProgram)

@@ -3,8 +3,8 @@ import { CargoStatsDefinition } from '@staratlas/cargo'
 import { InstructionReturn } from '@staratlas/data-source'
 import { Fleet, Game } from '@staratlas/sage'
 
-import { StarAtlasPrograms } from '../../programs'
-import { FleetInfo } from '../state/user-fleets'
+import { StarAtlasPrograms } from '../../programs.js'
+import { FleetInfo } from '../state/user-fleets.js'
 
 export const forceDropFleetCargoIx = (
     fleetInfo: FleetInfo,

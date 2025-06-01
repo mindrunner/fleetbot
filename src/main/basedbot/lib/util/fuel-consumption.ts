@@ -1,5 +1,5 @@
-import { FleetInfo } from '../sage/state/user-fleets'
-import { Coordinates } from './coordinates'
+import { FleetInfo } from '../sage/state/user-fleets.js'
+import { Coordinates } from './coordinates.js'
 
 export type FuelConsumption = {
     auto: number

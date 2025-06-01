@@ -1,14 +1,17 @@
-import { DataSourceOptions } from 'typeorm'
-import { LoggerOptions } from 'typeorm/logger/LoggerOptions'
+import { fileURLToPath } from 'node:url'
+import { dirname, join } from 'node:path'
+import { DataSourceOptions, LoggerOptions } from 'typeorm'
+import { config } from '../config/index.js'
 
-import { config } from '../config'
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 const dbConfig: DataSourceOptions = {
     ...config.db,
     type: 'postgres',
     synchronize: false,
-    entities: [`${__dirname}/entities/**/!(*test).{ts,js}`],
-    migrations: [`${__dirname}/migrations/**/*.{ts,js}`],
+    entities: [join(__dirname, 'entities/**/!(*test).{ts,js}')],
+    migrations: [join(__dirname, 'migrations/**/*.{ts,js}')],
     logging: ((config.db.logging || 'all') as string)
         .split(',')
         .map((l) => l.trim()) as LoggerOptions,

@@ -1,2 +1,2 @@
-export * from './init-keypair'
-export * from './resource'
+export * from './init-keypair.js'
+export * from './resource.js'

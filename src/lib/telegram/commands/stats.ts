@@ -4,13 +4,13 @@ import Big from 'big.js'
 import { Telegraf } from 'telegraf'
 import { Between, MoreThanOrEqual } from 'typeorm'
 
-import dayjs from '../../../dayjs'
-import { Refill } from '../../../db/entities'
-import { getResourcePrices } from '../../../service/gm'
-import { AD, connection, fleetProgram } from '../../../service/sol'
-import { getDailyBurnRate, getPendingRewards } from '../../stock-resources'
-import { ContextMessageUpdate } from '../context-message-update'
-import { unauthorized } from '../response'
+import dayjs from '../../../dayjs.js'
+import { Refill } from '../../../db/entities/index.js'
+import { getResourcePrices } from '../../../service/gm/index.js'
+import { AD, connection, fleetProgram } from '../../../service/sol/index.js'
+import { getDailyBurnRate, getPendingRewards } from '../../stock-resources.js'
+import { ContextMessageUpdate } from '../context-message-update.js'
+import { unauthorized } from '../response/index.js'
 
 export const stats = (bot: Telegraf<ContextMessageUpdate>): void => {
     bot.command(['stats'], async (ctx: ContextMessageUpdate) => {

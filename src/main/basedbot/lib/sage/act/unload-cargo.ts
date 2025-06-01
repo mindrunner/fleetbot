@@ -7,20 +7,20 @@ import {
 import { Game } from '@staratlas/sage'
 import BN from 'bn.js'
 
-import { logger } from '../../../../../logger'
-import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx'
-import { getTokenBalance } from '../../../basedbot'
-import { programs } from '../../programs'
-import { unloadCargoIx } from '../ix/unload-cargo'
-import { getCargoType } from '../state/cargo-types'
-import { starbaseByCoordinates } from '../state/starbase-by-coordinates'
+import { logger } from '../../../../../logger.js'
+import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx.js'
+import { getTokenBalance } from '../../../basedbot.js'
+import { programs } from '../../programs.js'
+import { unloadCargoIx } from '../ix/unload-cargo.js'
+import { getCargoType } from '../state/cargo-types.js'
+import { starbaseByCoordinates } from '../state/starbase-by-coordinates.js'
 import {
     getCargoPodsForStarbasePlayer,
     getStarbasePlayer,
-} from '../state/starbase-player'
-import { Player } from '../state/user-account'
-import { FleetInfo } from '../state/user-fleets'
-import { getFleetCargoHold } from './load-cargo'
+} from '../state/starbase-player.js'
+import { Player } from '../state/user-account.js'
+import { FleetInfo } from '../state/user-fleets.js'
+import { getFleetCargoHold } from './load-cargo.js'
 
 export const getHold = (
     mint: PublicKey,

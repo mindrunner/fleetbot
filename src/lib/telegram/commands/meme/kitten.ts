@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker'
 import { Telegraf } from 'telegraf'
 
-import { logger } from '../../../../logger'
-import { ContextMessageUpdate } from '../../context-message-update'
+import { logger } from '../../../../logger.js'
+import { ContextMessageUpdate } from '../../context-message-update.js'
 
 export const kitten = (bot: Telegraf<ContextMessageUpdate>): void => {
     bot.command(['kitten'], async (ctx) => {

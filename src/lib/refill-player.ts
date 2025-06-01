@@ -2,18 +2,18 @@ import { PublicKey } from '@solana/web3.js'
 import { getAllFleetsForUserPublicKey } from '@staratlas/factory'
 import Big from 'big.js'
 
-import { Sentry } from '../sentry'
+import { Sentry } from '../sentry.js'
 
-import dayjs from '../dayjs'
-import { Refill, Wallet } from '../db/entities'
-import { logger } from '../logger'
-import { refillFleet } from '../service/fleet'
-import { AD, connection, fleetProgram } from '../service/sol'
+import dayjs from '../dayjs.js'
+import { Refill, Wallet } from '../db/entities/index.js'
+import { logger } from '../logger.js'
+import { refillFleet } from '../service/fleet/index.js'
+import { AD, connection, fleetProgram } from '../service/sol/index.js'
 
-import { FleetRefill } from './const'
-import { fleetDepletionInfo } from './fleet-depletion-info'
-import { RefillStrategy } from './refill-strategy'
-import { getShipName } from './stock-resources'
+import { FleetRefill } from './const/index.js'
+import { fleetDepletionInfo } from './fleet-depletion-info.js'
+import { RefillStrategy } from './refill-strategy/index.js'
+import { getShipName } from './stock-resources.js'
 
 export const refillPlayer = async (
     player: PublicKey,

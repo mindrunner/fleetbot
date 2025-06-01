@@ -1,9 +1,9 @@
 import { readAllFromRPC } from '@staratlas/data-source'
 import { Starbase } from '@staratlas/sage'
 
-import { connection } from '../../../../../service/sol'
-import { programs } from '../../programs'
-import { Coordinates } from '../../util/coordinates'
+import { connection } from '../../../../../service/sol/index.js'
+import { programs } from '../../programs.js'
+import { Coordinates } from '../../util/coordinates.js'
 
 export const starbaseByCoordinates = async (
     coordinates: Coordinates,

@@ -2,11 +2,11 @@ import { PublicKey } from '@solana/web3.js'
 import { InstructionReturn } from '@staratlas/data-source'
 import { Fleet, Game } from '@staratlas/sage'
 
-import { StarAtlasPrograms } from '../../programs'
-import { getCargoType } from '../state/cargo-types'
-import { Player } from '../state/user-account'
-import { FleetInfo } from '../state/user-fleets'
-import { Mineable } from '../state/world-map'
+import { StarAtlasPrograms } from '../../programs.js'
+import { getCargoType } from '../state/cargo-types.js'
+import { Player } from '../state/user-account.js'
+import { FleetInfo } from '../state/user-fleets.js'
+import { Mineable } from '../state/world-map.js'
 
 export const miningHandlerIx = (
     fleetInfo: FleetInfo,
