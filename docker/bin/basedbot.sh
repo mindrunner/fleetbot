@@ -1,3 +1,3 @@
 #!/bin/bash
 
-basedbot
+/app/basedbot.js

@@ -2,4 +2,4 @@
 
 migrate-db.sh
 
-fleetbot
+/app/fleetbot.js

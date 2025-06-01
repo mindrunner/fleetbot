@@ -1,3 +1,3 @@
 #!/bin/bash
 
-airdrop
+/app/airdrop.js

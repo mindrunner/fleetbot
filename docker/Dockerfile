@@ -33,10 +33,12 @@ ENV APP_VERSION=$APP_VERSION
 
 WORKDIR /app
 
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/dist/airdrop/index.js /usr/local/bin/airdrop
-COPY --from=builder /app/dist/fleetbot/index.js /usr/local/bin/fleetbot
-COPY --from=builder /app/dist/basedbot/index.js /usr/local/bin/basedbot
+ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh /usr/local/bin/
+
+COPY --from=builder /app/node_modules /app/node_modules
+COPY --from=builder /app/dist/airdrop/index.js /app/airdrop.js
+COPY --from=builder /app/dist/fleetbot/index.js /app/fleetbot.js
+COPY --from=builder /app/dist/basedbot/index.js /app/basedbot.js
 COPY docker/bin/* /usr/local/bin/
 
 USER node
