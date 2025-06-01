@@ -3,14 +3,15 @@
     "version": "1.0.0",
     "description": "fleetbot refills your fleets in Star Atlas Score",
     "scripts": {
-        "build": "tsc",
+        "build": "pnpm run type-check && swc src -d dist --strip-leading-paths --copy-files",
+        "type-check": "tsc --noEmit",
         "build:docker": "docker build -t fleetbot -f docker/app/Dockerfile .",
         "db:migrate": "npm run typeorm -- migration:run",
         "lint": "eslint .",
         "lint:docker": "docker run --rm -i hadolint/hadolint < cicd/docker/app/Dockerfile",
         "lint:yaml": "yamllint .",
         "clean": "rm -rf build",
-        "start": "ts-node-dev -r ./src/setup-aliases.ts --transpile-only --rs --inspect=19230 --",
+        "start": "node -r source-map-support/register -r @swc-node/register",
         "start:airdrop": "pnpm run start src/main/airdrop",
         "start:basedbot": "pnpm run start src/main/basedbot",
         "start:fleetbot": "pnpm run start src/main/fleetbot",
@@ -44,6 +45,10 @@
         "@staratlas/points": "^1.1.0",
         "@staratlas/profile-faction": "^0.6.0",
         "@staratlas/sage": "^1.8.10",
+        "@swc-node/register": "^1.10.10",
+        "@swc/cli": "^0.7.7",
+        "@swc/core": "^1.11.29",
+        "@swc/jest": "^0.2.38",
         "big.js": "^7.0.1",
         "bip39": "^3.1.0",
         "bn.js": "^5.2.2",
@@ -61,7 +66,7 @@
         "superagent": "^10.2.1",
         "telegraf": "^4.16.3",
         "typeorm": "^0.3.23",
-        "undici": "^7.8.0",
+        "undici": "^7.10.0",
         "winston": "^3.17.0"
     },
     "devDependencies": {
@@ -69,6 +74,7 @@
         "@types/bn.js": "^5.1.6",
         "@types/chance": "^1.1.6",
         "@types/module-alias": "^2.0.4",
+        "@types/node": "^22.15.29",
         "@types/pg": "^8.15.1",
         "@types/superagent": "^8.1.9",
         "@typescript-eslint/eslint-plugin": "^8.32.0",
@@ -85,10 +91,13 @@
         "ts-node-dev": "^2.0.0",
         "typescript": "^5.8.3"
     },
-    "packageManager": "pnpm@10.2.1",
+    "packageManager": "pnpm@10.11.0",
     "pnpm": {
         "onlyBuiltDependencies": [
-            "bufferutil"
+            "@swc/core",
+            "bigint-buffer",
+            "bufferutil",
+            "utf-8-validate"
         ]
     }
 }

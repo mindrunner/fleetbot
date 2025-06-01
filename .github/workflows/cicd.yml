@@ -28,26 +28,12 @@ jobs:
             - uses: ./.github/actions/install
             - run: pnpm run build
             - run: pnpm install --frozen-lockfile --ignore-scripts --prod
-            - uses: docker/metadata-action@v5
-              id: metadata
+            - uses: ./.github/actions/docker-buildx
               with:
-                  images: runmymind/fleetbot
-                  tags: |
-                      type=schedule
-                      type=ref,event=branch
-                      type=ref,event=tag
-                      type=ref,event=pr
-                      type=sha
-                      type=raw,value=latest,enable={{is_default_branch}}
-            - uses: docker/login-action@v3
-              with:
-                  username: ${{ secrets.DOCKERHUB_USERNAME }}
-                  password: ${{ secrets.DOCKERHUB_TOKEN }}
-            - uses: int128/kaniko-action@v1
-              with:
-                  push: true
-                  file: ./docker/Dockerfile
-                  tags: ${{ steps.metadata.outputs.tags }}
-                  labels: ${{ steps.metadata.outputs.labels }}
-                  cache: true
-                  cache-repository: runmymind/fleetbot/cache
+                  repository: 'runmymind'
+                  project-name: 'fleetbot'
+                  app-name: 'fleetbot'
+                  dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
+                  dockerhub-password: ${{ secrets.DOCKERHUB_TOKEN }}
+                  dockerfile: 'docker/Dockerfile'
+

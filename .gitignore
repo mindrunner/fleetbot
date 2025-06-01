@@ -4,6 +4,7 @@
 .env*
 !.env.example
 *.iml
+dist/
 
 src/main/basedbot/lib/sage/ships.json
 package-lock.json

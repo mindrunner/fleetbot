@@ -2,22 +2,11 @@
     "compileOnSave": true,
     "compilerOptions": {
         // Project Options
-        "target": "es2021",
-        "module": "commonjs",
-        "lib": [
-            "dom",
-            "es5",
-            "es6",
-            "es7",
-            "es2017",
-            "es2018",
-            "es2019",
-            "es2020",
-            "es2021"
-        ],
-        "outDir": "./build/app",
+        "target": "ESNext",
+        "module": "ESNext",
+        "outDir": "./dist",
         "sourceMap": true,
-
+        "types": ["node"],
         // Type Checking
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,

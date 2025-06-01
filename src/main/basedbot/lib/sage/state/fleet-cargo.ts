@@ -41,11 +41,11 @@ const getTokenAccountForKey = async (
         const accountData = tokenAccount.account.data
 
         result.push({
-            amount: new BN(accountData.slice(64, 72), 'le').toNumber(),
-            mint: bs58.encode(accountData.slice(0, 32)),
-            owner: bs58.encode(accountData.slice(32, 64)),
+            amount: new BN(accountData.subarray(64, 72), 'le').toNumber(),
+            mint: bs58.encode(accountData.subarray(0, 32)),
+            owner: bs58.encode(accountData.subarray(32, 64)),
             tokenAccount: accountKey,
-            delegate: bs58.encode(accountData.slice(76, 108)),
+            delegate: bs58.encode(accountData.subarray(76, 108)),
             delegatedAmount: new BN(
                 accountData.slice(121, 129),
                 'le',
