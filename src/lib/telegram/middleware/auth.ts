@@ -1,6 +1,6 @@
 import { Middleware } from 'telegraf'
+import { Wallet } from '../../../db/entities/wallet.js'
 
-import { Wallet } from '../../../db/entities/index.js'
 import { ContextMessageUpdate } from '../context-message-update.js'
 
 export const auth: Middleware<ContextMessageUpdate> = async (

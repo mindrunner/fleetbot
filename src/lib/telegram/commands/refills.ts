@@ -1,6 +1,6 @@
 import { Telegraf } from 'telegraf'
 
-import { Refill } from '../../../db/entities/index.js'
+import { Refill } from '../../../db/entities/refill.js'
 import { AD } from '../../../service/sol/index.js'
 import { ContextMessageUpdate } from '../context-message-update.js'
 import { unauthorized } from '../response/index.js'

@@ -10,7 +10,8 @@ import Big from 'big.js'
 import superagent from 'superagent'
 
 import dayjs from '../dayjs.js'
-import { ShipInfo, Wallet } from '../db/entities/index.js'
+import { ShipInfo } from '../db/entities/ship-info.js'
+import { Wallet } from '../db/entities/wallet.js'
 import { logger } from '../logger.js'
 import {
     getFleetRemainingResources,

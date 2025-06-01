@@ -1,7 +1,12 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm'
-
-import { RelationIdColumn } from '../columns/index.js'
-
+import {
+    BaseEntity,
+    Column,
+    Entity,
+    ManyToOne,
+    PrimaryColumn,
+    Relation,
+    RelationId,
+} from 'typeorm'
 import { Wallet } from './wallet.js'
 
 @Entity()
@@ -39,11 +44,11 @@ export class Refill extends BaseEntity {
     @Column({ type: 'integer' })
     ammo!: number
 
-    @RelationIdColumn({ type: 'varchar' })
-    walletPublicKey!: Wallet['publicKey']
+    @RelationId((refill: Refill) => refill.wallet)
+    walletPublicKey!: string
 
     @ManyToOne(() => Wallet, (wallet) => wallet.refills, {
         onDelete: 'CASCADE',
     })
-    wallet!: Wallet
+    wallet!: Relation<Wallet>
 }

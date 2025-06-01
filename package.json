@@ -59,6 +59,7 @@
         "pnpm": "^10.10.0",
         "pretty-error": "^4.0.0",
         "punycode": "^2.3.1",
+        "reflect-metadata": "^0.2.2",
         "superagent": "^10.2.1",
         "telegraf": "^4.16.3",
         "typeorm": "^0.3.23",

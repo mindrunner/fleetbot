@@ -6,7 +6,7 @@ import {
 } from '@solana/web3.js'
 
 import dayjs from '../dayjs.js'
-import { Transaction } from '../db/entities/index.js'
+import { Transaction } from '../db/entities/transaction.js'
 import { logger } from '../logger.js'
 import { connection } from '../service/sol/index.js'
 import { keyPair, resource } from '../service/wallet/index.js'

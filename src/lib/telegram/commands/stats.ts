@@ -5,7 +5,7 @@ import { Telegraf } from 'telegraf'
 import { Between, MoreThanOrEqual } from 'typeorm'
 
 import dayjs from '../../../dayjs.js'
-import { Refill } from '../../../db/entities/index.js'
+import { Refill } from '../../../db/entities/refill.js'
 import { getResourcePrices } from '../../../service/gm/index.js'
 import { AD, connection, fleetProgram } from '../../../service/sol/index.js'
 import { getDailyBurnRate, getPendingRewards } from '../../stock-resources.js'

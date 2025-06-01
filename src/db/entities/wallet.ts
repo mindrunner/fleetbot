@@ -5,16 +5,14 @@ import {
     CreateDateColumn,
     Entity,
     Index,
-    ManyToOne,
     OneToMany,
     PrimaryColumn,
-    PrimaryGeneratedColumn,
-    Unique,
+    Relation,
     UpdateDateColumn,
 } from 'typeorm'
-
+import { Transaction } from './transaction.js'
+import { Bonus } from './bonus.js'
 import { Refill } from './refill.js'
-import { RelationIdColumn } from '../columns/index.js'
 
 @Entity()
 export class Wallet extends BaseEntity {
@@ -57,20 +55,21 @@ export class Wallet extends BaseEntity {
     @Column({ type: 'boolean', default: true })
     notify!: boolean
 
-    @OneToMany(() => Transaction, (transaction) => transaction.wallet)
-    transactions!: Promise<Transaction[]>
+    @OneToMany(() => Transaction, (tx) => tx.wallet, { lazy: true })
+    transactions!: Relation<Promise<Transaction[]>>
 
-    @OneToMany(() => Bonus, (bonus) => bonus.wallet)
-    bonuses!: Promise<Bonus[]>
+    @OneToMany(() => Bonus, (b) => b.wallet, { lazy: true })
+    bonuses!: Relation<Promise<Bonus[]>>
 
-    @OneToMany(() => Refill, (refill) => refill.wallet)
-    refills!: Promise<Refill[]>
+    @OneToMany(() => Refill, (r) => r.wallet, { lazy: true })
+    refills!: Relation<Promise<Refill[]>>
 
     async getBalance(): Promise<Big> {
-        const deposit = (await this.transactions).reduce(
-            (acc, cur) => acc.add(cur.amount),
-            Big(0),
-        )
+        const txs = await this.transactions
+        console.log(this.publicKey)
+        console.log(JSON.stringify(txs))
+
+        const deposit = txs.reduce((acc, cur) => acc.add(cur.amount), Big(0))
         const bonus = (await this.bonuses).reduce(
             (acc, cur) => acc.add(cur.amount),
             Big(0),
@@ -92,58 +91,4 @@ export class Wallet extends BaseEntity {
             Big(0),
         )
     }
-}
-
-@Entity()
-export class Bonus extends BaseEntity {
-    @PrimaryGeneratedColumn('uuid')
-    id!: string
-
-    @Column('timestamptz')
-    time!: Date
-
-    @Column({ type: 'float' })
-    amount!: number
-
-    @Column({ type: 'text' })
-    reason!: string
-
-    @RelationIdColumn({ type: 'text' })
-    walletPublicKey!: string
-
-    @ManyToOne(() => Wallet, (wallet) => wallet.bonuses, {
-        onDelete: 'CASCADE',
-    })
-    wallet!: Wallet
-}
-
-@Entity()
-@Unique(['signature', 'resource'])
-export class Transaction extends BaseEntity {
-    @PrimaryGeneratedColumn('uuid')
-    id!: string
-
-    @Column({ type: 'text' })
-    @Index()
-    signature!: string
-
-    @Column('timestamptz')
-    time!: Date
-
-    @Column({ type: 'float' })
-    amount!: number
-
-    @Column({ type: 'float' })
-    originalAmount!: number
-
-    @Column({ type: 'text' })
-    resource!: string
-
-    @RelationIdColumn({ type: 'text' })
-    walletPublicKey!: Wallet['publicKey']
-
-    @ManyToOne(() => Wallet, (wallet) => wallet.transactions, {
-        onDelete: 'CASCADE',
-    })
-    wallet!: Wallet
 }

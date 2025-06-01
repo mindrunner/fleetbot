@@ -1,7 +1,8 @@
 import { LessThan, MoreThan } from 'typeorm'
 
 import dayjs from '../dayjs.js'
-import { Transaction, Wallet } from '../db/entities/index.js'
+import { Transaction } from '../db/entities/transaction.js'
+import { Wallet } from '../db/entities/wallet.js'
 import { logger } from '../logger.js'
 import {
     getBalanceAtlas,

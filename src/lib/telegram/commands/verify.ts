@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker'
 import dayjs from 'dayjs'
 import { Telegraf } from 'telegraf'
 
-import { Wallet } from '../../../db/entities/index.js'
+import { Wallet } from '../../../db/entities/wallet.js'
 import { ContextMessageUpdate } from '../context-message-update.js'
 import {
     alreadyRegistered,

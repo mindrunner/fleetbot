@@ -1,6 +1,6 @@
 import { Telegraf } from 'telegraf'
 
-import { ShipInfo } from '../../../../db/entities/index.js'
+import { ShipInfo } from '../../../../db/entities/ship-info.js'
 import { logger } from '../../../../logger.js'
 import { ContextMessageUpdate } from '../../context-message-update.js'
 

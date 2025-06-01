@@ -3,7 +3,7 @@ import Big from 'big.js'
 import { Telegraf } from 'telegraf'
 
 import dayjs from '../../../dayjs.js'
-import { Transaction } from '../../../db/entities/index.js'
+import { Transaction } from '../../../db/entities/transaction.js'
 import { sendAtlas } from '../../../service/gm/index.js'
 import { AD } from '../../../service/sol/index.js'
 import { ContextMessageUpdate } from '../context-message-update.js'

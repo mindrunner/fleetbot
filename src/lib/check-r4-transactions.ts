@@ -7,7 +7,8 @@ import {
 import Big from 'big.js'
 
 import dayjs from '../dayjs.js'
-import { Transaction, Wallet } from '../db/entities/index.js'
+import { Transaction } from '../db/entities/transaction.js'
+import { Wallet } from '../db/entities/wallet.js'
 import { TxCache } from '../db/entities/tx-cache.js'
 import { logger } from '../logger.js'
 import { Amounts } from '../service/fleet/const/index.js'

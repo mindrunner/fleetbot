@@ -1,7 +1,7 @@
 import { Message } from 'telegraf/types'
 
 import dayjs from '../../../dayjs.js'
-import { Wallet } from '../../../db/entities/index.js'
+import { Wallet } from '../../../db/entities/wallet'
 import { ContextMessageUpdate } from '../context-message-update.js'
 
 export const authPending = (

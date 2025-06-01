@@ -3,7 +3,7 @@ import { getAllFleetsForUserPublicKey } from '@staratlas/factory'
 import Big from 'big.js'
 
 import dayjs from '../dayjs.js'
-import { Wallet } from '../db/entities/index.js'
+import { Wallet } from '../db/entities/wallet.js'
 import { logger } from '../logger.js'
 import { getResourcePrices } from '../service/gm/index.js'
 import { AD, connection, fleetProgram } from '../service/sol/index.js'

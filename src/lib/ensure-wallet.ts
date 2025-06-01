@@ -1,4 +1,4 @@
-import { Wallet } from '../db/entities/index.js'
+import { Wallet } from '../db/entities/wallet.js'
 
 export const ensureWallet = async (publicKey: string): Promise<Wallet> => {
     await Wallet.upsert(
