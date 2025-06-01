@@ -7,12 +7,19 @@ import { createMiningStrategy } from '../fsm/mine.js'
 import { createTransportStrategy, transport } from '../fsm/transport.js'
 import { Player } from '../lib/sage/state/user-account.js'
 import { WorldMap } from '../lib/sage/state/world-map.js'
-import { galaxySectorsData, SectorInfo } from '../lib/util/galaxy-sectors-data.js'
+import {
+    galaxySectorsData,
+    SectorInfo,
+} from '../lib/util/galaxy-sectors-data.js'
 import { getRandomFleet } from '../lib/util/get-random-fleet.js'
 
 import { nameMapMatcher } from './name-map-matcher.js'
 import { getRandomFleetName } from './random-fleet-name.js'
-import { makeStrategyMap, StrategyConfig, StrategyMap } from './strategy-config.js'
+import {
+    makeStrategyMap,
+    StrategyConfig,
+    StrategyMap,
+} from './strategy-config.js'
 
 const randomSector = (chance: Chance.Chance, sectors: Array<SectorInfo>) =>
     sectors[chance.integer({ min: 0, max: sectors.length - 1 })].coordinates

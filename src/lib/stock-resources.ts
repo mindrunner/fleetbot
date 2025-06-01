@@ -12,7 +12,10 @@ import superagent from 'superagent'
 import dayjs from '../dayjs.js'
 import { ShipInfo, Wallet } from '../db/entities/index.js'
 import { logger } from '../logger.js'
-import { getFleetRemainingResources, getTimePass } from '../service/fleet/index.js'
+import {
+    getFleetRemainingResources,
+    getTimePass,
+} from '../service/fleet/index.js'
 import { Amounts } from '../service/fleet/const/index.js'
 import {
     buyResources,
