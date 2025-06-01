@@ -3,7 +3,7 @@ import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm'
 
 @Entity()
 export class TxCache extends BaseEntity {
-    @PrimaryColumn({ type: 'string' })
+    @PrimaryColumn({ type: 'varchar' })
     id!: string
 
     @Column('jsonb', { nullable: false })

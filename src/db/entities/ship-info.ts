@@ -9,13 +9,13 @@ import {
 
 @Entity()
 export class ShipInfo extends BaseEntity {
-    @PrimaryColumn({ type: 'string' })
+    @PrimaryColumn({ type: 'varchar' })
     mint!: string
 
-    @Column({ type: 'string' })
+    @Column({ type: 'varchar' })
     name!: string
 
-    @Column({ type: 'string' })
+    @Column({ type: 'varchar' })
     imageName!: string
 
     @CreateDateColumn({ type: 'timestamptz' })

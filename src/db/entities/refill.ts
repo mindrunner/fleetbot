@@ -6,13 +6,13 @@ import { Wallet } from './wallet.js'
 
 @Entity()
 export class Refill extends BaseEntity {
-    @PrimaryColumn({ type: 'text' })
+    @PrimaryColumn({ type: 'varchar' })
     signature!: string
 
     @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
     time!: Date
 
-    @Column({ type: 'text' })
+    @Column({ type: 'varchar' })
     fleet!: string
 
     @Column({ type: 'float' })
@@ -39,7 +39,7 @@ export class Refill extends BaseEntity {
     @Column({ type: 'integer' })
     ammo!: number
 
-    @RelationIdColumn({ type: 'string' })
+    @RelationIdColumn({ type: 'varchar' })
     walletPublicKey!: Wallet['publicKey']
 
     @ManyToOne(() => Wallet, (wallet) => wallet.refills, {
