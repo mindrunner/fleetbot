@@ -5,6 +5,7 @@ export default defineConfig({
         'src/main/fleetbot/index.ts',
         'src/main/basedbot/index.ts',
         'src/main/airdrop/index.ts',
+        'src/main/migrate/index.ts',
     ],
     format: ['esm'],
     splitting: false,

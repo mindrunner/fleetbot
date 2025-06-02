@@ -6,7 +6,7 @@ import {
     PrimaryColumn,
     type Relation,
 } from 'typeorm'
-import { RelationIdColumn } from '../columns'
+import { RelationIdColumn } from '../columns/relation-id.js'
 import { Wallet } from './wallet.js'
 
 @Entity()

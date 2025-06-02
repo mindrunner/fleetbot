@@ -17,7 +17,7 @@ export class Transaction extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id!: string
 
-    @Column({ type: 'text' })
+    @Column({ type: 'varchar' })
     @Index()
     signature!: string
 
@@ -30,7 +30,7 @@ export class Transaction extends BaseEntity {
     @Column({ type: 'float' })
     originalAmount!: number
 
-    @Column({ type: 'text' })
+    @Column({ type: 'varchar' })
     resource!: string
 
     @RelationIdColumn()

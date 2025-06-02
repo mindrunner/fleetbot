@@ -16,7 +16,7 @@ import { Refill } from './refill.js'
 
 @Entity()
 export class Wallet extends BaseEntity {
-    @PrimaryColumn({ type: 'text' })
+    @PrimaryColumn({ type: 'varchar' })
     publicKey!: string
 
     @CreateDateColumn({ type: 'timestamptz' })
@@ -32,7 +32,7 @@ export class Wallet extends BaseEntity {
     @Column({ type: 'float', default: 0.15 })
     tip!: number
 
-    @Column({ type: 'text', nullable: true })
+    @Column({ type: 'varchar', nullable: true })
     nick?: string
 
     @Column({ type: 'boolean', default: false })

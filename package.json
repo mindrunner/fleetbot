@@ -15,7 +15,9 @@
         "lint:docker": "docker run --rm -i hadolint/hadolint < cicd/docker/app/Dockerfile",
         "lint:yaml": "yamllint .",
         "clean": "rm -rf build",
-        "typeorm": "typeorm-ts-node-commonjs -d src/db/db-data-source.ts"
+        "typeorm": "typeorm-ts-node-esm -d src/db/db-data-source.ts",
+        "migration:run": "pnpm run typeorm migration:run",
+        "migration:generate": "pnpm run typeorm migration:generate"
     },
     "repository": {
         "type": "git",

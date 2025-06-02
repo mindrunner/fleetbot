@@ -6,7 +6,7 @@ import {
     PrimaryGeneratedColumn,
     type Relation,
 } from 'typeorm'
-import { RelationIdColumn } from '../columns'
+import { RelationIdColumn } from '../columns/relation-id.js'
 import { Wallet } from './wallet.js'
 
 @Entity()
@@ -20,7 +20,7 @@ export class Bonus extends BaseEntity {
     @Column({ type: 'float' })
     amount!: number
 
-    @Column({ type: 'text' })
+    @Column({ type: 'varchar' })
     reason!: string
 
     @RelationIdColumn()
