@@ -4,7 +4,7 @@ import {
     Entity,
     ManyToOne,
     PrimaryColumn,
-    Relation,
+    type Relation,
     RelationId,
 } from 'typeorm'
 import { Wallet } from './wallet.js'

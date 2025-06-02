@@ -7,7 +7,7 @@ import {
     Index,
     OneToMany,
     PrimaryColumn,
-    Relation,
+    type Relation,
     UpdateDateColumn,
 } from 'typeorm'
 import { Transaction } from './transaction.js'

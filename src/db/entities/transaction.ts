@@ -5,7 +5,7 @@ import {
     Index,
     ManyToOne,
     PrimaryGeneratedColumn,
-    Relation,
+    type Relation,
     RelationId,
     Unique,
 } from 'typeorm'
