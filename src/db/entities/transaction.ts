@@ -6,10 +6,10 @@ import {
     ManyToOne,
     PrimaryGeneratedColumn,
     type Relation,
-    RelationId,
     Unique,
 } from 'typeorm'
 import { Wallet } from './wallet.js'
+import { RelationIdColumn } from '../columns/relation-id.js'
 
 @Entity()
 @Unique(['signature', 'resource'])
@@ -33,8 +33,8 @@ export class Transaction extends BaseEntity {
     @Column({ type: 'text' })
     resource!: string
 
-    @RelationId((tx: Transaction) => tx.wallet)
-    walletPublicKey!: string
+    @RelationIdColumn()
+    walletPublicKey!: Wallet['publicKey']
 
     @ManyToOne(() => Wallet, (wallet) => wallet.transactions, {
         onDelete: 'CASCADE',

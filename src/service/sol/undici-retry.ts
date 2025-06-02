@@ -1,4 +1,5 @@
 import { Agent, setGlobalDispatcher } from 'undici'
+import { logger } from '../../logger'
 
 setGlobalDispatcher(new Agent({ connections: 100, connectTimeout: 30000 }))
 
@@ -20,7 +21,7 @@ export const fetchWithRetries = async (
             const response = await fetch(input, init)
 
             if (response.status === 502 && attempt < retryAttempts) {
-                console.log(
+                logger.warn(
                     `Retrying due to status 502 (attempt ${attempt + 1}/${retryAttempts})`,
                 )
             } else {
@@ -30,7 +31,7 @@ export const fetchWithRetries = async (
             if (attempt >= retryAttempts) {
                 throw new Error(`Max retries reached due to error: ${e}`)
             }
-            console.log(
+            logger.warn(
                 `Retrying due to error (${attempt + 1}/${retryAttempts}): ${e}`,
             )
         }

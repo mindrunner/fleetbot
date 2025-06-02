@@ -5,6 +5,7 @@ import {
 } from '@staratlas/data-source'
 import { Game } from '@staratlas/sage'
 import BN from 'bn.js'
+import { logger } from '../../../../../logger'
 
 import { connection } from '../../../../../service/sol/index.js'
 import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx.js'
@@ -58,7 +59,7 @@ export const rearm = async (
     const maxAmmo = fleetInfo.cargoStats.ammoCapacity
     const ammoNeeded = maxAmmo - currentAmmo
 
-    console.log(
+    logger.info(
         `Current Ammo: ${currentAmmo}, Max Ammo: ${maxAmmo}, Ammo Needed: ${ammoNeeded}`,
     )
 

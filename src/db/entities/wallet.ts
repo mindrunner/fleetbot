@@ -65,11 +65,10 @@ export class Wallet extends BaseEntity {
     refills!: Relation<Promise<Refill[]>>
 
     async getBalance(): Promise<Big> {
-        const txs = await this.transactions
-        console.log(this.publicKey)
-        console.log(JSON.stringify(txs))
-
-        const deposit = txs.reduce((acc, cur) => acc.add(cur.amount), Big(0))
+        const deposit = (await this.transactions).reduce(
+            (acc, cur) => acc.add(cur.amount),
+            Big(0),
+        )
         const bonus = (await this.bonuses).reduce(
             (acc, cur) => acc.add(cur.amount),
             Big(0),

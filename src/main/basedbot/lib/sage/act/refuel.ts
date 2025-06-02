@@ -5,6 +5,7 @@ import {
 } from '@staratlas/data-source'
 import { Game } from '@staratlas/sage'
 import BN from 'bn.js'
+import { logger } from '../../../../../logger'
 
 import { connection } from '../../../../../service/sol/index.js'
 import { sendAndConfirmInstructions } from '../../../../../service/sol/send-and-confirm-tx.js'
@@ -58,7 +59,7 @@ export const refuel = async (
     const maxFuel = fleetInfo.cargoStats.fuelCapacity
     const fuelNeeded = maxFuel - currentFuel
 
-    console.log(
+    logger.info(
         `Current Fuel: ${currentFuel}, Max Fuel: ${maxFuel}, Fuel Needed: ${fuelNeeded}`,
     )
 
