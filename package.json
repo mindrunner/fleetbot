@@ -70,7 +70,7 @@
     },
     "devDependencies": {
         "@types/big.js": "^6.2.2",
-        "@types/bn.js": "^5.1.6",
+        "@types/bn.js": "^5.2.0",
         "@types/chance": "^1.1.6",
         "@types/module-alias": "^2.0.4",
         "@types/node": "^22.15.29",
