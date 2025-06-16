@@ -73,7 +73,7 @@
         "@types/bn.js": "^5.1.6",
         "@types/chance": "^1.1.6",
         "@types/module-alias": "^2.0.4",
-        "@types/node": "^22.15.29",
+        "@types/node": "^24.0.3",
         "@types/pg": "^8.15.1",
         "@types/superagent": "^8.1.9",
         "@typescript-eslint/eslint-plugin": "^8.32.0",
